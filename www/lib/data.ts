@@ -128,34 +128,34 @@ export const products: Product[] = sampleProducts.map((product) => ProductSchema
 // Categories data with inferred types
 export const categories = [
   {
-    name: "Audio",
-    href: "/products?category=audio",
-    count: "120+ products"
+    name: "Áudio",
+    href: "/produtos?category=audio",
+    count: "120+ produtos"
   },
   {
-    name: "Wearables",
-    href: "/products?category=wearables",
-    count: "85+ products"
+    name: "Vestíveis",
+    href: "/produtos?category=wearables",
+    count: "85+ produtos"
   },
   {
-    name: "Accessories",
-    href: "/products?category=accessories",
-    count: "200+ products"
+    name: "Acessórios",
+    href: "/produtos?category=accessories",
+    count: "200+ produtos"
   },
   {
-    name: "Mobile",
-    href: "/products?category=mobile",
-    count: "95+ products"
+    name: "Celulares",
+    href: "/produtos?category=mobile",
+    count: "95+ produtos"
   },
   {
-    name: "Photography",
-    href: "/products?category=photography",
-    count: "60+ products"
+    name: "Fotografia",
+    href: "/produtos?category=photography",
+    count: "60+ produtos"
   },
   {
-    name: "Gaming",
-    href: "/products?category=gaming",
-    count: "150+ products"
+    name: "Games",
+    href: "/produtos?category=gaming",
+    count: "150+ produtos"
   }
 ] as const;
 
@@ -166,25 +166,25 @@ export const testimonials = [
     name: "Sarah Johnson",
     role: "Designer",
     content:
-      "Amazing quality products and exceptional customer service. I've been shopping here for over a year and never been disappointed.",
+      "Produtos de ótima qualidade e atendimento excelente. Compro aqui há mais de um ano e nunca me decepcionei.",
     rating: 5,
     avatar: "/placeholder.svg?height=60&width=60"
   },
   {
     id: 2,
     name: "Michael Chen",
-    role: "Developer",
+    role: "Desenvolvedor",
     content:
-      "Fast shipping, great prices, and the products always exceed my expectations. Highly recommend this store to everyone.",
+      "Entrega rápida, ótimos preços e os produtos sempre superam minhas expectativas. Recomendo para todo mundo.",
     rating: 5,
     avatar: "/placeholder.svg?height=60&width=60"
   },
   {
     id: 3,
     name: "Emily Davis",
-    role: "Marketing Manager",
+    role: "Gerente de Marketing",
     content:
-      "The attention to detail in both products and packaging is incredible. This is my go-to store for premium tech accessories.",
+      "O cuidado com os detalhes, tanto nos produtos quanto na embalagem, é incrível. É minha loja preferida para acessórios premium.",
     rating: 5,
     avatar: "/placeholder.svg?height=60&width=60"
   }

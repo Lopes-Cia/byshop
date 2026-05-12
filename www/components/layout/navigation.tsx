@@ -14,19 +14,19 @@ import {
 
 const categories: { title: string; href: string; description: string }[] = [
   {
-    title: "Audio",
-    href: "/products?category=audio",
-    description: "Headphones, speakers, and premium sound gear."
+    title: "Áudio",
+    href: "/produtos?category=audio",
+    description: "Fones, caixas de som e acessórios premium de áudio."
   },
   {
-    title: "Wearables",
-    href: "/products?category=wearables",
-    description: "Smart watches and fitness trackers."
+    title: "Vestíveis",
+    href: "/produtos?category=wearables",
+    description: "Relógios inteligentes e monitores de atividade."
   },
   {
-    title: "Accessories",
-    href: "/products?category=accessories",
-    description: "Bags, chargers, hubs, and everyday essentials."
+    title: "Acessórios",
+    href: "/produtos?category=accessories",
+    description: "Bolsas, carregadores, hubs e itens essenciais do dia a dia."
   }
 ];
 
@@ -53,37 +53,37 @@ export default function Navigation() {
     <NavigationMenu viewport={false}>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Shop</NavigationMenuTrigger>
+          <NavigationMenuTrigger>Loja</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
                   <Link
                     className="flex h-full w-full flex-col justify-end rounded-md bg-[url('https://bundui-images.netlify.app/products/01.jpeg')] bg-cover p-0! no-underline outline-hidden select-none focus:shadow-md"
-                    href="/products?sort=newest">
+                    href="/produtos?sort=newest">
                     <div className="bg-foreground/30 space-y-2 p-4 text-white backdrop-blur-md">
-                      <div className="font-medium">New Arrivals</div>
+                      <div className="font-medium">Novidades</div>
                       <p className="text-sm leading-tight">
-                        Discover the styles in our latest collection.
+                        Descubra os estilos da nossa coleção mais recente.
                       </p>
                     </div>
                   </Link>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/products?sort=newest" title="Summer Collection">
-                Lightweight essentials perfect for the warm season.
+              <ListItem href="/produtos?sort=newest" title="Coleção de Verão">
+                Itens leves e essenciais perfeitos para os dias mais quentes.
               </ListItem>
-              <ListItem href="/products?category=accessories" title="Accessories">
-                Complete your look with our stylish bags, jewelry, and more.
+              <ListItem href="/produtos?category=accessories" title="Acessórios">
+                Complete seu visual com bolsas, joias e muito mais.
               </ListItem>
-              <ListItem href="/products?sale=1" title="Sale">
-                Shop discounted items before they&#39;re gone.
+              <ListItem href="/produtos?sale=1" title="Promoções">
+                Aproveite os descontos antes que acabem.
               </ListItem>
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
+          <NavigationMenuTrigger>Categorias</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-2 md:grid-cols-2 lg:w-[550px]">
               {categories.map((category) => (
@@ -95,26 +95,26 @@ export default function Navigation() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Quick Links</NavigationMenuTrigger>
+          <NavigationMenuTrigger>Links rápidos</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[300px] gap-4">
               <li>
                 <NavigationMenuLink asChild>
-                  <Link href="/products">
-                    <div className="font-medium">All Products</div>
-                    <div className="text-muted-foreground">Browse our full product catalog.</div>
+                  <Link href="/produtos">
+                    <div className="font-medium">Todos os produtos</div>
+                    <div className="text-muted-foreground">Veja o catálogo completo de produtos.</div>
                   </Link>
                 </NavigationMenuLink>
                 <NavigationMenuLink asChild>
-                  <Link href="/faq">
-                    <div className="font-medium">FAQs</div>
-                    <div className="text-muted-foreground">Answers to common questions.</div>
+                  <Link href="/perguntas-frequentes">
+                    <div className="font-medium">Perguntas frequentes</div>
+                    <div className="text-muted-foreground">Respostas para dúvidas comuns.</div>
                   </Link>
                 </NavigationMenuLink>
                 <NavigationMenuLink asChild>
                   <Link href="/blog">
                     <div className="font-medium">Blog</div>
-                    <div className="text-muted-foreground">Get inspired by our latest posts.</div>
+                    <div className="text-muted-foreground">Inspire-se com nossos posts mais recentes.</div>
                   </Link>
                 </NavigationMenuLink>
               </li>

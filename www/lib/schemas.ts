@@ -44,49 +44,49 @@ export const UserSchema = z.object({
 
 // Auth forms schemas
 export const SignInSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  email: z.string().email("Digite um e-mail válido"),
+  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
 })
 
 export const SignUpSchema = z
   .object({
-    firstName: z.string().min(1, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
-    email: z.string().email("Please enter a valid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    firstName: z.string().min(1, "Nome é obrigatório"),
+    lastName: z.string().min(1, "Sobrenome é obrigatório"),
+    email: z.string().email("Digite um e-mail válido"),
+    password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: "As senhas não conferem",
     path: ["confirmPassword"],
   })
 
 export const ForgotPasswordSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Digite um e-mail válido"),
 })
 
 // Checkout form schema
 export const CheckoutSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  address: z.string().min(1, "Address is required"),
-  city: z.string().min(1, "City is required"),
-  state: z.string().min(1, "State is required"),
-  zipCode: z.string().min(5, "ZIP code must be at least 5 characters"),
-  cardNumber: z.string().min(16, "Card number must be at least 16 digits"),
-  expiryDate: z.string().regex(/^\d{2}\/\d{2}$/, "Please enter MM/YY format"),
-  cvv: z.string().min(3, "CVV must be at least 3 digits"),
+  email: z.string().email("Digite um e-mail válido"),
+  firstName: z.string().min(1, "Nome é obrigatório"),
+  lastName: z.string().min(1, "Sobrenome é obrigatório"),
+  address: z.string().min(1, "Endereço é obrigatório"),
+  city: z.string().min(1, "Cidade é obrigatória"),
+  state: z.string().min(1, "Estado é obrigatório"),
+  zipCode: z.string().min(5, "CEP deve ter pelo menos 5 caracteres"),
+  cardNumber: z.string().min(16, "Número do cartão deve ter pelo menos 16 dígitos"),
+  expiryDate: z.string().regex(/^\d{2}\/\d{2}$/, "Digite no formato MM/AA"),
+  cvv: z.string().min(3, "CVV deve ter pelo menos 3 dígitos"),
 })
 
 // Contact form schema
 export const ContactSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Please enter a valid email address"),
+  firstName: z.string().min(1, "Nome é obrigatório"),
+  lastName: z.string().min(1, "Sobrenome é obrigatório"),
+  email: z.string().email("Digite um e-mail válido"),
   phone: z.string().optional(),
-  subject: z.string().min(1, "Subject is required"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  subject: z.string().min(1, "Assunto é obrigatório"),
+  message: z.string().min(10, "Mensagem deve ter pelo menos 10 caracteres"),
   orderNumber: z.string().optional(),
 })
 

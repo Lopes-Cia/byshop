@@ -14,19 +14,19 @@ export default function Footer() {
             <div className="space-y-4">
               <Logo />
               <p className="text-muted-foreground mb-6 max-w-md">
-                Discover premium products with exceptional quality and modern design. Your
-                satisfaction is our priority.
+                Descubra produtos premium com qualidade excepcional e design moderno. Sua
+                satisfação é nossa prioridade.
               </p>
             </div>
 
             {/* Newsletter */}
             <div className="mb-6">
               <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                Subscribe to our newsletter
+                Assine nossa newsletter
               </h3>
               <div className="flex space-x-2">
-                <Input type="email" placeholder="Enter your email" className="flex-1" />
-                <Button>Subscribe</Button>
+                <Input type="email" placeholder="Digite seu e-mail" className="flex-1" />
+                <Button>Assinar</Button>
               </div>
             </div>
 
@@ -58,34 +58,34 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="mb-4 text-sm font-semibold text-gray-900">Quick Links</h3>
+            <h3 className="mb-4 text-sm font-semibold text-gray-900">Links rápidos</h3>
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/about"
+                  href="/sobre"
                   className="hover:text-primary text-muted-foreground transition-colors">
-                  About Us
+                  Sobre
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href="/contato"
                   className="hover:text-primary text-muted-foreground transition-colors">
-                  Contact
+                  Contato
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/faq"
+                  href="/perguntas-frequentes"
                   className="hover:text-primary text-muted-foreground transition-colors">
                   FAQ
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/shipping"
+                  href="/entrega"
                   className="hover:text-primary text-muted-foreground transition-colors">
-                  Shipping Info
+                  Entrega
                 </Link>
               </li>
             </ul>
@@ -97,23 +97,23 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/privacy"
+                  href="/privacidade"
                   className="hover:text-primary text-muted-foreground transition-colors">
-                  Privacy Policy
+                  Política de Privacidade
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/terms"
+                  href="/termos-de-uso"
                   className="hover:text-primary text-muted-foreground transition-colors">
-                  Terms of Service
+                  Termos de Uso
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/returns"
+                  href="/trocas-e-devolucoes"
                   className="hover:text-primary text-muted-foreground transition-colors">
-                  Returns
+                  Trocas e devoluções
                 </Link>
               </li>
             </ul>
@@ -121,7 +121,7 @@ export default function Footer() {
         </div>
 
         <div className="text-muted-foreground mt-8 border-t border-gray-200 pt-8 text-center">
-          <p>&copy; {new Date().getFullYear()} EcommerceKit. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} ByShop. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>

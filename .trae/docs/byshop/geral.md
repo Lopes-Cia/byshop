@@ -1,4 +1,4 @@
-# Byshop (/www) — Análise do projeto (estado atual)
+# ByShop (/www) — Análise do projeto (estado atual)
 
 Este documento descreve o estado atual do projeto em `c:\LOPES\www\byshop\www`, com foco em arquitetura, rotas/fluxos, estado, dados, UI e testes.
 
@@ -62,28 +62,28 @@ Convenções observadas:
 
 | Rota | Arquivo(s) | Tipo | Resumo |
 |---|---|---|---|
-| `/` | [app/(loja)/(home)/page.tsx](file:///c:/LOPES/www/byshop/www/app/(loja)/(home)/page.tsx) | Server | Home com seções (Hero/Featured/Categories/Testimonials/Newsletter). |
-| `/products` | [app/(shop)/products/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/products/page.tsx) + [products-client.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/products/products-client.tsx) | Server + Client | Listagem com filtros por querystring (`category/price/sort/sale`). |
-| `/products/[id]` | [app/(shop)/products/[id]/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/products/%5Bid%5D/page.tsx) + [product-detail.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/products/%5Bid%5D/product-detail.tsx) | Server + Client | PDP: imagens, variações, quantidade; adiciona ao carrinho e wishlist. |
-| `/cart` | [app/(shop)/cart/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/cart/page.tsx) | Client | Carrinho com ajuste de qty, remoção, cupom e resumo de totals. |
-| `/checkout` | [app/(shop)/checkout/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/checkout/page.tsx) | Client | Formulário (Zod) + resumo; cria pedido e limpa carrinho. |
-| `/checkout/success` | [app/(shop)/checkout/success/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/checkout/success/page.tsx) + [success-client.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/checkout/success/success-client.tsx) | Server + Client | Tela pós-compra via `orderId` em querystring. |
-| `/orders` | [app/(usuario)/orders/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/orders/page.tsx) | Client | Lista pedidos do usuário logado (filtra por `userId`). |
-| `/orders/[id]` | [app/(usuario)/orders/[id]/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/orders/%5Bid%5D/page.tsx) + [order-detail-client.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/orders/%5Bid%5D/order-detail-client.tsx) | Server + Client | Detalhe do pedido a partir do `id` (path param). |
-| `/tracking` | [app/(shop)/tracking/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/tracking/page.tsx) + [tracking-client.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/tracking/tracking-client.tsx) | Server + Client | Rastreamento via `orderId` em querystring. |
-| `/wishlist` | [app/(usuario)/wishlist/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/wishlist/page.tsx) | Client | Lista itens salvos; move item para carrinho; limpa wishlist. |
-| `/profile` | [app/(usuario)/profile/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/profile/page.tsx) | Client | Perfil do usuário logado; senão, CTA para login/cadastro com `next`. |
-| `/auth/signin` | [app/(usuario)/auth/signin/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/auth/signin/page.tsx) + [signin-client.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/auth/signin/signin-client.tsx) | Server + Client | Login mockado; respeita `next` (sanitizado para paths internos). |
-| `/auth/signup` | [app/(usuario)/auth/signup/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/auth/signup/page.tsx) + [signup-client.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/auth/signup/signup-client.tsx) | Server + Client | Cadastro mockado; respeita `next` sanitizado. |
-| `/auth/forgot-password` | [app/(usuario)/auth/forgot-password/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/auth/forgot-password/page.tsx) + [forgot-password-client.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/auth/forgot-password/forgot-password-client.tsx) | Server + Client | Recuperação mockada; respeita `next` sanitizado. |
-| `/contact` | [app/(loja)/contact/page.tsx](file:///c:/LOPES/www/byshop/www/app/(loja)/contact/page.tsx) | Client | Formulário de contato (validado por Zod). |
-| `/about` | [app/(institucional)/about/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/about/page.tsx) | Server | Página institucional. |
+| `/` | [app/(loja)/(inicio)/page.tsx](file:///c:/LOPES/www/byshop/www/app/(loja)/(inicio)/page.tsx) | Server | Home com seções (Hero/Featured/Categories/Testimonials/Newsletter). |
+| `/produtos` | [app/(shop)/produtos/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/produtos/page.tsx) + [produtos-client.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/produtos/produtos-client.tsx) | Server + Client | Listagem com filtros por querystring (`category/price/sort/sale`). |
+| `/produtos/[id]` | [app/(shop)/produtos/[id]/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/produtos/%5Bid%5D/page.tsx) + [detalhe-produto.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/produtos/%5Bid%5D/detalhe-produto.tsx) | Server + Client | PDP: imagens, variações, quantidade; adiciona ao carrinho e favoritos. |
+| `/carrinho` | [app/(shop)/carrinho/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/carrinho/page.tsx) | Client | Carrinho com ajuste de qty, remoção, cupom e resumo de totals. |
+| `/finalizar-compra` | [app/(shop)/finalizar-compra/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/finalizar-compra/page.tsx) | Client | Formulário (Zod) + resumo; cria pedido e limpa carrinho. |
+| `/finalizar-compra/sucesso` | [app/(shop)/finalizar-compra/sucesso/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/finalizar-compra/sucesso/page.tsx) + [sucesso-client.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/finalizar-compra/sucesso/sucesso-client.tsx) | Server + Client | Tela pós-compra via `orderId` em querystring. |
+| `/pedidos` | [app/(usuario)/pedidos/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/pedidos/page.tsx) | Client | Lista pedidos do usuário logado (filtra por `userId`). |
+| `/pedidos/[id]` | [app/(usuario)/pedidos/[id]/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/pedidos/%5Bid%5D/page.tsx) + [detalhe-pedido-client.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/pedidos/%5Bid%5D/detalhe-pedido-client.tsx) | Server + Client | Detalhe do pedido a partir do `id` (path param). |
+| `/rastreamento` | [app/(shop)/rastreamento/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/rastreamento/page.tsx) + [rastreamento-client.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/rastreamento/rastreamento-client.tsx) | Server + Client | Rastreamento via `orderId` em querystring. |
+| `/favoritos` | [app/(usuario)/favoritos/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/favoritos/page.tsx) | Client | Lista itens salvos; move item para carrinho; limpa favoritos. |
+| `/perfil` | [app/(usuario)/perfil/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/perfil/page.tsx) | Client | Perfil do usuário logado; senão, CTA para login/cadastro com `next`. |
+| `/conta/entrar` | [app/(usuario)/conta/entrar/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/conta/entrar/page.tsx) + [entrar-client.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/conta/entrar/entrar-client.tsx) | Server + Client | Login mockado; respeita `next` (sanitizado para paths internos). |
+| `/conta/cadastrar` | [app/(usuario)/conta/cadastrar/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/conta/cadastrar/page.tsx) + [cadastrar-client.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/conta/cadastrar/cadastrar-client.tsx) | Server + Client | Cadastro mockado; respeita `next` sanitizado. |
+| `/conta/recuperar-senha` | [app/(usuario)/conta/recuperar-senha/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/conta/recuperar-senha/page.tsx) + [recuperar-senha-client.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/conta/recuperar-senha/recuperar-senha-client.tsx) | Server + Client | Recuperação mockada; respeita `next` sanitizado. |
+| `/contato` | [app/(loja)/contato/page.tsx](file:///c:/LOPES/www/byshop/www/app/(loja)/contato/page.tsx) | Client | Formulário de contato (validado por Zod). |
+| `/sobre` | [app/(institucional)/sobre/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/sobre/page.tsx) | Server | Página institucional. |
 | `/blog` | [app/(loja)/blog/page.tsx](file:///c:/LOPES/www/byshop/www/app/(loja)/blog/page.tsx) | Server | Página institucional. |
-| `/faq` | [app/(institucional)/faq/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/faq/page.tsx) | Server | Página institucional. |
-| `/shipping` | [app/(institucional)/shipping/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/shipping/page.tsx) | Server | Página institucional. |
-| `/returns` | [app/(institucional)/returns/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/returns/page.tsx) | Server | Página institucional. |
-| `/terms` | [app/(institucional)/terms/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/terms/page.tsx) | Server | Página institucional. |
-| `/privacy` | [app/(institucional)/privacy/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/privacy/page.tsx) | Server | Página institucional. |
+| `/perguntas-frequentes` | [app/(institucional)/perguntas-frequentes/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/perguntas-frequentes/page.tsx) | Server | Página institucional. |
+| `/entrega` | [app/(institucional)/entrega/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/entrega/page.tsx) | Server | Página institucional. |
+| `/trocas-e-devolucoes` | [app/(institucional)/trocas-e-devolucoes/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/trocas-e-devolucoes/page.tsx) | Server | Página institucional. |
+| `/termos-de-uso` | [app/(institucional)/termos-de-uso/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/termos-de-uso/page.tsx) | Server | Página institucional. |
+| `/privacidade` | [app/(institucional)/privacidade/page.tsx](file:///c:/LOPES/www/byshop/www/app/(institucional)/privacidade/page.tsx) | Server | Página institucional. |
 
 **Arquivos globais do App Router**
 
@@ -95,34 +95,34 @@ Convenções observadas:
 
 ### Catálogo → PDP → Carrinho
 
-- Catálogo em `/products` usa `products` de [data.ts](file:///c:/LOPES/www/byshop/www/lib/data.ts) e filtra/ordena em client-side ([products-client.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/products/products-client.tsx)).
-- PDP em `/products/[id]` localiza o produto pelo `id` e renderiza a tela client ([page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/products/%5Bid%5D/page.tsx), [product-detail.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/products/%5Bid%5D/product-detail.tsx)).
-- A ação “Add to Cart” grava no Zustand cart store; wishlist também é local/persistida.
+- Catálogo em `/produtos` usa `products` de [data.ts](file:///c:/LOPES/www/byshop/www/lib/data.ts) e filtra/ordena em client-side ([produtos-client.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/produtos/produtos-client.tsx)).
+- PDP em `/produtos/[id]` localiza o produto pelo `id` e renderiza a tela client ([page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/produtos/%5Bid%5D/page.tsx), [detalhe-produto.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/produtos/%5Bid%5D/detalhe-produto.tsx)).
+- A ação “Adicionar ao carrinho” grava no Zustand cart store; favoritos também é local/persistida.
 
 ### Carrinho → Checkout → Sucesso → Pedido → Tracking
 
-- Carrinho em `/cart`:
-  - Lê `items` do store persistido e aguarda hidratação antes de renderizar ([cart/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/cart/page.tsx)).
+- Carrinho em `/carrinho`:
+  - Lê `items` do store persistido e aguarda hidratação antes de renderizar ([carrinho/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/carrinho/page.tsx)).
   - Exibe o resumo calculado por `getSummary()` do store ([cartStore.ts](file:///c:/LOPES/www/byshop/www/stores/cartStore.ts)).
   - Permite aplicar cupom via `CouponBox` ([CouponBox.tsx](file:///c:/LOPES/www/byshop/www/components/CouponBox.tsx)).
-- Checkout em `/checkout`:
+- Checkout em `/finalizar-compra`:
   - Valida formulário via Zod + hook [useForm.ts](file:///c:/LOPES/www/byshop/www/hooks/useForm.ts) e schema [CheckoutSchema](file:///c:/LOPES/www/byshop/www/lib/schemas.ts).
-  - Cria pedido chamando `createOrder` (orders store) e limpa o carrinho ([checkout/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/checkout/page.tsx)).
-- Sucesso em `/checkout/success`:
-  - Recebe `orderId` via querystring e passa para um client component ([checkout/success/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/checkout/success/page.tsx)).
-- Pedido em `/orders` e `/orders/[id]`:
+  - Cria pedido chamando `createOrder` (orders store) e limpa o carrinho ([finalizar-compra/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/finalizar-compra/page.tsx)).
+- Sucesso em `/finalizar-compra/sucesso`:
+  - Recebe `orderId` via querystring e passa para um client component ([finalizar-compra/sucesso/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/finalizar-compra/sucesso/page.tsx)).
+- Pedido em `/pedidos` e `/pedidos/[id]`:
   - Lista e detalhe consultam orders store persistido ([ordersStore.ts](file:///c:/LOPES/www/byshop/www/stores/ordersStore.ts)).
-- Tracking em `/tracking`:
-  - Resolve `orderId` via querystring e renderiza o client component que apresenta timeline/info ([tracking/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/tracking/page.tsx)).
+- Tracking em `/rastreamento`:
+  - Resolve `orderId` via querystring e renderiza o client component que apresenta timeline/info ([rastreamento/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/rastreamento/page.tsx)).
 
 ### Autenticação e `next`
 
 - Auth é mockada no front:
   - Credenciais de teste em [authStore.ts](file:///c:/LOPES/www/byshop/www/stores/authStore.ts)
   - Login simula latência, valida credenciais e grava `user` no store persistido
-- Rotas `/auth/*` aceitam `?next=/alguma-rota`:
-  - As páginas “server” sanitizam `next` para evitar redirecionamento externo (apenas caminhos internos) ([signin/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/auth/signin/page.tsx)).
-  - O client component navega para `nextPath` após login ([signin-client.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/auth/signin/signin-client.tsx)).
+- Rotas `/conta/*` aceitam `?next=/alguma-rota`:
+  - As páginas “server” sanitizam `next` para evitar redirecionamento externo (apenas caminhos internos) ([entrar/page.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/conta/entrar/page.tsx)).
+  - O client component navega para `nextPath` após login ([entrar-client.tsx](file:///c:/LOPES/www/byshop/www/app/(usuario)/conta/entrar/entrar-client.tsx)).
 
 ## Dados e domínio (schemas e mocks)
 
@@ -223,12 +223,11 @@ Os principais schemas/tipos estão em [schemas.ts](file:///c:/LOPES/www/byshop/w
   - Reporter HTML (não abre automaticamente)
 - Especificação E2E principal:
   - Compra como guest cria pedido e valida tracking
-  - Login respeita `next` e redireciona para `/profile`
+- Login respeita `next` e redireciona para `/perfil`
   - ([purchase-journey.spec.ts](file:///c:/LOPES/www/byshop/www/tests/e2e/purchase-journey.spec.ts))
 
 - Status observado ao executar os testes:
-  - O cenário de compra falha por “strict mode violation” ao localizar `Add to Cart` (existem dois botões com o mesmo nome acessível na página do produto).
-  - O cenário de signin falha ao esperar o heading `"My Account"` em `/profile`, mas a página atual renderiza textos em pt-BR.
+  - Falhas anteriores eram relacionadas a seletores por texto/strict mode e mistura de idiomas; os textos e rotas foram migrados para pt-BR e os testes foram ajustados.
 
 ## Limites conhecidos (descrição do estado atual)
 
@@ -236,4 +235,4 @@ Os principais schemas/tipos estão em [schemas.ts](file:///c:/LOPES/www/byshop/w
   - Produtos/categorias/depoimentos vêm de arquivo local ([data.ts](file:///c:/LOPES/www/byshop/www/lib/data.ts))
   - Auth e pedidos são persistidos no browser via Zustand persist (sem API real)
 - Internacionalização/textos:
-  - Há mistura de textos em pt-BR e inglês em algumas páginas/labels (ex.: signin vs wishlist/pedidos).
+  - Objetivo: padronizar UI e URLs para pt-BR (mantendo redirects das rotas antigas).

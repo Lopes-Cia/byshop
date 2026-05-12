@@ -42,7 +42,7 @@ function HeaderSearch() {
         <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
         <input
           type="text"
-          placeholder="Search products..."
+          placeholder="Buscar produtos..."
           className="focus:ring-primary w-full rounded-lg border border-gray-300 py-2 pr-4 pl-10 focus:border-transparent focus:ring-2"
         />
       </div>
@@ -61,7 +61,7 @@ function HeaderActions({
 
   return (
     <div className="flex items-center space-x-4">
-      <Link href="/wishlist" className="relative">
+      <Link href="/favoritos" className="relative">
         <Heart className="hover:text-primary h-6 w-6 text-gray-700 transition-colors" />
         {wishlistCount > 0 && (
           <span className="bg-primary absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full text-xs text-white">
@@ -70,7 +70,7 @@ function HeaderActions({
         )}
       </Link>
 
-      <Link href="/cart" className="relative">
+      <Link href="/carrinho" className="relative">
         <ShoppingCart className="hover:text-primary h-6 w-6 text-gray-700 transition-colors" />
         {itemCount > 0 && (
           <span className="bg-primary absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full text-xs text-white">
@@ -85,20 +85,20 @@ function HeaderActions({
             <User className="h-5 w-5" />
           </Button>
           <div className="invisible absolute right-0 mt-2 w-48 rounded-md bg-white py-1 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100">
-            <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              Profile
+            <Link href="/perfil" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              Perfil
             </Link>
             <button
               onClick={logout}
               className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">
-              Sign Out
+              Sair
             </button>
           </div>
         </div>
       ) : (
         <Link href={signInHref}>
           <Button variant="outline" size="sm">
-            Sign In
+            Entrar
           </Button>
         </Link>
       )}
@@ -117,21 +117,21 @@ function HeaderMobileMenu({ isMenuOpen }: HeaderMobileMenuProps) {
     <div className="border-t border-gray-200 py-4 md:hidden">
       <div className="flex flex-col space-y-4">
         <Link href="/" className="hover:text-primary text-gray-700 transition-colors">
-          Home
+          Início
         </Link>
-        <Link href="/products" className="hover:text-primary text-gray-700 transition-colors">
-          Shop
+        <Link href="/produtos" className="hover:text-primary text-gray-700 transition-colors">
+          Produtos
         </Link>
-        <Link href="/wishlist" className="hover:text-primary text-gray-700 transition-colors">
-          Wishlist
+        <Link href="/favoritos" className="hover:text-primary text-gray-700 transition-colors">
+          Favoritos
         </Link>
-        <Link href="/about" className="hover:text-primary text-gray-700 transition-colors">
-          About
+        <Link href="/sobre" className="hover:text-primary text-gray-700 transition-colors">
+          Sobre
         </Link>
         <div className="border-t border-gray-200 pt-4">
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder="Buscar produtos..."
             className="focus:ring-primary w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2"
           />
         </div>
@@ -145,7 +145,7 @@ export default function Header() {
   const itemCount = useCartStore((state) => state.getItemCount());
   const wishlistCount = useWishlistStore((state) => state.getCount());
   const pathname = usePathname();
-  const signInHref = `/auth/signin?next=${encodeURIComponent(pathname)}`;
+  const signInHref = `/conta/entrar?next=${encodeURIComponent(pathname)}`;
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
@@ -176,4 +176,3 @@ export default function Header() {
     </header>
   );
 }
-

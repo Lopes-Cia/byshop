@@ -6,17 +6,17 @@ const posts = [
   {
     title: "Como escolher o acessório certo para o seu setup",
     excerpt: "Dicas práticas para combinar utilidade, estilo e custo-benefício.",
-    href: "/products?category=accessories"
+    href: "/produtos?category=accessories"
   },
   {
     title: "Áudio sem complicação: guia rápido",
     excerpt: "O básico para comparar fones e caixas e acertar na compra.",
-    href: "/products?category=audio"
+    href: "/produtos?category=audio"
   },
   {
     title: "Promoções: como aproveitar melhor ofertas",
     excerpt: "Entenda como identificar descontos reais e evitar compras por impulso.",
-    href: "/products?sale=1"
+    href: "/produtos?sale=1"
   }
 ] as const;
 
@@ -31,7 +31,7 @@ export default function BlogPage() {
           </p>
         </div>
         <Button asChild variant="outline">
-          <Link href="/products">Ver catálogo</Link>
+          <Link href="/produtos">Ver catálogo</Link>
         </Button>
       </div>
 
@@ -53,4 +53,3 @@ export default function BlogPage() {
     </div>
   );
 }
-

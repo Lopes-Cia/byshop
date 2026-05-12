@@ -41,13 +41,13 @@ export default function ProductCard({ product }: ProductCardProps) {
             e.stopPropagation();
             toggleWishlist(product);
           }}
-          aria-label={isWishlisted ? "Remover da wishlist" : "Adicionar à wishlist"}
+          aria-label={isWishlisted ? "Remover dos favoritos" : "Adicionar aos favoritos"}
           className={`absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white transition-opacity ${
             isWishlisted ? "opacity-100" : "opacity-0 group-hover:opacity-100"
           }`}>
           <Heart className={`h-4 w-4 ${isWishlisted ? "fill-current text-red-500" : "text-gray-600"}`} />
         </button>
-        <Link href={`/products/${product.id}`}>
+        <Link href={`/produtos/${product.id}`}>
           <img
             src={product.image || "/placeholder.svg"}
             alt={product.name}
@@ -57,7 +57,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
 
       <div className="p-4">
-        <Link href={`/products/${product.id}`}>
+        <Link href={`/produtos/${product.id}`}>
           <h3 className="hover:text-primary mb-2 line-clamp-2 font-semibold text-gray-900 transition-colors">
             {product.name}
           </h3>
@@ -89,7 +89,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <Button onClick={handleAddToCart} className="w-full" size="sm">
-          Add to Cart
+          Adicionar ao carrinho
         </Button>
       </div>
     </div>

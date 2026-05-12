@@ -1,0 +1,1 @@
+mantenha sempre o arquivo C:\LOPES\www\byshop\.trae\docs\byshop\geral.md , aualizado com o andamento das tarefas do projeto.

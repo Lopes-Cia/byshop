@@ -3,12 +3,12 @@ import { Headphones, Watch, Backpack, Smartphone, Camera, Gamepad2 } from "lucid
 import { categories } from "@/lib/data";
 
 const categoryIcons = {
-  Audio: Headphones,
-  Wearables: Watch,
-  Accessories: Backpack,
-  Mobile: Smartphone,
-  Photography: Camera,
-  Gaming: Gamepad2
+  Áudio: Headphones,
+  Vestíveis: Watch,
+  Acessórios: Backpack,
+  Celulares: Smartphone,
+  Fotografia: Camera,
+  Games: Gamepad2
 } as const;
 
 export default function Categories() {
@@ -16,9 +16,9 @@ export default function Categories() {
     <section className="bg-gray-50 py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">Shop by Category</h2>
+          <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">Comprar por categoria</h2>
           <p className="text-lg text-gray-600">
-            Find exactly what you&#39;re looking for in our organized categories
+            Encontre exatamente o que você procura em categorias organizadas
           </p>
         </div>
 

@@ -23,8 +23,8 @@ export default function CouponBox({ className, compact }: Props) {
   const couponLabel = useMemo(() => {
     if (!coupon) return null
     if (coupon.code === "FREESHIP") return "Frete grátis"
-    if (coupon.code === "SAVE20") return "20% off"
-    return "10% off"
+    if (coupon.code === "SAVE20") return "20% de desconto"
+    return "10% de desconto"
   }, [coupon])
 
   return (
@@ -89,4 +89,3 @@ export default function CouponBox({ className, compact }: Props) {
     </div>
   )
 }
-
