@@ -1,5 +1,5 @@
 import { products } from "@/lib/data";
-import ProductDetailPage from "@/app/products/[id]/product-detail";
+import ProductDetailPage from "./product-detail";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

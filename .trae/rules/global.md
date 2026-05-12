@@ -17,5 +17,7 @@ alwaysApply: true
 
 - Sempre adicione comentários no código, num formato que simplifique entendimento.
 - Os comentarios devem ser IA first, ou seja, devem ser compativeis e facilitados para a IA.
-- Prefira mudanças pequenas e verificáveis; sempre que possível, inclua uma forma de validação (teste, script, comando).
 
+## Skills
+
+- brainstorming, use essa skill para gerar ideias e entendimento da tarefa atual.
