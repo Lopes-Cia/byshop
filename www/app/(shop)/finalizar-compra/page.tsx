@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CouponBox from "@/components/CouponBox";
@@ -12,6 +12,19 @@ import { CheckoutSchema, type CheckoutForm } from "@/lib/schemas";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+const MOCK_CHECKOUT_FORM: CheckoutForm = {
+  email: "comprador.teste@byshop.com",
+  firstName: "João",
+  lastName: "Silva",
+  address: "Rua das Flores, 123",
+  city: "São Paulo",
+  state: "SP",
+  zipCode: "01001-000",
+  cardNumber: "4111111111111111",
+  expiryDate: "05/30",
+  cvv: "123",
+};
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, getSummary, clearCart } = useCartStore();
@@ -20,12 +33,31 @@ export default function CheckoutPage() {
   const { data, errors, isSubmitting, setValue, handleSubmit } = useForm(CheckoutSchema);
   const [hasHydrated, setHasHydrated] = useState(useCartStore.persist.hasHydrated());
   const [hasPlacedOrder, setHasPlacedOrder] = useState(false);
+  const hasPrefilled = useRef(false);
 
   useEffect(() => {
     const unsubscribe = useCartStore.persist.onFinishHydration(() => setHasHydrated(true));
     if (useCartStore.persist.hasHydrated()) setHasHydrated(true);
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") return;
+    if (hasPrefilled.current) return;
+
+    setValue("email", MOCK_CHECKOUT_FORM.email);
+    setValue("firstName", MOCK_CHECKOUT_FORM.firstName);
+    setValue("lastName", MOCK_CHECKOUT_FORM.lastName);
+    setValue("address", MOCK_CHECKOUT_FORM.address);
+    setValue("city", MOCK_CHECKOUT_FORM.city);
+    setValue("state", MOCK_CHECKOUT_FORM.state);
+    setValue("zipCode", MOCK_CHECKOUT_FORM.zipCode);
+    setValue("cardNumber", MOCK_CHECKOUT_FORM.cardNumber);
+    setValue("expiryDate", MOCK_CHECKOUT_FORM.expiryDate);
+    setValue("cvv", MOCK_CHECKOUT_FORM.cvv);
+
+    hasPrefilled.current = true;
+  }, [setValue]);
 
   useEffect(() => {
     if (hasHydrated && items.length === 0 && !hasPlacedOrder) router.replace("/carrinho");

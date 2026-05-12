@@ -107,6 +107,7 @@ Convenções observadas:
   - Permite aplicar cupom via `CouponBox` ([CouponBox.tsx](file:///c:/LOPES/www/byshop/www/components/CouponBox.tsx)).
 - Checkout em `/finalizar-compra`:
   - Valida formulário via Zod + hook [useForm.ts](file:///c:/LOPES/www/byshop/www/hooks/useForm.ts) e schema [CheckoutSchema](file:///c:/LOPES/www/byshop/www/lib/schemas.ts).
+  - Em ambiente não-produção, auto-preenche o formulário com dados de teste para acelerar a validação do fluxo.
   - Cria pedido chamando `createOrder` (orders store) e limpa o carrinho ([finalizar-compra/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/finalizar-compra/page.tsx)).
 - Sucesso em `/finalizar-compra/sucesso`:
   - Recebe `orderId` via querystring e passa para um client component ([finalizar-compra/sucesso/page.tsx](file:///c:/LOPES/www/byshop/www/app/(shop)/finalizar-compra/sucesso/page.tsx)).
@@ -176,6 +177,7 @@ Os principais schemas/tipos estão em [schemas.ts](file:///c:/LOPES/www/byshop/w
 - Ações:
   - `createOrder()` gera `ord_*`, status inicial `processing`, e tracking mock (`MockExpress`)
   - Leitura: `getOrderById`, `getOrdersByUserId`
+- Observação (React/Next + Zustand): em páginas client, evitar selectors que retornem novos arrays/objetos a cada chamada (ex.: `filter` dentro do selector), pois isso pode causar loop de render/hidratação.
 
 ### Wishlist (`stores/wishlistStore.ts`)
 

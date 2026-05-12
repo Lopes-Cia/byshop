@@ -46,13 +46,16 @@ export default function OrdersPage() {
     return unsubscribe;
   }, []);
 
-  const orders = useOrdersStore((state) =>
-    user ? state.orders.filter((order) => order.userId === user.id) : [],
-  );
+  const orders = useOrdersStore((state) => state.orders);
+
+  const ordersByUser = useMemo(() => {
+    if (!user) return [];
+    return orders.filter((order) => order.userId === user.id);
+  }, [orders, user]);
 
   const orderedList = useMemo(() => {
-    return [...orders].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  }, [orders]);
+    return [...ordersByUser].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  }, [ordersByUser]);
 
   if (!user) {
     const encodedNext = encodeURIComponent(nextPath);
