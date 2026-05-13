@@ -215,6 +215,7 @@ Os principais schemas/tipos estão em [schemas.ts](file:///c:/LOPES/www/byshop/w
   - qualquer outro valor/ausente → fallback seguro para [HeaderV1](file:///c:/LOPES/www/byshop/www/components/layout/header-v1.tsx)
 - Ponto de seleção (wrapper): [header.tsx](file:///c:/LOPES/www/byshop/www/components/layout/header.tsx)
 - Processo detalhado (referência visual → componente Next.js): [mod_design.md](file:///c:/LOPES/www/byshop/.trae/docs/byshop/mod_design.md)
+- Comparação de design (vercel vs byshop) + estratégia de upgrade: [upgrad-design.md](file:///c:/LOPES/www/byshop/.trae/docs/byshop/upgrad-design.md)
 - Sandbox de desenho (apenas o header do modelo, sem chrome global): `/dev/desenho` ([page.tsx](file:///c:/LOPES/www/byshop/www/app/dev/desenho/page.tsx))
   - Implementação espelha `.trae/docs/design/modelo.html` em Tailwind (foco em estrutura e breakpoints).
   - Logo do modelo via asset estático `/logo.png` (arquivo: `www/public/logo.png`, sincronizado de `.trae/docs/design/logo.png`)
