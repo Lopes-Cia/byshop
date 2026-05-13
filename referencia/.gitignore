@@ -1,0 +1,3 @@
+# IA: Pasta de snapshots/backup. Não versionar conteúdo para evitar ruído no repositório.
+*
+!.gitignore

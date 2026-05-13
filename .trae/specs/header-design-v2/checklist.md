@@ -1,7 +1,0 @@
-- [x] Existe uma forma de alternar Header V1/V2 via `NEXT_PUBLIC_HEADER_VARIANT`, com fallback seguro para V1
-- [x] Header V1 permanece visualmente e funcionalmente igual ao atual (sem regressões perceptíveis)
-- [x] Header V2 implementa as 3 faixas no desktop (utilitária, principal, navegação) inspirado no modelo
-- [x] Header V2 mantém paridade funcional: busca, wishlist, carrinho (com contador), e conta (logado/deslogado)
-- [x] Header V2 funciona no mobile (menu colapsável e busca acessível)
-- [x] `npm run lint` e `npm run build` passam em `www/`
-- [x] `.trae/docs/byshop/geral.md` foi atualizado com o andamento e instruções de uso

@@ -1,7 +1,0 @@
-- [x] Rotas canônicas pt-BR implementadas conforme mapeamento do spec
-- [x] Redirects permanentes (inglês -> pt-BR) configurados em `next.config.ts`
-- [x] Links internos atualizados para novos slugs (Header/Navigation/Footer/páginas)
-- [x] Textos visíveis nas páginas alvo estão em pt-BR (incluindo componentes compartilhados)
-- [x] `www/tests/e2e/purchase-journey.spec.ts` atualizado e passando
-- [x] `.trae/docs/byshop/geral.md` atualizado com novos caminhos/links
-- [x] `npm run lint` passa (aceitando warnings existentes) e `npm run build` passa
