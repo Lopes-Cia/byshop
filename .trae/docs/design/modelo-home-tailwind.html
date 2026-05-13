@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modelo Home (Tailwind)</title>
+    <!-- IA: Arquivo de referência para prototipar a home a partir do print. Usa Tailwind via CDN para ser “copiar e colar”. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-[#eef1f5] px-4 py-10">
+    <!-- IA: Canvas principal em “cartão” central, como na referência. -->
+    <div
+      class="mx-auto w-full max-w-[1100px] overflow-hidden rounded-[28px] bg-white shadow-[0_30px_90px_-40px_rgba(0,0,0,0.45)] ring-1 ring-black/5"
+    >
+      <header class="border-b border-black/5">
+        <!-- IA: Header — Row 1 (logo + util + busca + ações). -->
+        <div class="px-6 pt-6 pb-4">
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3">
+              <div class="h-6 w-16 rounded bg-gray-200" aria-hidden="true"></div>
+              <div class="hidden items-center gap-3 text-xs text-gray-500 md:flex">
+                <div class="h-3 w-10 rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="h-3 w-10 rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="h-3 w-10 rounded bg-gray-200" aria-hidden="true"></div>
+              </div>
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2 rounded-full bg-[#f3f4f6] px-4 py-2">
+                <div class="h-4 w-4 rounded bg-gray-300" aria-hidden="true"></div>
+                <div class="h-3 w-48 rounded bg-gray-200" aria-hidden="true"></div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="hidden items-center gap-2 text-xs text-gray-500 sm:flex">
+                <div class="h-3 w-12 rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="h-3 w-10 rounded bg-gray-200" aria-hidden="true"></div>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="h-8 w-8 rounded-full bg-gray-200" aria-hidden="true"></div>
+                <div class="h-8 w-8 rounded-full bg-gray-200" aria-hidden="true"></div>
+                <div class="h-8 w-8 rounded-full bg-gray-200" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- IA: Header — Row 2 (atalhos/categorias em chips). -->
+          <div class="mt-4 flex gap-3 overflow-auto pb-1">
+            <div class="shrink-0 rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-medium text-gray-700">
+              Today’s Deals
+            </div>
+            <div class="shrink-0 rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-medium text-gray-700">
+              Categories
+            </div>
+            <div class="shrink-0 rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-medium text-gray-700">
+              Computers
+            </div>
+            <div class="shrink-0 rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-medium text-gray-700">
+              Gaming
+            </div>
+            <div class="shrink-0 rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-medium text-gray-700">
+              Audio
+            </div>
+            <div class="shrink-0 rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-medium text-gray-700">
+              Accessories
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="px-6 py-8">
+        <!-- IA: Hero principal (texto à esquerda + produto à direita). -->
+        <section class="rounded-2xl bg-[#f7f7f8] p-6">
+          <div class="grid items-center gap-6 md:grid-cols-[1.1fr_0.9fr]">
+            <div class="space-y-4">
+              <div class="inline-flex items-center gap-2 text-xs text-gray-500">
+                <div class="h-2.5 w-2.5 rounded-full bg-orange-300" aria-hidden="true"></div>
+                <div class="h-3 w-20 rounded bg-gray-200" aria-hidden="true"></div>
+              </div>
+              <div class="space-y-2">
+                <div class="h-9 w-80 max-w-full rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="h-4 w-[520px] max-w-full rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="h-4 w-[420px] max-w-full rounded bg-gray-200" aria-hidden="true"></div>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="h-10 w-28 rounded-full bg-gray-900" aria-hidden="true"></div>
+                <div class="h-10 w-28 rounded-full bg-white ring-1 ring-black/10" aria-hidden="true"></div>
+              </div>
+            </div>
+
+            <div class="relative">
+              <div class="aspect-[4/3] w-full rounded-2xl bg-gray-200" aria-hidden="true"></div>
+              <div class="absolute right-4 top-4 w-44 rounded-xl bg-white p-3 shadow-sm ring-1 ring-black/10">
+                <div class="h-3 w-24 rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="mt-2 h-6 w-20 rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="mt-3 h-9 w-full rounded-lg bg-gray-900" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="flex items-center gap-3 rounded-xl bg-white p-3 ring-1 ring-black/5">
+              <div class="h-9 w-9 rounded-full bg-gray-200" aria-hidden="true"></div>
+              <div class="space-y-1">
+                <div class="h-3 w-24 rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="h-3 w-16 rounded bg-gray-200" aria-hidden="true"></div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 rounded-xl bg-white p-3 ring-1 ring-black/5">
+              <div class="h-9 w-9 rounded-full bg-gray-200" aria-hidden="true"></div>
+              <div class="space-y-1">
+                <div class="h-3 w-24 rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="h-3 w-16 rounded bg-gray-200" aria-hidden="true"></div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 rounded-xl bg-white p-3 ring-1 ring-black/5">
+              <div class="h-9 w-9 rounded-full bg-gray-200" aria-hidden="true"></div>
+              <div class="space-y-1">
+                <div class="h-3 w-24 rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="h-3 w-16 rounded bg-gray-200" aria-hidden="true"></div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 rounded-xl bg-white p-3 ring-1 ring-black/5">
+              <div class="h-9 w-9 rounded-full bg-gray-200" aria-hidden="true"></div>
+              <div class="space-y-1">
+                <div class="h-3 w-24 rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="h-3 w-16 rounded bg-gray-200" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- IA: Seção “Shop by categories” (4 cards). -->
+        <section class="mt-10">
+          <div class="mb-4 flex items-center justify-between">
+            <div class="h-5 w-44 rounded bg-gray-200" aria-hidden="true"></div>
+            <div class="h-8 w-24 rounded-full bg-gray-100 ring-1 ring-black/10" aria-hidden="true"></div>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="rounded-2xl bg-[#f7f7f8] p-4">
+              <div class="aspect-[4/3] w-full rounded-xl bg-gray-200" aria-hidden="true"></div>
+              <div class="mt-4 h-4 w-28 rounded bg-gray-200" aria-hidden="true"></div>
+            </div>
+            <div class="rounded-2xl bg-[#f7f7f8] p-4">
+              <div class="aspect-[4/3] w-full rounded-xl bg-gray-200" aria-hidden="true"></div>
+              <div class="mt-4 h-4 w-28 rounded bg-gray-200" aria-hidden="true"></div>
+            </div>
+            <div class="rounded-2xl bg-[#f7f7f8] p-4">
+              <div class="aspect-[4/3] w-full rounded-xl bg-gray-200" aria-hidden="true"></div>
+              <div class="mt-4 h-4 w-28 rounded bg-gray-200" aria-hidden="true"></div>
+            </div>
+            <div class="rounded-2xl bg-[#f7f7f8] p-4">
+              <div class="aspect-[4/3] w-full rounded-xl bg-gray-200" aria-hidden="true"></div>
+              <div class="mt-4 h-4 w-28 rounded bg-gray-200" aria-hidden="true"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- IA: Blocos em 2 colunas. -->
+        <section class="mt-10 grid gap-4 lg:grid-cols-2">
+          <div class="rounded-2xl bg-[#f7f7f8] p-5">
+            <div class="h-4 w-28 rounded bg-gray-200" aria-hidden="true"></div>
+            <div class="mt-4 grid gap-3 sm:grid-cols-2">
+              <div class="rounded-xl bg-white p-3 ring-1 ring-black/5">
+                <div class="aspect-[4/3] w-full rounded-lg bg-gray-200" aria-hidden="true"></div>
+                <div class="mt-3 h-3 w-32 rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="mt-2 h-3 w-20 rounded bg-gray-200" aria-hidden="true"></div>
+              </div>
+              <div class="rounded-xl bg-white p-3 ring-1 ring-black/5">
+                <div class="aspect-[4/3] w-full rounded-lg bg-gray-200" aria-hidden="true"></div>
+                <div class="mt-3 h-3 w-32 rounded bg-gray-200" aria-hidden="true"></div>
+                <div class="mt-2 h-3 w-20 rounded bg-gray-200" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-[#f7f7f8] p-5">
+            <div class="h-4 w-36 rounded bg-gray-200" aria-hidden="true"></div>
+            <div class="mt-4 aspect-[16/9] w-full rounded-xl bg-gray-200" aria-hidden="true"></div>
+            <div class="mt-4 h-9 w-32 rounded-full bg-gray-100 ring-1 ring-black/10" aria-hidden="true"></div>
+          </div>
+        </section>
+
+        <section class="mt-12 rounded-2xl bg-[#f7f7f8] p-8">
+          <div class="grid items-center gap-6 md:grid-cols-[1fr_0.7fr]">
+            <div class="space-y-3">
+              <div class="h-8 w-80 max-w-full rounded bg-gray-200" aria-hidden="true"></div>
+              <div class="h-4 w-[520px] max-w-full rounded bg-gray-200" aria-hidden="true"></div>
+              <div class="mt-4 flex items-center gap-3">
+                <div class="h-11 w-full max-w-sm rounded-full bg-white ring-1 ring-black/10" aria-hidden="true"></div>
+                <div class="h-11 w-32 rounded-full bg-gray-900" aria-hidden="true"></div>
+              </div>
+            </div>
+            <div class="aspect-[4/3] w-full rounded-2xl bg-gray-200" aria-hidden="true"></div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="border-t border-black/5 px-6 py-10">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="space-y-3">
+            <div class="h-4 w-28 rounded bg-gray-200" aria-hidden="true"></div>
+            <div class="space-y-2">
+              <div class="h-3 w-40 rounded bg-gray-200" aria-hidden="true"></div>
+              <div class="h-3 w-32 rounded bg-gray-200" aria-hidden="true"></div>
+              <div class="h-3 w-36 rounded bg-gray-200" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="h-4 w-28 rounded bg-gray-200" aria-hidden="true"></div>
+            <div class="space-y-2">
+              <div class="h-3 w-40 rounded bg-gray-200" aria-hidden="true"></div>
+              <div class="h-3 w-32 rounded bg-gray-200" aria-hidden="true"></div>
+              <div class="h-3 w-36 rounded bg-gray-200" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="h-4 w-28 rounded bg-gray-200" aria-hidden="true"></div>
+            <div class="space-y-2">
+              <div class="h-3 w-40 rounded bg-gray-200" aria-hidden="true"></div>
+              <div class="h-3 w-32 rounded bg-gray-200" aria-hidden="true"></div>
+              <div class="h-3 w-36 rounded bg-gray-200" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="h-4 w-28 rounded bg-gray-200" aria-hidden="true"></div>
+            <div class="space-y-2">
+              <div class="h-3 w-40 rounded bg-gray-200" aria-hidden="true"></div>
+              <div class="h-3 w-32 rounded bg-gray-200" aria-hidden="true"></div>
+              <div class="h-3 w-36 rounded bg-gray-200" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-10 flex items-center justify-between border-t border-black/5 pt-6 text-xs text-gray-500">
+          <div class="h-3 w-40 rounded bg-gray-200" aria-hidden="true"></div>
+          <div class="h-3 w-24 rounded bg-gray-200" aria-hidden="true"></div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+

@@ -12,8 +12,10 @@ export default defineConfig({
   webServer: {
     command: "npm run dev -- -p 3031",
     url: "http://localhost:3031",
-    reuseExistingServer: true,
+    // IA-first: quando validamos por variante (NEXT_PUBLIC_HEADER_VARIANT),
+    // precisamos garantir que o servidor respeite o env atual e não reutilize
+    // um processo anterior com build diferente.
+    reuseExistingServer: !process.env.NEXT_PUBLIC_HEADER_VARIANT,
     timeout: 120_000
   }
 });
-

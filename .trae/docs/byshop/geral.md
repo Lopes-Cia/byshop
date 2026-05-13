@@ -52,6 +52,7 @@ Este documento descreve o estado atual do projeto em `c:\LOPES\www\byshop\www`, 
   - Testes Playwright end-to-end
 - `public/`
   - Assets estáticos (ex.: logo e preview)
+  - Observação: o `www/public/logo.png` foi sincronizado a partir de `.trae/docs/design/logo.png` (logo de referência usada no sandbox).
 
 ## Rotas e páginas (mapa do App Router)
 
@@ -207,6 +208,20 @@ Os principais schemas/tipos estão em [schemas.ts](file:///c:/LOPES/www/byshop/w
   - `useAuthStore` (estado do usuário e logout)
   - ([header.tsx](file:///c:/LOPES/www/byshop/www/components/layout/header.tsx))
 
+#### Header (V1/V2)
+
+- Alternância por build-time env: `NEXT_PUBLIC_HEADER_VARIANT`
+  - `v2` → renderiza [HeaderV2](file:///c:/LOPES/www/byshop/www/components/layout/header-v2.tsx)
+  - qualquer outro valor/ausente → fallback seguro para [HeaderV1](file:///c:/LOPES/www/byshop/www/components/layout/header-v1.tsx)
+- Ponto de seleção (wrapper): [header.tsx](file:///c:/LOPES/www/byshop/www/components/layout/header.tsx)
+- Processo detalhado (referência visual → componente Next.js): [mod_design.md](file:///c:/LOPES/www/byshop/.trae/docs/byshop/mod_design.md)
+- Sandbox de desenho (apenas o header do modelo, sem chrome global): `/dev/desenho` ([page.tsx](file:///c:/LOPES/www/byshop/www/app/dev/desenho/page.tsx))
+  - Implementação espelha `.trae/docs/design/modelo.html` em Tailwind (foco em estrutura e breakpoints).
+  - Logo do modelo via asset estático `/logo.png` (arquivo: `www/public/logo.png`, sincronizado de `.trae/docs/design/logo.png`)
+  - Links atuais do modelo: `Ofertas` (`/produtos?sale=1`), `Novidades` (`/produtos?sort=newest`), `Sobre nós` (`/sobre`)
+  - Nota: a tentativa de usar esse sandbox como “sistema de desenho” para diferenciar componentes da interface teve uma implementação frágil; precisamos definir uma estratégia nova (slots/contrato + tokens/breakpoints + checklist de UI/UX) antes de evoluir.
+  - 2026-05-12: revisão visual do header (top bar + nav) levantou pontos de consistência de tipografia/ícones e breakpoints (ex.: padronizar tamanho dos ícones e targets, reduzir `text-[18px]` para `text-base`, trocar breakpoint `981px` por `lg=1024`, e ajustar `px`/`gap` para escala Tailwind).
+
 ### shadcn/ui
 
 - Config do registry/aliases em [components.json](file:///c:/LOPES/www/byshop/www/components.json)
@@ -223,6 +238,11 @@ Os principais schemas/tipos estão em [schemas.ts](file:///c:/LOPES/www/byshop/w
 - Config em [playwright.config.ts](file:///c:/LOPES/www/byshop/www/playwright.config.ts)
   - Sobe o dev server na porta 3031
   - Reporter HTML (não abre automaticamente)
+- Smoke do Header (desktop + mobile):
+  - Arquivo: [header-variants-smoke.spec.ts](file:///c:/LOPES/www/byshop/www/tests/e2e/header-variants-smoke.spec.ts)
+  - Execução sugerida (PowerShell):
+    - V1 (fallback): `Remove-Item Env:\NEXT_PUBLIC_HEADER_VARIANT -ErrorAction SilentlyContinue; npx playwright test tests/e2e/header-variants-smoke.spec.ts`
+    - V2: `$env:NEXT_PUBLIC_HEADER_VARIANT="v2"; npx playwright test tests/e2e/header-variants-smoke.spec.ts`
 - Especificação E2E principal:
   - Compra como guest cria pedido e valida tracking
 - Login respeita `next` e redireciona para `/perfil`

@@ -49,6 +49,9 @@ function ListItem({
 }
 
 export default function Navigation() {
+  /* IA: Links de ferramentas internas devem aparecer apenas fora de produção para não poluir o menu do site público. */
+  const showDevLinks = process.env.NODE_ENV !== "production";
+
   return (
     <NavigationMenu viewport={false}>
       <NavigationMenuList>
@@ -117,6 +120,26 @@ export default function Navigation() {
                     <div className="text-muted-foreground">Inspire-se com nossos posts mais recentes.</div>
                   </Link>
                 </NavigationMenuLink>
+                {showDevLinks ? (
+                  <>
+                    <NavigationMenuLink asChild>
+                      <Link href="/dev/desenho">
+                        <div className="font-medium">Desenho (Dev)</div>
+                        <div className="text-muted-foreground">
+                          Sandbox limpo com o header do modelo (Tailwind), para guiar refatoração.
+                        </div>
+                      </Link>
+                    </NavigationMenuLink>
+                    <NavigationMenuLink asChild>
+                      <Link href="/dev/modelo">
+                        <div className="font-medium">Modelo Home (Dev)</div>
+                        <div className="text-muted-foreground">
+                          Wireframe genérico (placeholders) inspirado em home completa.
+                        </div>
+                      </Link>
+                    </NavigationMenuLink>
+                  </>
+                ) : null}
               </li>
             </ul>
           </NavigationMenuContent>

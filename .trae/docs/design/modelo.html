@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Header</title>
+    <style>
+      :root {
+        --text: #111827;
+        --muted: rgba(17, 24, 39, 0.55);
+        --line: rgba(17, 24, 39, 0.12);
+        --topbar-bg: #f3f4f6;
+        --amazon-orange: #ff9900;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Arial,
+          "Apple Color Emoji",
+          "Segoe UI Emoji";
+        color: var(--text);
+        background: #ffffff;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .wrap {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 0 22px;
+      }
+
+      .site-header {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .topbar {
+        background: var(--topbar-bg);
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .topbar-row {
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .topbar-message {
+        padding: 7px 0;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .topbar-utils {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        white-space: nowrap;
+      }
+
+      .toplink {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        padding: 7px 0;
+      }
+
+      .toplink:hover {
+        color: var(--text);
+      }
+
+      .caret {
+        opacity: 0.6;
+        font-size: 11px;
+        margin-left: -4px;
+      }
+
+      .mainbar {
+        background: #ffffff;
+      }
+
+      .mainbar-row {
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 22px;
+      }
+
+      .left-group {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        min-width: 0;
+      }
+
+      .logo {
+        position: relative;
+        display: inline-flex;
+        align-items: flex-end;
+        padding: 10px 0;
+        line-height: 1;
+      }
+
+      .logo-text {
+        font-weight: 800;
+        font-size: 34px;
+        letter-spacing: -0.6px;
+      }
+
+      .logo-smile {
+        position: absolute;
+        left: 16px;
+        bottom: 6px;
+        width: 62px;
+        height: 14px;
+        border-bottom: 4px solid var(--amazon-orange);
+        border-radius: 0 0 999px 999px;
+        transform: rotate(-6deg);
+      }
+
+      .mainnav {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        min-width: 0;
+      }
+
+      .nav-link {
+        color: var(--text);
+        font-size: 18px;
+        font-weight: 500;
+        padding: 10px 0;
+      }
+
+      .nav-link:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+
+      .nav-all {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .grid {
+        width: 22px;
+        height: 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .action {
+        border: 0;
+        background: transparent;
+        padding: 10px 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .action:hover {
+        opacity: 0.78;
+      }
+
+      .action-label {
+        font-size: 18px;
+        font-weight: 500;
+      }
+
+      .icon-action {
+        width: 38px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      @media (max-width: 980px) {
+        .nav-link:not(.nav-all) {
+          display: none;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .topbar-message {
+          display: none;
+        }
+
+        .action-label {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header" aria-label="Cabeçalho">
+      <div class="topbar">
+        <div class="wrap">
+          <div class="topbar-row">
+            <a class="topbar-message" href="#">Amazon's response to Covid-19</a>
+            <div class="topbar-utils" aria-label="Preferências">
+              <a class="toplink" href="#" aria-label="País">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M12 22s7-4.4 7-11a7 7 0 1 0-14 0c0 6.6 7 11 7 11Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                </svg>
+                <span>India</span>
+                <span class="caret" aria-hidden="true">▾</span>
+              </a>
+              <a class="toplink" href="#" aria-label="Idioma">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <path d="M2 12h20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <path
+                    d="M12 2c2.8 2.7 4.4 6.2 4.4 10S14.8 19.3 12 22c-2.8-2.7-4.4-6.2-4.4-10S9.2 4.7 12 2Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>ENG</span>
+                <span class="caret" aria-hidden="true">▾</span>
+              </a>
+              <a class="toplink" href="#" aria-label="Moeda">
+                <span>USD</span>
+                <span class="caret" aria-hidden="true">▾</span>
+              </a>
+              <a class="toplink" href="#">Customer Service</a>
+              <a class="toplink" href="#">Sell on Amazon</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mainbar">
+        <div class="wrap">
+          <div class="mainbar-row">
+            <div class="left-group">
+              <a class="logo" href="#" aria-label="Amazon">
+                <span class="logo-text">amazon</span>
+                <span class="logo-smile" aria-hidden="true"></span>
+              </a>
+
+              <nav class="mainnav" aria-label="Navegação principal">
+                <a class="nav-link nav-all" href="#">
+                  <span class="grid" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z"
+                        fill="currentColor"
+                        opacity="0.85"
+                      />
+                    </svg>
+                  </span>
+                  <span>All</span>
+                </a>
+                <a class="nav-link" href="#">Today's Deals</a>
+                <a class="nav-link" href="#">Gift Cards</a>
+                <a class="nav-link" href="#">Registry &amp; Gifting</a>
+              </nav>
+            </div>
+
+            <div class="actions" aria-label="Ações">
+              <button class="action" type="button" aria-label="Search">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M10.5 18.5a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M16.4 16.4 21 21"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <span class="action-label">Search</span>
+              </button>
+
+              <button class="action icon-action" type="button" aria-label="Account">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M20 21a8 8 0 0 0-16 0"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+
+              <button class="action icon-action" type="button" aria-label="Favorites">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M12 21s-7-4.4-9.3-9A5.7 5.7 0 0 1 12 5.8 5.7 5.7 0 0 1 21.3 12c-2.3 4.6-9.3 9-9.3 9Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+
+              <button class="action icon-action" type="button" aria-label="Cart">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M6 7h15l-1.5 8H7.2L6 7Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M6 7 5 3H2"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path d="M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="2" />
+                  <path
+                    d="M18 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  </body>
+</html>
