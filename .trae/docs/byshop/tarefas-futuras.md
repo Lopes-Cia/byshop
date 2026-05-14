@@ -89,9 +89,6 @@ Quero que cada uma dessas tarefas siga um fluxo de criação de contexto, onde o
 - revisão detalhada do design mobile, MOBILE FIRST
 
 
-### ruido legado
-- refatorar o projeto todo removendo o código legado, fallback para versões anteriores, compatibilidade para versões anteriores.
-
 ### helpers
 - criar helpers para facilitar o uso de funções comuns.
 - analisar as funções existentes que estao em repetição e criar helpers para elas.

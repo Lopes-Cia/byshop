@@ -4,11 +4,12 @@ import { useSyncExternalStore } from "react"
 import { z } from "zod"
 
 import { coupons } from "@/lib/data"
-import { safeGetItem, safeSetItem } from "@/lib/safe-storage"
+import { safeGetItem, safeRemoveItem, safeSetItem } from "@/lib/safe-storage"
 import { CartItemSchema, CouponSchema, type CartItem } from "@/lib/schemas"
 
 // IA-first: chave única para persistir o carrinho no localStorage (versionada para futuras migrações).
-const CART_STORAGE_KEY = "byshop:cart:v1"
+const CART_STORAGE_KEY_V1 = "byshop:cart:v1"
+const CART_STORAGE_KEY = "byshop:cart:v2"
 
 // IA-first: shape persistida (somente dados serializáveis; sem funções).
 const CartPersistedSchema = z.object({
@@ -29,10 +30,8 @@ export type CartState = {
   total: number
   count: number
   addItem: (item: CartItem) => void
-  // IA-first: `variant` é opcional para compatibilidade; sem variant remove/atualiza todas as variações do mesmo id.
-  removeItem: (id: number, variant?: string) => void
-  // IA-first: `variant` é opcional para compatibilidade; sem variant atualiza todas as variações do mesmo id.
-  setQuantity: (id: number, quantity: number, variant?: string) => void
+  removeItem: (id: number, variant: string) => void
+  setQuantity: (id: number, quantity: number, variant: string) => void
   clear: () => void
   setCouponCode: (code: string | null) => void
 }
@@ -82,6 +81,7 @@ function writeStorage(next: CartPersistedState) {
 function ensureHydrated() {
   if (hydrated) return
   hydrated = true
+  safeRemoveItem(CART_STORAGE_KEY_V1)
   persistedState = readStorage()
 }
 
@@ -192,24 +192,18 @@ function addItem(item: CartItem) {
   })
 }
 
-function removeItem(id: number, variant?: string) {
+function removeItem(id: number, variant: string) {
   setPersistedState((current) => {
-    const nextItems =
-      typeof variant === "string"
-        ? current.items.filter((i) => !(i.id === id && i.variant === variant))
-        : current.items.filter((i) => i.id !== id)
-
-    return { ...current, items: nextItems }
+    return { ...current, items: current.items.filter((i) => !(i.id === id && i.variant === variant)) }
   })
 }
 
-function setQuantity(id: number, quantity: number, variant?: string) {
+function setQuantity(id: number, quantity: number, variant: string) {
   setPersistedState((current) => {
     const nextQty = clampInt(quantity, 1, 999)
-    const shouldMatch = (i: CartItem) => i.id === id && (typeof variant !== "string" || i.variant === variant)
     return {
       ...current,
-      items: current.items.map((i) => (shouldMatch(i) ? { ...i, quantity: nextQty } : i)),
+      items: current.items.map((i) => (i.id === id && i.variant === variant ? { ...i, quantity: nextQty } : i)),
     }
   })
 }

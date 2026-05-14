@@ -4,11 +4,12 @@ import { useSyncExternalStore } from "react"
 import { z } from "zod"
 
 import { coupons } from "@/lib/data"
-import { safeGetItem, safeSetItem } from "@/lib/safe-storage"
+import { safeGetItem, safeRemoveItem, safeSetItem } from "@/lib/safe-storage"
 import { CouponSchema, OrderSchema, OrderStatusSchema, OrderTotalsSchema, type CartItem, type Order } from "@/lib/schemas"
 
-// IA-first: chave única para persistir pedidos no localStorage (versionada para futuras migrações).
-const ORDERS_STORAGE_KEY = "byshop:orders:v1"
+// IA-first: storage v2 descarta dados antigos do v1 (sem migração) para manter schema estrito.
+const ORDERS_STORAGE_KEY = "byshop:orders:v2"
+const ORDERS_STORAGE_KEY_V1 = "byshop:orders:v1"
 
 // IA-first: shape persistida (somente dados serializáveis; sem funções).
 const OrdersPersistedSchema = z.object({
@@ -84,6 +85,7 @@ function writeStorage(next: OrdersPersistedState) {
 
 function ensureHydrated() {
   if (hydrated) return
+  safeRemoveItem(ORDERS_STORAGE_KEY_V1)
   hydrated = true
   persistedState = readStorage()
 }
@@ -171,11 +173,8 @@ function computeTotals(input: CreateOrderInput) {
   const shipping = input.totals?.shipping ?? computeShipping(taxable, couponCode)
   const tax = input.totals?.tax ?? computeTax(taxable)
   const total = input.totals?.total ?? roundMoney(Math.max(0, taxable + shipping + tax))
-  const parsed = OrderTotalsSchema.safeParse({ subtotal, shipping, tax, discount, total })
-  if (!parsed.success) {
-    return { subtotal: 0, shipping: 0, tax: 0, discount: 0, total: 0 }
-  }
-  return parsed.data
+
+  return OrderTotalsSchema.parse({ subtotal, shipping, tax, discount, total })
 }
 
 function setPersistedState(updater: (current: OrdersPersistedState) => OrdersPersistedState) {
@@ -202,33 +201,15 @@ function createOrder(input: CreateOrderInput): Order {
     tracking: createTracking(),
   }
 
-  const parsed = OrderSchema.safeParse(order)
-  if (!parsed.success) {
-    const fallback: Order = {
-      id: createOrderId(),
-      createdAt: new Date().toISOString(),
-      customerEmail: "cliente@byshop.com",
-      items: [],
-      totals: { subtotal: 0, shipping: 0, tax: 0, discount: 0, total: 0 },
-      status: "processing",
-      couponCode: null,
-      tracking: createTracking(),
-    }
-    setPersistedState((current) => ({
-      ...current,
-      orders: [fallback, ...current.orders],
-      lastCreatedOrderId: fallback.id,
-    }))
-    return fallback
-  }
+  const parsed = OrderSchema.parse(order)
 
   setPersistedState((current) => ({
     ...current,
-    orders: [parsed.data, ...current.orders],
-    lastCreatedOrderId: parsed.data.id,
+    orders: [parsed, ...current.orders],
+    lastCreatedOrderId: parsed.id,
   }))
 
-  return parsed.data
+  return parsed
 }
 
 function getOrderById(id: string) {

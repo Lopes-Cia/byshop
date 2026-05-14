@@ -496,10 +496,6 @@ export const categories = [
   { id: "monitores", title: "Monitores", icon: "🖥️" },
 ] as const
 
-export { CartItemSchema, CouponSchema, OrderSchema, OrderStatusSchema, OrderTotalsSchema }
-export { OrderTrackingSchema }
-export type { CartItem, Coupon, Order, OrderStatus, OrderTotals, OrderTracking }
-
 export const SAVE10: Coupon = CouponSchema.parse({
   code: "SAVE10",
   title: "10% OFF",

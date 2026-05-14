@@ -23,7 +23,7 @@
     - Shop: `/ofertas`, `/cartoes-presente`, `/presentes`
     - Usuário: (nenhum — implementadas em 2026-05-14)
   - Notas:
-    - O `www/README.md` foi mantido como referência do template importado e pode conter caminhos/rotas antigas (ex.: `/product/[id]`).
+    - O `www/README.md` foi revisado para refletir as rotas canônicas (ex.: `/produtos/[id]`).
 - 2026-05-13: AppShell global (layout único para todas as páginas)
   - `app/layout.tsx` passou a envolver todas as rotas com `AppShell`
   - `AppShell` centraliza: Top Bar + Header + Footer + overlays globais (busca/carrinho/menu mobile)
@@ -39,11 +39,11 @@
   - Stores client (persistência via `useSyncExternalStore` + `localStorage`):
     - `www/stores/cart-store.ts` (itens, cupom, totais derivados)
     - `www/stores/orders-store.ts` (criação e persistência de pedidos)
-  - Schemas Zod centralizados em `www/lib/schemas.ts` (com re-export em `www/lib/data.ts` para compatibilidade)
+  - Schemas Zod centralizados em `www/lib/schemas.ts`
   - Cupons ativos: `SAVE10`, `SAVE20`, `FREESHIP`
-  - Totais agora incluem `shipping` (frete) e `tax` (imposto), mantendo leitura de dados persistidos antigos
+  - Totais incluem `shipping` (frete) e `tax` (imposto)
 - 2026-05-13: Task 2 (carrinho real no Header/AppShell/PDP + rota de checkout)
-  - `removeItem`/`setQuantity` agora aceitam `id` + `variant` opcional (quando omitido, aplica para todas as variações do mesmo `id`)
+  - `removeItem`/`setQuantity` agora exigem `id` + `variant` (sem compatibilidade “sem variant”)
   - Header: badge do carrinho usa `count` do store
   - AppShell: drawer do carrinho usa itens/totais do store e ações (alterar quantidade, remover, limpar)
   - CTAs: navegação de checkout padronizada em `/finalizar-compra`
@@ -53,7 +53,7 @@
   - Resumo: subtotal, desconto, frete, taxas e total derivados do store
   - CTAs: `/finalizar-compra` e `/produtos`
 - 2026-05-13: Task 6 (rota legada de checkout + remoção de placeholder)
-  - `/checkout` agora redireciona (server) para `/finalizar-compra` via `redirect()` do `next/navigation`
+  - Rota legada `/checkout` foi removida (404); rota canônica do fluxo de compra é `/finalizar-compra`
   - `PlaceholderPage` foi removido; placeholders restantes usam `PaginaEmConstrucao` (`www/components/pagina-em-construcao.tsx`)
 - 2026-05-13: Task 4 (checkout real)
   - Rota `/finalizar-compra`: formulário mock com validação (`react-hook-form` + `zodResolver`) e resumo do carrinho
@@ -65,14 +65,29 @@
 - 2026-05-14: Páginas do usuário (rotas reais + autenticação)
   - Rotas de autenticação (com `next` seguro): `/conta/entrar`, `/conta/cadastrar`, `/conta/recuperar-senha`
   - Rotas do usuário (sem placeholder): `/minha-conta`, `/meus-pedidos`, `/enderecos`, `/lista-de-desejos`
-  - Compatibilidade: `/perfil` → `/minha-conta`, `/favoritos` → `/lista-de-desejos`
   - Stores client (persistência via `useSyncExternalStore` + `localStorage`):
     - `www/stores/auth-store.ts` (login/cadastro/logout mock)
     - `www/stores/wishlist-store.ts` (wishlist por `productId`)
     - `www/stores/addresses-store.ts` (endereços CRUD)
   - Alinhado mock de cliente (e-mail único) entre auth/checkout/pedidos: `www/lib/mocks.ts`
   - Persistência `localStorage` com fallback seguro (try/catch): `www/lib/safe-storage.ts`
-  - Funcionalidades removidas (redirecionam para `/minha-conta`): `/metodos-de-pagamento`, `/minhas-avaliacoes`
+  - Rotas legadas removidas (404): `/perfil`, `/favoritos`, `/metodos-de-pagamento`, `/minhas-avaliacoes`
+- 2026-05-14: Pedido/checkout (schema + persistência mais estritos)
+  - `OrderTotalsSchema` ficou estrito (sem defaults) para evitar mascarar totals ausentes/invalidos
+  - `orders-store` agora usa `byshop:orders:v2` e descarta `byshop:orders:v1` na primeira hidratação
+  - `computeTotals`/`createOrder` passaram a usar `parse()` (sem fallbacks silenciosos)
+- 2026-05-14: Store do carrinho (refino de API + versionamento de storage)
+  - `www/stores/cart-store.ts`: `removeItem` e `setQuantity` agora exigem `variant` (sem compatibilidade “sem variant”)
+  - Persistência do carrinho: bump de `byshop:cart:v1` para `byshop:cart:v2`
+  - Migração destrutiva: limpeza do `byshop:cart:v1` via `safeRemoveItem` no `ensureHydrated`
+- 2026-05-14: Stores do usuário (bump v2 + limpeza v1)
+  - `www/stores/auth-store.ts`: bump `byshop:auth:v1` → `byshop:auth:v2` + limpeza destrutiva do `v1` via `safeRemoveItem`
+  - `www/stores/wishlist-store.ts`: bump `byshop:wishlist:v1` → `byshop:wishlist:v2` + limpeza destrutiva do `v1` via `safeRemoveItem`
+  - `www/stores/addresses-store.ts`: bump `byshop:addresses:v1` → `byshop:addresses:v2` + troca de `localStorage` direto por `safe-storage` + limpeza destrutiva do `v1` via `safeRemoveItem`
+- 2026-05-14: Ruído legado (limpeza de rotas e exports)
+  - Rotas de redirect legadas removidas (404): `/checkout`, `/perfil`, `/favoritos`, `/metodos-de-pagamento`, `/minhas-avaliacoes`
+  - `www/lib/data.ts`: removidos re-exports de `schemas/types` (imports devem apontar para `www/lib/schemas.ts`)
+  - Docs: `www/README.md` e este arquivo atualizados para refletir rotas canônicas e remoções
 
 ## Referências importantes
 - README do app importado (fonte de verdade do design system e convenções): [README.md](file:///c:/LOPES/www/byshop/www/README.md)
@@ -145,9 +160,6 @@
 
 **Mobile**
 - Revisão detalhada do design mobile (mobile first).
-
-**Ruído legado**
-- Refatorar o projeto todo removendo código legado, fallbacks e compatibilidades para versões anteriores.
 
 **Helpers**
 - Criar helpers para facilitar o uso de funções comuns.

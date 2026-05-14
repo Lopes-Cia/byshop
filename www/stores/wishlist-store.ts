@@ -3,9 +3,10 @@
 import { useSyncExternalStore } from "react"
 import { z } from "zod"
 
-import { safeGetItem, safeSetItem } from "@/lib/safe-storage"
+import { safeGetItem, safeRemoveItem, safeSetItem } from "@/lib/safe-storage"
 
-const WISHLIST_STORAGE_KEY = "byshop:wishlist:v1"
+const WISHLIST_STORAGE_KEY = "byshop:wishlist:v2"
+const WISHLIST_STORAGE_KEY_V1 = "byshop:wishlist:v1"
 
 const WishlistItemSchema = z.object({
   productId: z.number().int().positive(),
@@ -80,6 +81,7 @@ function writeStorage(next: WishlistPersistedState) {
 function ensureHydrated() {
   if (hydrated) return
   hydrated = true
+  safeRemoveItem(WISHLIST_STORAGE_KEY_V1)
   persistedState = readStorage()
 }
 

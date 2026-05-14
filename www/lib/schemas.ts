@@ -55,13 +55,12 @@ export const OrderTrackingSchema = z.object({
   url: z.string().url(),
 })
 
-// IA-first: totals aceitam campos ausentes para compatibilidade com dados persistidos antigos.
 export const OrderTotalsSchema = z.object({
-  subtotal: z.number().nonnegative().default(0),
-  shipping: z.number().nonnegative().default(0),
-  tax: z.number().nonnegative().default(0),
-  discount: z.number().nonnegative().default(0),
-  total: z.number().nonnegative().default(0),
+  subtotal: z.number().nonnegative(),
+  shipping: z.number().nonnegative(),
+  tax: z.number().nonnegative(),
+  discount: z.number().nonnegative(),
+  total: z.number().nonnegative(),
 })
 
 export const OrderSchema = z.object({

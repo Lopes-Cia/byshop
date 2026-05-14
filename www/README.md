@@ -324,7 +324,7 @@ Os componentes shadcn/ui usam os design tokens definidos no `globals.css`:
 │   ├── layout.tsx           # Layout raiz (fonts, metadata)
 │   ├── page.tsx             # Homepage
 │   ├── globals.css          # Estilos globais + design tokens
-│   └── product/[id]/        # Pagina de produto dinamica
+│   └── (shop)/produtos/[id]/ # Pagina de produto dinamica
 │       └── page.tsx
 ├── components/              # Componentes reutilizaveis
 │   ├── header.tsx          # Header global (navegacao, busca, carrinho)
@@ -417,7 +417,7 @@ interface ProductCardProps {
 ```
 
 **Estrutura:**
-- Link para `/product/[id]`
+- Link para `/produtos/[id]`
 - Imagem/emoji placeholder
 - Categoria em amber
 - Titulo truncado (2 linhas)
@@ -463,7 +463,7 @@ const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 - Cart Sidebar (direita)
 - Search Modal (centralizado)
 
-### Pagina de Produto (`app/product/[id]/page.tsx`)
+### Pagina de Produto (`app/(shop)/produtos/[id]/page.tsx`)
 
 **Params:** `{ id: string }`
 

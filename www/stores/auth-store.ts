@@ -4,7 +4,7 @@ import { useSyncExternalStore } from "react"
 import { z } from "zod"
 
 import { MOCK_CUSTOMER } from "@/lib/mocks"
-import { safeGetItem, safeSetItem } from "@/lib/safe-storage"
+import { safeGetItem, safeRemoveItem, safeSetItem } from "@/lib/safe-storage"
 
 export const MOCK_AUTH_USER = {
   email: MOCK_CUSTOMER.email,
@@ -13,7 +13,8 @@ export const MOCK_AUTH_USER = {
   lastName: MOCK_CUSTOMER.lastName,
 } as const
 
-const AUTH_STORAGE_KEY = "byshop:auth:v1"
+const AUTH_STORAGE_KEY = "byshop:auth:v2"
+const AUTH_STORAGE_KEY_V1 = "byshop:auth:v1"
 
 const UserSchema = z.object({
   id: z.string().min(1),
@@ -93,6 +94,7 @@ function writeStorage(next: AuthPersistedState) {
 function ensureHydrated() {
   if (hydrated) return
   hydrated = true
+  safeRemoveItem(AUTH_STORAGE_KEY_V1)
   persistedState = readStorage()
   volatileState = { isLoading: false }
 }

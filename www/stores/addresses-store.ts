@@ -3,7 +3,10 @@
 import { useSyncExternalStore } from "react"
 import { z } from "zod"
 
-const ADDRESSES_STORAGE_KEY = "byshop:addresses:v1"
+import { safeGetItem, safeRemoveItem, safeSetItem } from "@/lib/safe-storage"
+
+const ADDRESSES_STORAGE_KEY = "byshop:addresses:v2"
+const ADDRESSES_STORAGE_KEY_V1 = "byshop:addresses:v1"
 
 const AddressSchema = z.object({
   id: z.string().min(1),
@@ -75,8 +78,7 @@ function safeParseJson(input: string) {
 }
 
 function readStorage(): AddressesPersistedState {
-  if (typeof window === "undefined") return defaultPersistedState
-  const raw = window.localStorage.getItem(ADDRESSES_STORAGE_KEY)
+  const raw = safeGetItem(ADDRESSES_STORAGE_KEY)
   if (!raw) return defaultPersistedState
   const parsed = safeParseJson(raw)
   const res = AddressesPersistedSchema.safeParse(parsed)
@@ -85,13 +87,13 @@ function readStorage(): AddressesPersistedState {
 }
 
 function writeStorage(next: AddressesPersistedState) {
-  if (typeof window === "undefined") return
-  window.localStorage.setItem(ADDRESSES_STORAGE_KEY, JSON.stringify(next))
+  safeSetItem(ADDRESSES_STORAGE_KEY, JSON.stringify(next))
 }
 
 function ensureHydrated() {
   if (hydrated) return
   hydrated = true
+  safeRemoveItem(ADDRESSES_STORAGE_KEY_V1)
   persistedState = readStorage()
 }
 
@@ -218,4 +220,3 @@ export const addressesStore = {
   clear,
   getById,
 }
-
