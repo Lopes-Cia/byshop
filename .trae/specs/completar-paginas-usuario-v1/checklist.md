@@ -1,0 +1,11 @@
+- [x] Existem páginas reais (sem `PaginaEmConstrucao`) para: `/minha-conta`, `/meus-pedidos`, `/enderecos`, `/metodos-de-pagamento`, `/lista-de-desejos`, `/minhas-avaliacoes`.
+- [x] Existem páginas reais para autenticação: `/conta/entrar`, `/conta/cadastrar`, `/conta/recuperar-senha`.
+- [x] `next` é tratado com segurança: somente caminhos iniciando com `/` e não `//`; qualquer valor inválido cai para `/`.
+- [x] Store de auth persiste usuário e suporta login/signup/logout (mock) sem dependência nova.
+- [x] Store de wishlist persiste itens e oferece add/remove/toggle/count.
+- [x] Store de endereços e métodos de pagamento persistem e suportam CRUD básico.
+- [x] Stores baseados em `useSyncExternalStore` não geram erro/loop (snapshots cacheados).
+- [x] `/meus-pedidos` integra com `orders-store` do shop e linka cada pedido para `/finalizar-compra/sucesso?orderId=...`.
+- [x] `/perfil` redireciona para `/minha-conta` e `/favoritos` redireciona para `/lista-de-desejos`.
+- [x] Visual consistente com o design atual do ByShop (tipografia/spacing/cores, shadcn/ui).
+- [x] Sem diagnósticos TypeScript/Next no editor após mudanças (GetDiagnostics).

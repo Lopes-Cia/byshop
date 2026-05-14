@@ -1,20 +1,12 @@
 'use client'
 
-import {
-  Search,
-  Menu,
-  ShoppingCart,
-  Heart,
-  User,
-  Star,
-  Package,
-  Wallet,
-  CreditCard,
-  Gift,
-} from "lucide-react"
+import { Search, Menu, ShoppingCart, Heart, User, Package, Wallet, Gift, MapPin } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
+import { useEffect, useRef } from "react"
 import { useCartStore } from "@/stores/cart-store"
+import { useAuthStore } from "@/stores/auth-store"
 
 interface HeaderProps {
   onMobileMenuOpen: () => void
@@ -38,6 +30,25 @@ export function Header({
   // IA-first: badge do carrinho reflete a quantidade total (soma das quantidades) do store persistido.
   const cartCount = useCartStore((s) => s.count)
   const badgeText = cartCount > 99 ? "99+" : String(cartCount)
+  const pathname = usePathname()
+  const auth = useAuthStore((s) => ({ user: s.user, logout: s.logout }))
+  const accountHref = auth.user
+    ? "/minha-conta"
+    : `/conta/entrar?next=${encodeURIComponent(pathname || "/")}`
+  const userMenuRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (!isUserMenuOpen) return
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null
+      if (!target) return
+      if (!userMenuRef.current?.contains(target)) setIsUserMenuOpen(false)
+    }
+
+    window.addEventListener("pointerdown", handlePointerDown)
+    return () => window.removeEventListener("pointerdown", handlePointerDown)
+  }, [isUserMenuOpen, setIsUserMenuOpen])
 
   return (
     <header className="bg-white border-b border-neutral-200 sticky top-0 z-50">
@@ -216,12 +227,14 @@ export function Header({
             <Search className="w-5 h-5 md:w-4 md:h-4 text-neutral-600 md:text-neutral-400" />
             <span className="hidden md:inline text-xs text-neutral-400 border border-neutral-200 rounded px-1.5 py-0.5">Ctrl K</span>
           </button>
-          <div 
-            className="hidden md:block relative"
-            onMouseEnter={() => setIsUserMenuOpen(true)}
-            onMouseLeave={() => setIsUserMenuOpen(false)}
-          >
-            <button className="hover:text-neutral-900">
+          <div className="hidden md:block relative" ref={userMenuRef}>
+            <button
+              type="button"
+              aria-label={auth.user ? "Menu da conta" : "Entrar"}
+              aria-expanded={isUserMenuOpen}
+              onClick={() => setIsUserMenuOpen((prev) => !prev)}
+              className="hover:text-neutral-900"
+            >
               <User className="w-5 h-5 text-neutral-700" />
             </button>
             
@@ -229,7 +242,9 @@ export function Header({
               <div className="absolute right-0 top-full mt-2 bg-white border border-neutral-200 shadow-lg rounded-lg w-72 z-50">
                 <div className="p-4 border-b border-neutral-100">
                   <p className="text-sm text-neutral-500">Bem-vindo</p>
-                  <p className="font-semibold text-neutral-900">Thomas</p>
+                  <p className="font-semibold text-neutral-900">
+                    {auth.user ? `${auth.user.firstName} ${auth.user.lastName}` : "Visitante"}
+                  </p>
                 </div>
 
                 {/* Creditos Section */}
@@ -260,39 +275,68 @@ export function Header({
                 </div>
                 
                 <div className="py-2">
-                  <Link href="/minha-conta" className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">
+                  <Link
+                    href="/minha-conta"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+                  >
                     <User className="w-4 h-4" />
                     Minha Conta
                   </Link>
-                  <Link href="/meus-pedidos" className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">
+                  <Link
+                    href="/meus-pedidos"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+                  >
                     <Package className="w-4 h-4" />
                     Meus Pedidos
                   </Link>
-                  <Link href="/lista-de-desejos" className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">
+                  <Link
+                    href="/enderecos"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+                  >
+                    <MapPin className="w-4 h-4" />
+                    Endereços
+                  </Link>
+                  <Link
+                    href="/lista-de-desejos"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+                  >
                     <Heart className="w-4 h-4" />
                     Lista de Desejos
-                  </Link>
-                  <Link href="/minhas-avaliacoes" className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">
-                    <Star className="w-4 h-4" />
-                    Minhas Avaliações
-                  </Link>
-                  <Link href="/metodos-de-pagamento" className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">
-                    <CreditCard className="w-4 h-4" />
-                    Métodos de pagamento
                   </Link>
                 </div>
                 
                 <div className="border-t border-neutral-100 py-2">
-                  <a href="#" className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                    Sair
-                  </a>
+                  {auth.user ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        auth.logout()
+                        setIsUserMenuOpen(false)
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                    >
+                      Sair
+                    </button>
+                  ) : (
+                    <Link
+                      href={accountHref}
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-amber-700 hover:bg-amber-50"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      Entrar
+                    </Link>
+                  )}
                 </div>
               </div>
             )}
           </div>
-          <button className="hidden md:block hover:text-neutral-900">
+          <Link href="/lista-de-desejos" className="hidden md:block hover:text-neutral-900" aria-label="Lista de desejos">
             <Heart className="w-5 h-5 text-neutral-700" />
-          </button>
+          </Link>
           <button 
             onClick={onCartOpen}
             className="relative p-2 -mr-2 hover:bg-neutral-100 rounded-lg"

@@ -21,7 +21,7 @@
     - Dataset: `www/lib/data.ts` (`products`, `categories`, `allSearchData`, `cartItemsMock`, `customerReviewsMock`)
   - Placeholders (páginas “Em construção”) para evitar dead-ends:
     - Shop: `/ofertas`, `/cartoes-presente`, `/presentes`
-    - Usuário: `/minha-conta`, `/meus-pedidos`, `/lista-de-desejos`, `/minhas-avaliacoes`, `/metodos-de-pagamento`, `/enderecos`
+    - Usuário: (nenhum — implementadas em 2026-05-14)
   - Notas:
     - O `www/README.md` foi mantido como referência do template importado e pode conter caminhos/rotas antigas (ex.: `/product/[id]`).
 - 2026-05-13: AppShell global (layout único para todas as páginas)
@@ -62,6 +62,17 @@
 - 2026-05-13: Task 5 (sucesso do checkout)
   - Rota `/finalizar-compra/sucesso`: lê `orderId` e carrega pedido da store (fallback: último pedido criado)
   - Exibe confirmação (id, total, status e tracking mock) e CTAs para `/produtos` e `/meus-pedidos`
+- 2026-05-14: Páginas do usuário (rotas reais + autenticação)
+  - Rotas de autenticação (com `next` seguro): `/conta/entrar`, `/conta/cadastrar`, `/conta/recuperar-senha`
+  - Rotas do usuário (sem placeholder): `/minha-conta`, `/meus-pedidos`, `/enderecos`, `/lista-de-desejos`
+  - Compatibilidade: `/perfil` → `/minha-conta`, `/favoritos` → `/lista-de-desejos`
+  - Stores client (persistência via `useSyncExternalStore` + `localStorage`):
+    - `www/stores/auth-store.ts` (login/cadastro/logout mock)
+    - `www/stores/wishlist-store.ts` (wishlist por `productId`)
+    - `www/stores/addresses-store.ts` (endereços CRUD)
+  - Alinhado mock de cliente (e-mail único) entre auth/checkout/pedidos: `www/lib/mocks.ts`
+  - Persistência `localStorage` com fallback seguro (try/catch): `www/lib/safe-storage.ts`
+  - Funcionalidades removidas (redirecionam para `/minha-conta`): `/metodos-de-pagamento`, `/minhas-avaliacoes`
 
 ## Referências importantes
 - README do app importado (fonte de verdade do design system e convenções): [README.md](file:///c:/LOPES/www/byshop/www/README.md)

@@ -13,8 +13,10 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { cartItemsMock } from "@/lib/data"
+import { MOCK_CUSTOMER } from "@/lib/mocks"
 import { cartStore, useCartStore } from "@/stores/cart-store"
 import { ordersStore } from "@/stores/orders-store"
+import { useAuthStore } from "@/stores/auth-store"
 
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value)
@@ -59,15 +61,15 @@ const CheckoutFormSchema = z.object({
 type CheckoutFormValues = z.infer<typeof CheckoutFormSchema>
 
 const devMockValues: CheckoutFormValues = {
-  fullName: "Cliente ByShop",
-  email: "cliente@byshop.com",
-  phone: "11999999999",
-  cep: "01001-000",
-  street: "Rua Exemplo",
-  number: "123",
-  neighborhood: "Centro",
-  city: "São Paulo",
-  state: "SP",
+  fullName: `${MOCK_CUSTOMER.firstName} ${MOCK_CUSTOMER.lastName}`,
+  email: MOCK_CUSTOMER.email,
+  phone: MOCK_CUSTOMER.phone,
+  cep: MOCK_CUSTOMER.address.cep,
+  street: MOCK_CUSTOMER.address.street,
+  number: MOCK_CUSTOMER.address.number,
+  neighborhood: MOCK_CUSTOMER.address.neighborhood,
+  city: MOCK_CUSTOMER.address.city,
+  state: MOCK_CUSTOMER.address.state,
   cardNumber: "4111 1111 1111 1111",
   cardName: "CLIENTE BYSHOP",
   cardExp: "08/29",
@@ -78,6 +80,7 @@ export default function FinalizarCompraPage() {
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const authUser = useAuthStore((s) => s.user)
 
   const cart = useCartStore((s) => ({
     items: s.items,
@@ -123,6 +126,13 @@ export default function FinalizarCompraPage() {
     mode: "onTouched",
   })
 
+  useEffect(() => {
+    if (!authUser) return
+    if (form.formState.isDirty) return
+    form.setValue("email", authUser.email)
+    form.setValue("fullName", `${authUser.firstName} ${authUser.lastName}`)
+  }, [authUser, form])
+
   const onSubmit = async (values: CheckoutFormValues) => {
     if (cart.items.length === 0) return
     setIsSubmitting(true)
@@ -130,7 +140,7 @@ export default function FinalizarCompraPage() {
     try {
       const order = ordersStore.createOrder({
         items: cart.items,
-        customerEmail: values.email,
+        customerEmail: authUser?.email ?? values.email,
         couponCode: cart.couponCode,
         totals: {
           subtotal: cart.subtotal,

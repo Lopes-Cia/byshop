@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 
-export default function MetodosDePagamentoPage() {
+export default function PerfilPage() {
   redirect("/minha-conta")
 }
+

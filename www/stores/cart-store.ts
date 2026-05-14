@@ -4,6 +4,7 @@ import { useSyncExternalStore } from "react"
 import { z } from "zod"
 
 import { coupons } from "@/lib/data"
+import { safeGetItem, safeSetItem } from "@/lib/safe-storage"
 import { CartItemSchema, CouponSchema, type CartItem } from "@/lib/schemas"
 
 // IA-first: chave única para persistir o carrinho no localStorage (versionada para futuras migrações).
@@ -64,9 +65,7 @@ function safeParseJson(input: string) {
 }
 
 function readStorage(): CartPersistedState {
-  if (typeof window === "undefined") return defaultPersistedState
-
-  const raw = window.localStorage.getItem(CART_STORAGE_KEY)
+  const raw = safeGetItem(CART_STORAGE_KEY)
   if (!raw) return defaultPersistedState
 
   const parsed = safeParseJson(raw)
@@ -77,8 +76,7 @@ function readStorage(): CartPersistedState {
 }
 
 function writeStorage(next: CartPersistedState) {
-  if (typeof window === "undefined") return
-  window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(next))
+  safeSetItem(CART_STORAGE_KEY, JSON.stringify(next))
 }
 
 function ensureHydrated() {

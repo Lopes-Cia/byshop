@@ -5,7 +5,6 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import {
   ArrowRight,
-  CreditCard,
   Cpu,
   Gamepad2,
   Gift,
@@ -146,7 +145,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           openMenu={openMenu}
           setOpenMenu={setOpenMenu}
           isUserMenuOpen={isUserMenuOpen}
-          setIsUserMenuOpen={setIsUserMenuOpen}
+        setIsUserMenuOpen={setIsUserMenuOpen}
         />
 
         {children}
@@ -238,12 +237,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
               <div className="border-t border-neutral-200 py-2">
                 <p className="px-4 py-2 text-xs font-semibold text-neutral-500 uppercase">Configurações</p>
-                <Link
-                  href="/metodos-de-pagamento"
-                  className="flex items-center gap-3 px-4 py-3 text-neutral-900 hover:bg-neutral-100"
-                >
-                  <CreditCard className="w-5 h-5 text-neutral-500" />
-                  Métodos de pagamento
+                <Link href="/enderecos" className="flex items-center gap-3 px-4 py-3 text-neutral-900 hover:bg-neutral-100">
+                  <MapPin className="w-5 h-5 text-neutral-500" />
+                  Endereços
                 </Link>
               </div>
             </div>

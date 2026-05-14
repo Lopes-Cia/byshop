@@ -1,5 +1,5 @@
-import { PaginaEmConstrucao } from "@/components/pagina-em-construcao"
+import { redirect } from "next/navigation"
 
 export default function MinhasAvaliacoesPage() {
-  return <PaginaEmConstrucao title="Minhas avaliações" />
+  redirect("/minha-conta")
 }

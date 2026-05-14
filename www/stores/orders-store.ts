@@ -4,6 +4,7 @@ import { useSyncExternalStore } from "react"
 import { z } from "zod"
 
 import { coupons } from "@/lib/data"
+import { safeGetItem, safeSetItem } from "@/lib/safe-storage"
 import { CouponSchema, OrderSchema, OrderStatusSchema, OrderTotalsSchema, type CartItem, type Order } from "@/lib/schemas"
 
 // IA-first: chave única para persistir pedidos no localStorage (versionada para futuras migrações).
@@ -67,9 +68,7 @@ function safeParseJson(input: string) {
 }
 
 function readStorage(): OrdersPersistedState {
-  if (typeof window === "undefined") return defaultPersistedState
-
-  const raw = window.localStorage.getItem(ORDERS_STORAGE_KEY)
+  const raw = safeGetItem(ORDERS_STORAGE_KEY)
   if (!raw) return defaultPersistedState
 
   const parsed = safeParseJson(raw)
@@ -80,8 +79,7 @@ function readStorage(): OrdersPersistedState {
 }
 
 function writeStorage(next: OrdersPersistedState) {
-  if (typeof window === "undefined") return
-  window.localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(next))
+  safeSetItem(ORDERS_STORAGE_KEY, JSON.stringify(next))
 }
 
 function ensureHydrated() {
