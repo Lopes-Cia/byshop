@@ -82,3 +82,73 @@
 
 ## Próximas decisões (placeholder)
 - (vazio)
+
+## Backlog (tarefas futuras)
+- Fonte: `.trae/docs/byshop/tarefas-futuras.md`
+- Regra de trabalho: cada item abaixo deve virar uma tarefa/spec separada, com “criação de contexto” (a IA faz perguntas para preencher lacunas; evitar suposições).
+
+### Institucional
+**Padronizar design de todas as páginas**
+- Refatorar o design de todas as páginas para um padrão.
+- Criar um menu de navegação para essa seção.
+
+### Loja
+**Home**
+- Refatorar o hero para exibir carrossel de banners.
+- Refatorar o componente de carrossel para exibir melhor os cards.
+
+### Shop
+**Produtos**
+
+**Lista de produtos**
+- Criar uma página modelo para exibição de lista de produtos. Exemplos:
+  - Lista de produtos por categoria
+  - Lista de produtos por marca
+  - Lista de produtos por busca
+  - Lista de produtos por tag (destaques, ofertas etc.)
+- Implementar filtros.
+- Implementar paginação.
+- Criar uma página para exibição das categorias e sub-categorias (não confundir com exibição de produtos).
+- Refatorar os dados mockados para absorver as novas funcionalidades de produtos e categorias.
+- Modificar o mock para não usar mais emojis (usar imagens de produtos e categorias).
+- Refatorar/criar um componente para breadcrumb.
+
+**Fluxo de compra**
+- Refatorar o design do fluxo de compra: carrinho, checkout, pagamento, sucesso, falha etc.
+
+### Usuário
+**Conta do usuário**
+- Refatorar a área do usuário para exibir informações corretas.
+- Criar um menu de navegação para essa seção.
+- Refatorar “Meus pedidos” para exibir uma tabela com os pedidos e criar uma página para detalhes do pedido.
+
+### Geral
+**Componente de dialog**
+- Criar componente para exibir mensagens de confirmação, erro, sucesso etc.
+
+**Mockup**
+- Usar o mockup integrado com o Redis.
+
+**SEO**
+- Implementar URLs amigáveis.
+- Implementar tags meta, analytics, pixel meta, GTM etc.
+
+**Header**
+- Refatorar para exibir informações nos menus.
+
+**Footer**
+- Refatorar para exibir os links corretos.
+- Refatorar para exibir informações corretas.
+
+**Hero**
+- Criar um componente hero padrão para todas as páginas.
+
+**Mobile**
+- Revisão detalhada do design mobile (mobile first).
+
+**Ruído legado**
+- Refatorar o projeto todo removendo código legado, fallbacks e compatibilidades para versões anteriores.
+
+**Helpers**
+- Criar helpers para facilitar o uso de funções comuns.
+- Analisar funções existentes em repetição e criar helpers para elas.

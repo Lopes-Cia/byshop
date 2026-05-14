@@ -1,5 +1,9 @@
 # Tarefas Futuras
 
+Esses são meus apontamentos para a futura implementação do projeto.
+Quero uma anotação dessas tarefas, porem a implementação , analise e qualquer outra coisa que precise de ser feita , sera algo posterior.
+Quero que cada uma dessas tarefas siga um fluxo de criação de contexto, onde o IA me faça perguntas para preecher as lagunas e nao apenas gerar um conteudo suposto.
+
 ## institucional
 
 ### padronizar design de todas as paginas
