@@ -14,6 +14,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { useCartStore } from "@/stores/cart-store"
 
 interface HeaderProps {
   onMobileMenuOpen: () => void
@@ -34,6 +35,10 @@ export function Header({
   isUserMenuOpen,
   setIsUserMenuOpen,
 }: HeaderProps) {
+  // IA-first: badge do carrinho reflete a quantidade total (soma das quantidades) do store persistido.
+  const cartCount = useCartStore((s) => s.count)
+  const badgeText = cartCount > 99 ? "99+" : String(cartCount)
+
   return (
     <header className="bg-white border-b border-neutral-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-2 md:gap-4">
@@ -293,9 +298,11 @@ export function Header({
             className="relative p-2 -mr-2 hover:bg-neutral-100 rounded-lg"
           >
             <ShoppingCart className="w-5 h-5 text-neutral-700" />
-            <span className="absolute top-0.5 right-0.5 bg-amber-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
-              3
-            </span>
+            {cartCount > 0 && (
+              <span className="absolute top-0.5 right-0.5 bg-amber-500 text-white text-[10px] min-w-4 h-4 px-1 rounded-full flex items-center justify-center">
+                {badgeText}
+              </span>
+            )}
           </button>
         </div>
       </div>

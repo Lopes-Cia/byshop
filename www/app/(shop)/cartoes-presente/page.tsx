@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/components/placeholder-page"
+import { PaginaEmConstrucao } from "@/components/pagina-em-construcao"
 
 export default function CartoesPresentePage() {
-  return <PlaceholderPage title="Cartões-presente" />
+  return <PaginaEmConstrucao title="Cartões-presente" />
 }

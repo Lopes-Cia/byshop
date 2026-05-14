@@ -20,7 +20,7 @@
     - Contratos: `www/lib/schemas.ts` (Zod)
     - Dataset: `www/lib/data.ts` (`products`, `categories`, `allSearchData`, `cartItemsMock`, `customerReviewsMock`)
   - Placeholders (páginas “Em construção”) para evitar dead-ends:
-    - Shop: `/carrinho`, `/checkout`, `/ofertas`, `/cartoes-presente`, `/presentes`
+    - Shop: `/ofertas`, `/cartoes-presente`, `/presentes`
     - Usuário: `/minha-conta`, `/meus-pedidos`, `/lista-de-desejos`, `/minhas-avaliacoes`, `/metodos-de-pagamento`, `/enderecos`
   - Notas:
     - O `www/README.md` foi mantido como referência do template importado e pode conter caminhos/rotas antigas (ex.: `/product/[id]`).
@@ -35,6 +35,33 @@
 - 2026-05-13: Páginas institucionais (conteúdo real)
   - Rotas: `/central-de-ajuda`, `/frete-e-entrega`, `/trocas-e-devolucoes`, `/termos`, `/privacidade`
   - Padronização: componente base reutilizável para acelerar criação com consistência visual
+- 2026-05-13: Task 1 (estado global + cupons)
+  - Stores client (persistência via `useSyncExternalStore` + `localStorage`):
+    - `www/stores/cart-store.ts` (itens, cupom, totais derivados)
+    - `www/stores/orders-store.ts` (criação e persistência de pedidos)
+  - Schemas Zod centralizados em `www/lib/schemas.ts` (com re-export em `www/lib/data.ts` para compatibilidade)
+  - Cupons ativos: `SAVE10`, `SAVE20`, `FREESHIP`
+  - Totais agora incluem `shipping` (frete) e `tax` (imposto), mantendo leitura de dados persistidos antigos
+- 2026-05-13: Task 2 (carrinho real no Header/AppShell/PDP + rota de checkout)
+  - `removeItem`/`setQuantity` agora aceitam `id` + `variant` opcional (quando omitido, aplica para todas as variações do mesmo `id`)
+  - Header: badge do carrinho usa `count` do store
+  - AppShell: drawer do carrinho usa itens/totais do store e ações (alterar quantidade, remover, limpar)
+  - CTAs: navegação de checkout padronizada em `/finalizar-compra`
+  - PDP: “Adicionar ao Carrinho” adiciona item no store e abre o drawer; “Comprar Agora” adiciona e navega para `/finalizar-compra`
+- 2026-05-13: Task 3 (página real de carrinho)
+  - Rota `/carrinho`: página client usando `useCartStore` (itens, quantidade, remover, cupom)
+  - Resumo: subtotal, desconto, frete, taxas e total derivados do store
+  - CTAs: `/finalizar-compra` e `/produtos`
+- 2026-05-13: Task 6 (rota legada de checkout + remoção de placeholder)
+  - `/checkout` agora redireciona (server) para `/finalizar-compra` via `redirect()` do `next/navigation`
+  - `PlaceholderPage` foi removido; placeholders restantes usam `PaginaEmConstrucao` (`www/components/pagina-em-construcao.tsx`)
+- 2026-05-13: Task 4 (checkout real)
+  - Rota `/finalizar-compra`: formulário mock com validação (`react-hook-form` + `zodResolver`) e resumo do carrinho
+  - CTA “Confirmar pedido”: cria pedido na store, limpa carrinho e navega para `/finalizar-compra/sucesso?orderId=...`
+  - Link “Voltar ao carrinho”: `/carrinho`
+- 2026-05-13: Task 5 (sucesso do checkout)
+  - Rota `/finalizar-compra/sucesso`: lê `orderId` e carrega pedido da store (fallback: último pedido criado)
+  - Exibe confirmação (id, total, status e tracking mock) e CTAs para `/produtos` e `/meus-pedidos`
 
 ## Referências importantes
 - README do app importado (fonte de verdade do design system e convenções): [README.md](file:///c:/LOPES/www/byshop/www/README.md)

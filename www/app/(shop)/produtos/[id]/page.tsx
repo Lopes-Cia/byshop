@@ -19,14 +19,16 @@ import {
   ShoppingCart,
 } from "lucide-react"
 import Link from "next/link"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useAppShell } from "@/components/app-shell-context"
 import { Carousel, CarouselItem } from "@/components/carousel"
 import { ProductCard } from "@/components/product-card"
 import { customerReviewsMock, getProductById, products } from "@/lib/data"
+import { cartStore } from "@/stores/cart-store"
 
 export default function ProductPage() {
   const params = useParams<{ id: string }>()
+  const router = useRouter()
   const { openCart } = useAppShell()
   const [selectedColor, setSelectedColor] = useState(0)
   const [selectedImage, setSelectedImage] = useState(0)
@@ -39,6 +41,35 @@ export default function ProductPage() {
   const related = products.filter((p) => p.id !== product?.id).slice(0, 6)
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value)
+
+  // IA-first: o store usa `variant` como parte da chave (id+variant) para diferenciar variações do mesmo produto.
+  const getSelectedVariant = () => {
+    const color = product?.colors?.[selectedColor]?.name
+    return color ? `Cor: ${color}` : "Padrão"
+  }
+
+  // IA-first: adiciona no carrinho persistido e deixa a UI (drawer/header) reagir via store.
+  const addToCart = () => {
+    if (!product) return
+    cartStore.addItem({
+      id: product.id,
+      name: product.name,
+      variant: getSelectedVariant(),
+      price: product.price,
+      quantity,
+      emoji: product.emoji,
+    })
+  }
+
+  const handleAddToCart = () => {
+    addToCart()
+    openCart()
+  }
+
+  const handleBuyNow = () => {
+    addToCart()
+    router.push("/finalizar-compra")
+  }
 
   const renderStars = (rating: number) => {
     return (
@@ -266,13 +297,16 @@ export default function ProductPage() {
               {/* Buttons */}
               <div className="space-y-2">
                 <button 
-                  onClick={openCart}
+                  onClick={handleAddToCart}
                   className="w-full bg-amber-400 hover:bg-amber-500 text-neutral-900 font-semibold py-3 rounded-full transition flex items-center justify-center gap-2"
                 >
                   <ShoppingCart className="w-5 h-5" />
                   Adicionar ao Carrinho
                 </button>
-                <button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-full transition">
+                <button
+                  onClick={handleBuyNow}
+                  className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-full transition"
+                >
                   Comprar Agora
                 </button>
               </div>

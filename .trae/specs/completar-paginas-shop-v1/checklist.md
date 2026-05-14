@@ -1,0 +1,12 @@
+- [x] Store do carrinho existe, persiste em localStorage e calcula resumo/total (inclui cupons mockados).
+- [x] Store de pedidos existe, persiste em localStorage e suporta criar pedido + buscar por id (para sucesso).
+- [x] Header não tem badge hardcoded; a quantidade do carrinho vem da store.
+- [x] Drawer do carrinho (AppShell) usa a store: itens, total, alterar quantidade/remover, e “Finalizar compra” fecha drawer e navega.
+- [x] PDP (`/produtos/[id]`) adiciona item na store e abre o carrinho.
+- [x] `/carrinho` não usa `PlaceholderPage`, renderiza itens via store e possui CTAs para `/finalizar-compra` e `/produtos`.
+- [x] `/finalizar-compra` não é placeholder, mostra resumo do pedido e formulário mockado, com CTA para “Confirmar pedido” e link de volta ao `/carrinho`.
+- [x] `/finalizar-compra/sucesso` existe e exibe confirmação com CTAs para `/produtos` e `/meus-pedidos`.
+- [x] `/checkout` redireciona para `/finalizar-compra` (compatibilidade de nomenclatura).
+- [x] As páginas acima não importam/renderizam `Header`/`Footer` diretamente (AppShell global).
+- [x] Visual consistente com o design atual (tipografia/spacing/cores).
+- [x] Sem diagnósticos TypeScript/Next no editor após mudanças.

@@ -1,4 +1,19 @@
-import { ProductSchema, type Product } from "@/lib/schemas"
+import {
+  CartItemSchema,
+  CouponSchema,
+  OrderSchema,
+  OrderStatusSchema,
+  OrderTrackingSchema,
+  OrderTotalsSchema,
+  ProductSchema,
+  type CartItem,
+  type Coupon,
+  type Order,
+  type OrderStatus,
+  type OrderTracking,
+  type OrderTotals,
+  type Product,
+} from "@/lib/schemas"
 
 const sampleProducts = [
   {
@@ -481,20 +496,46 @@ export const categories = [
   { id: "monitores", title: "Monitores", icon: "🖥️" },
 ] as const
 
-export type CartItemMock = {
-  id: number
-  name: string
-  variant: string
-  price: number
-  quantity: number
-  emoji: string
-}
+export { CartItemSchema, CouponSchema, OrderSchema, OrderStatusSchema, OrderTotalsSchema }
+export { OrderTrackingSchema }
+export type { CartItem, Coupon, Order, OrderStatus, OrderTotals, OrderTracking }
 
-export const cartItemsMock: CartItemMock[] = [
+export const SAVE10: Coupon = CouponSchema.parse({
+  code: "SAVE10",
+  title: "10% OFF",
+  description: "Cupom de 10% de desconto em itens elegíveis.",
+  type: "percent",
+  value: 10,
+  active: true,
+})
+
+export const SAVE20: Coupon = CouponSchema.parse({
+  code: "SAVE20",
+  title: "20% OFF",
+  description: "Cupom de 20% de desconto em itens elegíveis.",
+  type: "percent",
+  value: 20,
+  active: true,
+})
+
+export const FREESHIP: Coupon = CouponSchema.parse({
+  code: "FREESHIP",
+  title: "Frete grátis",
+  description: "Remove o custo de frete do pedido.",
+  type: "shipping",
+  value: 100,
+  active: true,
+})
+
+export const coupons: Coupon[] = [SAVE10, SAVE20, FREESHIP]
+
+export type CartItemMock = CartItem
+
+export const cartItemsMock: CartItemMock[] = CartItemSchema.array().parse([
   { id: 1, name: "Puma AXIS TR Boot", variant: "Preto / Tamanho 42", price: 125.0, quantity: 1, emoji: "👟" },
   { id: 2, name: "Headphone JBL T460BT", variant: "Preto", price: 199.99, quantity: 1, emoji: "🎧" },
   { id: 3, name: "Caixa de Som Bluetooth", variant: "Branco", price: 79.99, quantity: 1, emoji: "🔊" },
-]
+])
 
 export type CustomerReviewMock = {
   id: number

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   ArrowRight,
   CreditCard,
@@ -25,10 +26,12 @@ import {
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { AppShellProvider } from "@/components/app-shell-context"
-import { allSearchData, cartItemsMock } from "@/lib/data"
+import { allSearchData } from "@/lib/data"
+import { useCartStore } from "@/stores/cart-store"
 
 // IA-first: AppShell centraliza UI global (Top Bar + Header + Footer + overlays) e expõe ações via context.
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const router = useRouter()
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
 
@@ -38,6 +41,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  // IA-first: leitura única do store para alimentar o drawer e evitar dependência de mocks locais.
+  const cart = useCartStore((s) => ({
+    items: s.items,
+    subtotal: s.subtotal,
+    discount: s.discount,
+    shipping: s.shipping,
+    tax: s.tax,
+    total: s.total,
+    count: s.count,
+    removeItem: s.removeItem,
+    setQuantity: s.setQuantity,
+    clear: s.clear,
+  }))
 
   const api = useMemo(
     () => ({
@@ -66,10 +83,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           .filter((cat) => cat.items.length > 0)
 
   const allFilteredItems = filteredResults.flatMap((cat) => cat.items)
-  const cartTotal = cartItemsMock.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value)
+
+  // IA-first: CTA de checkout padrão (fecha drawer para evitar overlay na transição).
+  const goToCheckout = () => {
+    setIsCartOpen(false)
+    router.push("/finalizar-compra")
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -339,60 +361,123 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             }`}
           >
             <div className="flex items-center justify-between p-4 border-b border-neutral-200">
-              <h2 className="text-lg font-bold text-neutral-900">Seu Carrinho ({cartItemsMock.length})</h2>
+              <h2 className="text-lg font-bold text-neutral-900">Seu Carrinho ({cart.count})</h2>
               <button onClick={() => setIsCartOpen(false)} className="p-2 hover:bg-neutral-100 rounded-full transition">
                 <X className="w-5 h-5 text-neutral-600" />
               </button>
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ maxHeight: "calc(100vh - 280px)" }}>
-              {cartItemsMock.map((item, idx) => (
-                <div
-                  key={item.id}
-                  className={`flex gap-4 ${idx < cartItemsMock.length - 1 ? "pb-4 border-b border-neutral-100" : ""}`}
-                >
-                  <div className="w-20 h-20 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-3xl">{item.emoji}</span>
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium text-neutral-900">{item.name}</h4>
-                    <p className="text-sm text-neutral-500">{item.variant}</p>
-                    <p className="text-lg font-bold text-neutral-900 mt-1">{formatCurrency(item.price)}</p>
-                    <div className="flex items-center gap-3 mt-2">
-                      <div className="flex items-center border border-neutral-300 rounded">
-                        <button className="p-1 hover:bg-neutral-100">
-                          <Minus className="w-4 h-4" />
-                        </button>
-                        <span className="px-3 text-sm">{item.quantity}</span>
-                        <button className="p-1 hover:bg-neutral-100">
-                          <Plus className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <button className="text-neutral-400 hover:text-red-500 transition">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+              {cart.items.length === 0 ? (
+                <div className="py-10 text-center">
+                  <p className="text-sm font-medium text-neutral-900">Seu carrinho está vazio</p>
+                  <p className="mt-1 text-sm text-neutral-600">Adicione produtos para continuar.</p>
+                  <div className="mt-6">
+                    <Link
+                      href="/produtos"
+                      onClick={() => setIsCartOpen(false)}
+                      className="inline-flex items-center justify-center rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600 transition"
+                    >
+                      Ver produtos
+                    </Link>
                   </div>
                 </div>
-              ))}
+              ) : (
+                cart.items.map((item, idx) => (
+                  <div
+                    key={`${item.id}:${item.variant}`}
+                    className={`flex gap-4 ${idx < cart.items.length - 1 ? "pb-4 border-b border-neutral-100" : ""}`}
+                  >
+                    <div className="w-20 h-20 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <span className="text-3xl">{item.emoji ?? "🛒"}</span>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium text-neutral-900">{item.name}</h4>
+                      <p className="text-sm text-neutral-500">{item.variant}</p>
+                      <p className="text-lg font-bold text-neutral-900 mt-1">{formatCurrency(item.price)}</p>
+                      <div className="flex items-center gap-3 mt-2">
+                        <div className="flex items-center border border-neutral-300 rounded">
+                          <button
+                            onClick={() => {
+                              if (item.quantity <= 1) {
+                                cart.removeItem(item.id, item.variant)
+                                return
+                              }
+                              cart.setQuantity(item.id, item.quantity - 1, item.variant)
+                            }}
+                            className="p-1 hover:bg-neutral-100"
+                            aria-label="Diminuir quantidade"
+                          >
+                            <Minus className="w-4 h-4" />
+                          </button>
+                          <span className="px-3 text-sm">{item.quantity}</span>
+                          <button
+                            onClick={() => cart.setQuantity(item.id, item.quantity + 1, item.variant)}
+                            className="p-1 hover:bg-neutral-100"
+                            aria-label="Aumentar quantidade"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <button
+                          onClick={() => cart.removeItem(item.id, item.variant)}
+                          className="text-neutral-400 hover:text-red-500 transition"
+                          aria-label="Remover item"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
 
             <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-neutral-200 p-4 space-y-4">
               <div className="flex justify-between text-sm text-neutral-600">
                 <span>Subtotal</span>
-                <span>{formatCurrency(cartTotal)}</span>
+                <span>{formatCurrency(cart.subtotal)}</span>
               </div>
+              {cart.discount > 0 && (
+                <div className="flex justify-between text-sm text-neutral-600">
+                  <span>Desconto</span>
+                  <span className="text-green-700">- {formatCurrency(cart.discount)}</span>
+                </div>
+              )}
               <div className="flex justify-between text-sm text-neutral-600">
                 <span>Frete</span>
-                <span className="text-green-600">Grátis</span>
+                {cart.shipping === 0 ? (
+                  <span className="text-green-600">Grátis</span>
+                ) : (
+                  <span>{formatCurrency(cart.shipping)}</span>
+                )}
               </div>
+              {cart.tax > 0 && (
+                <div className="flex justify-between text-sm text-neutral-600">
+                  <span>Impostos</span>
+                  <span>{formatCurrency(cart.tax)}</span>
+                </div>
+              )}
               <div className="flex justify-between text-lg font-bold text-neutral-900 pt-2 border-t border-neutral-200">
                 <span>Total</span>
-                <span>{formatCurrency(cartTotal)}</span>
+                <span>{formatCurrency(cart.total)}</span>
               </div>
-              <button className="w-full bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg font-semibold transition">
+              <button
+                onClick={goToCheckout}
+                disabled={cart.count === 0}
+                className="w-full bg-amber-500 hover:bg-amber-600 disabled:bg-neutral-200 disabled:text-neutral-500 text-white py-3 rounded-lg font-semibold transition"
+              >
                 Finalizar compra
               </button>
+              {cart.count > 0 && (
+                <Link
+                  href="/carrinho"
+                  onClick={() => setIsCartOpen(false)}
+                  className="w-full text-red-600 hover:text-red-700 py-2 text-sm transition text-center"
+                >
+                  Ver carrinho
+                </Link>
+              )}
               <button
                 onClick={() => setIsCartOpen(false)}
                 className="w-full text-neutral-600 hover:text-neutral-900 py-2 text-sm transition"

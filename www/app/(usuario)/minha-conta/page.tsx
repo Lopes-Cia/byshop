@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/components/placeholder-page"
+import { PaginaEmConstrucao } from "@/components/pagina-em-construcao"
 
 export default function MinhaContaPage() {
-  return <PlaceholderPage title="Minha conta" />
+  return <PaginaEmConstrucao title="Minha conta" />
 }

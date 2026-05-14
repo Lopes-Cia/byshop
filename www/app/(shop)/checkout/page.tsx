@@ -1,5 +1,6 @@
-import { PlaceholderPage } from "@/components/placeholder-page"
+import { redirect } from "next/navigation"
 
 export default function CheckoutPage() {
-  return <PlaceholderPage title="Checkout" />
+  // IA-first: rota legada (/checkout) redireciona para a rota canônica do fluxo de compra.
+  redirect("/finalizar-compra")
 }

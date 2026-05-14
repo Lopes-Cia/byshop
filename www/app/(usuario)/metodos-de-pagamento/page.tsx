@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/components/placeholder-page"
+import { PaginaEmConstrucao } from "@/components/pagina-em-construcao"
 
 export default function MetodosDePagamentoPage() {
-  return <PlaceholderPage title="Métodos de pagamento" />
+  return <PaginaEmConstrucao title="Métodos de pagamento" />
 }
