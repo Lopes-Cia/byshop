@@ -78,7 +78,6 @@ const devMockValues: CheckoutFormValues = {
 
 export default function FinalizarCompraPage() {
   const router = useRouter()
-  const [mounted, setMounted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const authUser = useAuthStore((s) => s.user)
 
@@ -98,10 +97,6 @@ export default function FinalizarCompraPage() {
     if (qty === 1) return "1 item"
     return `${qty} itens`
   }, [cart.count])
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(CheckoutFormSchema),
@@ -156,16 +151,6 @@ export default function FinalizarCompraPage() {
     } finally {
       setIsSubmitting(false)
     }
-  }
-
-  if (!mounted) {
-    return (
-      <main className="bg-white">
-        <div className="mx-auto max-w-3xl px-4 py-16 text-center">
-          <p className="text-sm text-neutral-600">Carregando checkout…</p>
-        </div>
-      </main>
-    )
   }
 
   if (cart.items.length === 0) {

@@ -8,6 +8,13 @@
 - `www/`: app principal (importado do projeto `C:\LOPES\www\vercel`).
 - `referencia/`: snapshots do estado anterior (código + `.trae`).
 
+## Referência (como ficar visível)
+- A pasta `referencia/` tem um `.gitignore` com `*` (ignora tudo). Algumas rotinas de listagem/busca podem respeitar esse ignore e, por isso, o conteúdo pode “sumir” para ferramentas/IA mesmo existindo no disco.
+- Opções para deixar visível:
+  - **Recomendado (granular, sem ruído):** ajustar `referencia/.gitignore` para não ignorar tudo, e sim ignorar apenas pastas pesadas (`node_modules`, `.next`, relatórios, etc.) e/ou liberar apenas os trechos que você quer consultar (ex.: `referencia/2026-05-13/www/app/(usuario)/pedidos/**`).
+  - **Temporário (rápido):** comentar/remover a linha `*` em `referencia/.gitignore` enquanto estiver comparando/adaptando UI, e depois restaurar.
+  - **Sem mexer no ignore:** acessar por caminho absoluto direto no filesystem (ex.: abrir arquivos específicos em `referencia/2026-05-13/www/...`), sem depender de busca/listagem.
+
 ## Andamento
 - 2026-05-13: importado `C:\LOPES\www\vercel` para `C:\LOPES\www\byshop\www` (cópia limpa: sem `.next/`, sem `node_modules/`, sem `.git/`).
   - Snapshot do estado anterior: `C:\LOPES\www\byshop\referencia\2026-05-13\`
@@ -88,6 +95,9 @@
   - Rotas de redirect legadas removidas (404): `/checkout`, `/perfil`, `/favoritos`, `/metodos-de-pagamento`, `/minhas-avaliacoes`
   - `www/lib/data.ts`: removidos re-exports de `schemas/types` (imports devem apontar para `www/lib/schemas.ts`)
   - Docs: `www/README.md` e este arquivo atualizados para refletir rotas canônicas e remoções
+- 2026-05-14: Meus pedidos (tabela + detalhe)
+  - `www/app/(usuario)/meus-pedidos`: listagem migrada de cards para tabela (`components/ui/table`)
+  - Rota criada: `/meus-pedidos/[orderId]` com detalhes e itens do pedido (fallback “Pedido não encontrado”)
 
 ## Referências importantes
 - README do app importado (fonte de verdade do design system e convenções): [README.md](file:///c:/LOPES/www/byshop/www/README.md)
@@ -135,7 +145,7 @@
 **Conta do usuário**
 - Refatorar a área do usuário para exibir informações corretas.
 - Criar um menu de navegação para essa seção.
-- Refatorar “Meus pedidos” para exibir uma tabela com os pedidos e criar uma página para detalhes do pedido.
+- (feito) “Meus pedidos”: tabela na listagem + página de detalhe do pedido.
 
 ### Geral
 **Componente de dialog**
