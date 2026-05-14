@@ -1,0 +1,9 @@
+- [x] `/central-de-ajuda` não usa `PlaceholderPage` e possui CTAs para trocas/frete/privacidade/termos.
+- [x] `/frete-e-entrega` não usa `PlaceholderPage` e possui CTAs para central de ajuda e produtos.
+- [x] `/trocas-e-devolucoes` não usa `PlaceholderPage` e possui CTAs para central de ajuda e produtos.
+- [x] `/termos` não usa `PlaceholderPage` e possui CTAs para privacidade e central de ajuda.
+- [x] `/privacidade` não usa `PlaceholderPage` e possui CTAs para termos e central de ajuda.
+- [x] Todas as páginas acima não importam/renderizam `Header`/`Footer` diretamente (AppShell global).
+- [x] As páginas usam o componente base institucional para consistência e velocidade (sem duplicação desnecessária).
+- [x] Visual consistente com o design atual (tipografia/spacing/cores).
+- [x] Sem diagnósticos TypeScript/Next no editor após mudanças.

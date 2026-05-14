@@ -22,7 +22,6 @@
   - Placeholders (páginas “Em construção”) para evitar dead-ends:
     - Shop: `/carrinho`, `/checkout`, `/ofertas`, `/cartoes-presente`, `/presentes`
     - Usuário: `/minha-conta`, `/meus-pedidos`, `/lista-de-desejos`, `/minhas-avaliacoes`, `/metodos-de-pagamento`, `/enderecos`
-    - Institucional: `/sobre`, `/central-de-ajuda`, `/frete-e-entrega`, `/trocas-e-devolucoes`, `/termos`, `/privacidade`
   - Notas:
     - O `www/README.md` foi mantido como referência do template importado e pode conter caminhos/rotas antigas (ex.: `/product/[id]`).
 - 2026-05-13: AppShell global (layout único para todas as páginas)
@@ -30,6 +29,12 @@
   - `AppShell` centraliza: Top Bar + Header + Footer + overlays globais (busca/carrinho/menu mobile)
   - Home e PDP deixaram de importar/renderizar `Header`/`Footer` e removeram estados/JSX duplicados
   - PDP abre o carrinho via `useAppShell().openCart()` (ação global do shell)
+- 2026-05-13: Página institucional `/sobre` (conteúdo real)
+  - Hero institucional + seções: proposta, valores, como funciona, compromissos
+  - CTAs: `/produtos` e `/central-de-ajuda`
+- 2026-05-13: Páginas institucionais (conteúdo real)
+  - Rotas: `/central-de-ajuda`, `/frete-e-entrega`, `/trocas-e-devolucoes`, `/termos`, `/privacidade`
+  - Padronização: componente base reutilizável para acelerar criação com consistência visual
 
 ## Referências importantes
 - README do app importado (fonte de verdade do design system e convenções): [README.md](file:///c:/LOPES/www/byshop/www/README.md)

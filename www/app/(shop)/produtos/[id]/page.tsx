@@ -174,10 +174,14 @@ export default function ProductPage() {
               {/* Colors */}
               <div>
                 <p className="text-sm font-medium text-neutral-900 mb-2">
-                  Cor: <span className="font-normal">{product.colors[selectedColor].name}</span>
+                  Cor:{" "}
+                  <span className="font-normal">
+                    {/* IA-first: `colors` é opcional no dataset; fallback evita erro de TS. */}
+                    {product.colors?.[selectedColor]?.name ?? "Única"}
+                  </span>
                 </p>
                 <div className="flex gap-2 flex-wrap">
-                  {product.colors.map((color, idx) => (
+                  {(product.colors ?? []).map((color, idx) => (
                     <button
                       key={idx}
                       onClick={() => setSelectedColor(idx)}

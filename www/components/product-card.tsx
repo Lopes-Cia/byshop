@@ -16,7 +16,9 @@ const formatCurrency = (value: number) =>
 
 export function ProductCard({ id = 1, title, category, price, emoji, colored = false }: ProductCardProps) {
   const colors = ["bg-rose-100", "bg-amber-100", "bg-emerald-100", "bg-sky-100", "bg-violet-100"]
-  const bgColor = colored ? colors[Math.floor(Math.random() * colors.length)] : "bg-neutral-100"
+  // IA-first: evita `Math.random()` durante o render (mantém a UI estável e lint-free).
+  const colorIndex = Math.abs(id) % colors.length
+  const bgColor = colored ? colors[colorIndex] : "bg-neutral-100"
   const product = getProductById(id)
   const resolvedTitle = title ?? product?.name ?? "Produto"
   const resolvedCategory = category ?? product?.category ?? "Categoria"

@@ -1,0 +1,5 @@
+- [x] A rota `/sobre` renderiza a página “Sobre a ByShop” com conteúdo institucional (não placeholder).
+- [x] A página “Sobre” não importa/renderiza `Header`/`Footer` diretamente (AppShell é global).
+- [x] CTAs presentes: “Ver produtos” → `/produtos` e “Central de ajuda” → `/central-de-ajuda`.
+- [x] Visual consistente com o design atual (spacing/tipografia/cores do app).
+- [x] Sem erros de TypeScript/Next após `lint` + `build` + `tsc`.
