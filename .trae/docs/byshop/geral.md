@@ -96,8 +96,12 @@
   - `www/lib/data.ts`: removidos re-exports de `schemas/types` (imports devem apontar para `www/lib/schemas.ts`)
   - Docs: `www/README.md` e este arquivo atualizados para refletir rotas canônicas e remoções
 - 2026-05-14: Meus pedidos (listagem)
-  - `www/app/(usuario)/meus-pedidos`: tela client com redirect de auth + busca + filtro por status + tabela (`components/ui/table`) + empty state com CTAs
-  - Rota existente: `/meus-pedidos/[orderId]` (ainda placeholder “Em refatoração”)
+  - `www/app/(usuario)/meus-pedidos`: tela client com redirect de auth + busca + filtro por status + tabela (`components/ui/table`) + coluna Pagamento + empty state com CTAs
+  - `www/app/(usuario)/meus-pedidos/[orderId]`: detalhe do pedido com itens + resumo (inclui payment.label) + totais
+- 2026-05-14: Pedido (meio de pagamento)
+  - `OrderSchema` agora inclui `payment` (method + label) para exibir meio de pagamento na UI
+  - `orders-store` bump `byshop:orders:v2` → `byshop:orders:v3` com limpeza destrutiva do v2
+  - Checkout preenche `payment` (cartão mock com últimos 4 dígitos) ao criar pedido
 
 ## Referências importantes
 - README do app importado (fonte de verdade do design system e convenções): [README.md](file:///c:/LOPES/www/byshop/www/README.md)

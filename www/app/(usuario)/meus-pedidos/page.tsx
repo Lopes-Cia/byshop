@@ -55,6 +55,13 @@ const STATUS_LABEL: Record<OrderStatus, string> = {
   canceled: "Cancelado",
 }
 
+const PAYMENT_METHOD_LABEL: Record<Order["payment"]["method"], string> = {
+  card: "Cartão",
+  pix: "Pix",
+  boleto: "Boleto",
+  wallet: "Carteira",
+}
+
 function buildAuthHref(path: string, nextPath: string) {
   const encoded = encodeURIComponent(nextPath)
   return nextPath !== "/" ? `${path}?next=${encoded}` : path
@@ -273,6 +280,7 @@ export default function MeusPedidosPage() {
                   <TableHead>Data</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="min-w-[260px] whitespace-normal">Itens</TableHead>
+                <TableHead>Pagamento</TableHead>
                   <TableHead>Total</TableHead>
                   <TableHead className="text-right">Ação</TableHead>
                 </TableRow>
@@ -300,10 +308,13 @@ export default function MeusPedidosPage() {
                           <p className="text-xs text-neutral-600">{itemsSummary.totalItems} item(ns)</p>
                         </div>
                       </TableCell>
+                      <TableCell className="text-sm text-neutral-700">
+                        {PAYMENT_METHOD_LABEL[order.payment.method] ?? order.payment.method}
+                      </TableCell>
                       <TableCell className="font-semibold text-neutral-900">{formatMoneyPtBR(order.totals.total)}</TableCell>
                       <TableCell className="text-right">
                         <Button asChild size="sm" variant="outline">
-                          <Link href={`/meus-pedidos/${order.id}`}>Ver detalhes</Link>
+                          <Link href={`/meus-pedidos/${encodeURIComponent(order.id)}`}>Ver detalhes</Link>
                         </Button>
                       </TableCell>
                     </TableRow>
