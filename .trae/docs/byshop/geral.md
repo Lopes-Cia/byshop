@@ -95,9 +95,9 @@
   - Rotas de redirect legadas removidas (404): `/checkout`, `/perfil`, `/favoritos`, `/metodos-de-pagamento`, `/minhas-avaliacoes`
   - `www/lib/data.ts`: removidos re-exports de `schemas/types` (imports devem apontar para `www/lib/schemas.ts`)
   - Docs: `www/README.md` e este arquivo atualizados para refletir rotas canônicas e remoções
-- 2026-05-14: Meus pedidos (tabela + detalhe)
-  - `www/app/(usuario)/meus-pedidos`: listagem migrada de cards para tabela (`components/ui/table`)
-  - Rota criada: `/meus-pedidos/[orderId]` com detalhes e itens do pedido (fallback “Pedido não encontrado”)
+- 2026-05-14: Meus pedidos (listagem)
+  - `www/app/(usuario)/meus-pedidos`: tela client com redirect de auth + busca + filtro por status + tabela (`components/ui/table`) + empty state com CTAs
+  - Rota existente: `/meus-pedidos/[orderId]` (ainda placeholder “Em refatoração”)
 
 ## Referências importantes
 - README do app importado (fonte de verdade do design system e convenções): [README.md](file:///c:/LOPES/www/byshop/www/README.md)

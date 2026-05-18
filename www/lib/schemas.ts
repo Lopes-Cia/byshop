@@ -48,6 +48,12 @@ export const CouponSchema = z.object({
 // IA-first: schemas de pedido (persistência + telas de acompanhamento/conta).
 export const OrderStatusSchema = z.enum(["processing", "paid", "shipped", "delivered", "canceled"])
 
+// IA-first: método/identificação de pagamento (mock), sem dados sensíveis.
+export const OrderPaymentSchema = z.object({
+  method: z.enum(["card", "pix", "boleto", "wallet"]),
+  label: z.string().min(1),
+})
+
 // IA-first: tracking mockado para fluxo de compra (sucesso e meus pedidos).
 export const OrderTrackingSchema = z.object({
   carrier: z.string().min(1),
@@ -71,6 +77,7 @@ export const OrderSchema = z.object({
   totals: OrderTotalsSchema,
   status: OrderStatusSchema,
   couponCode: z.string().nullable(),
+  payment: OrderPaymentSchema,
   tracking: OrderTrackingSchema.optional(),
 })
 
@@ -78,6 +85,7 @@ export type Product = z.infer<typeof ProductSchema>
 export type CartItem = z.infer<typeof CartItemSchema>
 export type Coupon = z.infer<typeof CouponSchema>
 export type OrderStatus = z.infer<typeof OrderStatusSchema>
+export type OrderPayment = z.infer<typeof OrderPaymentSchema>
 export type OrderTracking = z.infer<typeof OrderTrackingSchema>
 export type OrderTotals = z.infer<typeof OrderTotalsSchema>
 export type Order = z.infer<typeof OrderSchema>

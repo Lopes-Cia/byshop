@@ -5,10 +5,20 @@ import { z } from "zod"
 
 import { coupons } from "@/lib/data"
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/lib/safe-storage"
-import { CouponSchema, OrderSchema, OrderStatusSchema, OrderTotalsSchema, type CartItem, type Order } from "@/lib/schemas"
+import {
+  CouponSchema,
+  OrderPaymentSchema,
+  OrderSchema,
+  OrderStatusSchema,
+  OrderTotalsSchema,
+  type CartItem,
+  type Order,
+  type OrderPayment,
+} from "@/lib/schemas"
 
-// IA-first: storage v2 descarta dados antigos do v1 (sem migração) para manter schema estrito.
-const ORDERS_STORAGE_KEY = "byshop:orders:v2"
+// IA-first: storage v3 descarta dados antigos (v1/v2) sem migração para manter schema estrito.
+const ORDERS_STORAGE_KEY = "byshop:orders:v3"
+const ORDERS_STORAGE_KEY_V2 = "byshop:orders:v2"
 const ORDERS_STORAGE_KEY_V1 = "byshop:orders:v1"
 
 // IA-first: shape persistida (somente dados serializáveis; sem funções).
@@ -23,6 +33,7 @@ export type CreateOrderInput = {
   items: CartItem[]
   customerEmail: string
   couponCode?: string | null
+  payment: OrderPayment
   totals?: {
     subtotal?: number
     shipping?: number
@@ -85,6 +96,7 @@ function writeStorage(next: OrdersPersistedState) {
 
 function ensureHydrated() {
   if (hydrated) return
+  safeRemoveItem(ORDERS_STORAGE_KEY_V2)
   safeRemoveItem(ORDERS_STORAGE_KEY_V1)
   hydrated = true
   persistedState = readStorage()
@@ -190,6 +202,7 @@ function setPersistedState(updater: (current: OrdersPersistedState) => OrdersPer
 }
 
 function createOrder(input: CreateOrderInput): Order {
+  const payment = OrderPaymentSchema.parse(input.payment)
   const order: Order = {
     id: createOrderId(),
     createdAt: new Date().toISOString(),
@@ -198,6 +211,7 @@ function createOrder(input: CreateOrderInput): Order {
     totals: computeTotals(input),
     status: "processing",
     couponCode: input.couponCode ?? null,
+    payment,
     tracking: createTracking(),
   }
 

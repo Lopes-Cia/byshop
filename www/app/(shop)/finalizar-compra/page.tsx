@@ -23,6 +23,12 @@ const formatCurrency = (value: number) =>
 
 const onlyDigits = (value: string) => value.replace(/\D/g, "")
 
+function lastCardDigits(value: string) {
+  const digits = onlyDigits(value)
+  if (digits.length <= 4) return digits
+  return digits.slice(-4)
+}
+
 const CheckoutFormSchema = z.object({
   fullName: z.string().trim().min(3, "Informe seu nome completo."),
   email: z.string().trim().email("Informe um e-mail válido."),
@@ -137,6 +143,10 @@ export default function FinalizarCompraPage() {
         items: cart.items,
         customerEmail: authUser?.email ?? values.email,
         couponCode: cart.couponCode,
+        payment: {
+          method: "card",
+          label: `Cartão •••• ${lastCardDigits(values.cardNumber)}`,
+        },
         totals: {
           subtotal: cart.subtotal,
           shipping: cart.shipping,
