@@ -39,12 +39,7 @@ export default function EntrarClient({ nextPath }: Props) {
     mode: "onTouched",
   })
 
-  useEffect(() => {
-    const subscription = form.watch(() => {
-      setAuthError(null)
-    })
-    return () => subscription.unsubscribe()
-  }, [form])
+
 
   const signUpHref = useMemo(() => {
     const encodedNext = encodeURIComponent(nextPath)
@@ -119,7 +114,16 @@ export default function EntrarClient({ nextPath }: Props) {
                       <FormItem>
                         <FormLabel>E-mail</FormLabel>
                         <FormControl>
-                          <Input placeholder="voce@email.com" inputMode="email" autoComplete="email" {...field} />
+                          <Input
+                            placeholder="voce@email.com"
+                            inputMode="email"
+                            autoComplete="email"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e)
+                              setAuthError(null)
+                            }}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -133,7 +137,16 @@ export default function EntrarClient({ nextPath }: Props) {
                       <FormItem>
                         <FormLabel>Senha</FormLabel>
                         <FormControl>
-                          <Input type="password" placeholder="Sua senha" autoComplete="current-password" {...field} />
+                          <Input
+                            type="password"
+                            placeholder="Sua senha"
+                            autoComplete="current-password"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e)
+                              setAuthError(null)
+                            }}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
