@@ -70,234 +70,192 @@ const CARDAPIO: MenuItem[] = [
   // ── Lanches ──
   {
     id: "lanche-1",
-    nome: "X-Tudo Especial",
+    nome: "X-Burguer",
     descricao:
-      "Hambúrguer artesanal 180g, queijo cheddar, bacon crocante, alface, tomate, maionese verde e molho especial da casa. Acompanha fritas.",
-    preco: 34.9,
+      "Pão brioche, hambúrguer de 90g, muçarela, alface, tomate, cebola e molho especial churrasco. Acompanha maionese, mostarda e ketchup.",
+    preco: 22.9,
     categoria: "lanches",
     destaque: true,
     maisVendido: true,
-    imagem: "/images/hamburger.png",
+    imagem: "/images/hamburguer-prato.png",
     tag: "Mais Vendido",
     tagColor: "#C2D82A",
   },
   {
     id: "lanche-2",
-    nome: "Chicken Crispy",
+    nome: "X-Burguer Duplo",
     descricao:
-      "Filé de frango empanado crocante, queijo prato, alface, tomate e maionese de ervas no pão brioche.",
+      "Pão brioche, 2 hambúrgueres de 90g, muçarela, alface, tomate, cebola e molho especial churrasco. Acompanha maionese, mostarda e ketchup.",
     preco: 29.9,
-    precoOriginal: 34.9,
     categoria: "lanches",
-    imagem: "/images/chicken_crispy.png",
-    tag: "Oferta",
-    tagColor: "#45AD56",
+    destaque: true,
+    imagem: "/images/x-burguer-duplo.png",
+    tag: "Duplo",
+    tagColor: "#692D8F",
   },
   {
     id: "lanche-3",
-    nome: "Veggie Mix",
+    nome: "Pão na Chapa",
     descricao:
-      "Hambúrguer de grão-de-bico com quinoa, pasta de abacate, rúcula, tomate seco e molho de iogurte.",
-    preco: 27.9,
+      "1 fatia de pão sovado com manteiga de leite, levemente passado na chapa. Acompanha café expresso.",
+    preco: 8.9,
     categoria: "lanches",
-    imagem: "/images/veggie_mix.png",
-    tag: "Veggie",
-    tagColor: "#45AD56",
+    imagem: "/images/pao-na-chapa.png",
+    tag: "Clássico",
+    tagColor: "#400F46",
   },
+  // ── Doces (Sobremesas) ──
   {
-    id: "lanche-4",
-    nome: "Hot Dog Supremo",
+    id: "doce-1",
+    nome: "Sobremesa Açaí (300ml, 400ml, 500ml)",
     descricao:
-      "Salsicha defumada, purê cremoso, vinagrete, batata palha, molho especial e queijo ralado.",
-    preco: 22.9,
-    categoria: "lanches",
-    lancamento: true,
-    imagem: "/images/hot_dog_supremo.png",
-    tag: "Lançamento",
-    tagColor: "#692D8F",
-  },
-  // ── Salgados ──
-  {
-    id: "salgado-1",
-    nome: "Coxinha Gourmet",
-    descricao:
-      "Massa fina e crocante recheada com frango catupiri. Porção com 6 unidades.",
+      "Base de sorvete de açaí natural da polpa. Acompanha banana, morango, leite em pó, M&M's, mini cookies, Nutella, granola, cereais e amendoim granulado.",
     preco: 18.9,
-    categoria: "salgados",
+    categoria: "doces",
     destaque: true,
     maisVendido: true,
-    imagem: "/images/coxinha.png",
+    imagem: "/images/donmix_logo.png",
     tag: "Mais Vendido",
     tagColor: "#C2D82A",
   },
   {
-    id: "salgado-2",
-    nome: "Pastel de Feira",
+    id: "doce-2",
+    nome: "Sobremesa Sundae Baunilha (180ml, 400ml)",
     descricao:
-      "Pastel frito na hora com carne moída temperada, queijo ou frango. Escolha o recheio.",
+      "Base de sorvete sabor baunilha industrializado. Acompanha calda saborizada industrializada, cereja industrializada e amendoim granulado.",
     preco: 12.9,
-    categoria: "salgados",
-    imagem: "/images/pastel.png",
-    tag: "Clássico",
-    tagColor: "#400F46",
-  },
-  {
-    id: "salgado-3",
-    nome: "Empada Frango c/ Catupiry",
-    descricao:
-      "Empada de dar água na boca: massa amanteigada, recheio cremoso de frango com catupiry.",
-    preco: 9.9,
-    categoria: "salgados",
-    imagem: "/images/donmix_logo.png",
-  },
-  {
-    id: "salgado-4",
-    nome: "Esfiha Aberta",
-    descricao:
-      "Esfiha aberta com carne, queijo ou calabresa. Massa leve e assada na hora.",
-    preco: 7.9,
-    categoria: "salgados",
-    imagem: "/images/donmix_logo.png",
-    tag: "Mais Barato",
-    tagColor: "#45AD56",
-  },
-  {
-    id: "salgado-5",
-    nome: "Porção de Batata Frita",
-    descricao:
-      "Batata frita crocante sequinha com sal temperado. Acompanha ketchup e mostarda.",
-    preco: 16.9,
-    categoria: "salgados",
-    imagem: "/images/donmix_logo.png",
-  },
-  // ── Doces ──
-  {
-    id: "doce-1",
-    nome: "Petit Gâteau",
-    descricao:
-      "Bolinho de chocolate com casca crocante e recheio cremoso. Acompanha sorvete de creme.",
-    preco: 24.9,
     categoria: "doces",
-    destaque: true,
     imagem: "/images/donmix_logo.png",
     tag: "Sobremesa",
     tagColor: "#692D8F",
   },
   {
-    id: "doce-2",
-    nome: "Mousse de Maracujá",
+    id: "doce-3",
+    nome: "Sobremesa Sundae Misto (180ml, 400ml)",
     descricao:
-      "Mousse leve e aerado de maracujá com calda da fruta. Coberto com chantilly.",
+      "Base de sorvete sabor baunilha industrializado com base de sorvete de açaí natural da polpa. Acompanha calda saborizada industrializada, cereja industrializada e amendoim granulado.",
     preco: 14.9,
     categoria: "doces",
     imagem: "/images/donmix_logo.png",
   },
   {
-    id: "doce-3",
-    nome: "Banana Split",
+    id: "doce-4",
+    nome: "Sobremesa Milk-shake 500ml",
     descricao:
-      "Banana partida ao meio com 3 bolas de sorvete, calda de chocolate, chantilly e castanhas.",
+      "Leite integral e base de sorvete sabor baunilha industrializado. Acompanha leite em pó, M&M's, mini cookies, Nutella e cereais. Copo com tampa reta com furo para canudo.",
     preco: 19.9,
     categoria: "doces",
-    lancamento: true,
-    imagem: "/images/donmix_logo.png",
-    tag: "Novo",
-    tagColor: "#C2D82A",
-  },
-  {
-    id: "doce-4",
-    nome: "Milkshake de Ovomaltine",
-    descricao:
-      "Milkshake cremoso de ovomaltine com calda de chocolate e chantilly.",
-    preco: 18.9,
-    categoria: "doces",
-    imagem: "/images/donmix_logo.png",
-  },
-  // ── Bebidas ──
-  {
-    id: "bebida-1",
-    nome: "Suco Natural",
-    descricao:
-      "Suco fresco de laranja, limão, maracujá, manga ou abacaxi. 500ml.",
-    preco: 12.9,
-    categoria: "bebidas",
-    destaque: true,
-    imagem: "/images/donmix_logo.png",
-    tag: "Natural",
-    tagColor: "#45AD56",
-  },
-  {
-    id: "bebida-2",
-    nome: "Refrigerente Lata",
-    descricao: "Coca-Cola, Guaraná Antarctica, Fanta Laranja ou Sprite. 350ml.",
-    preco: 6.9,
-    categoria: "bebidas",
-    imagem: "/images/donmix_logo.png",
-  },
-  {
-    id: "bebida-3",
-    nome: "Água Mineral c/ Gás",
-    descricao: "Água mineral com gás. 500ml.",
-    preco: 4.9,
-    categoria: "bebidas",
-    imagem: "/images/donmix_logo.png",
-  },
-  {
-    id: "bebida-4",
-    nome: "Café Especial",
-    descricao:
-      "Café coado na hora com grãos selecionados. Servido quente ou gelado.",
-    preco: 8.9,
-    categoria: "bebidas",
-    imagem: "/images/donmix_logo.png",
-    tag: "Gourmet",
-    tagColor: "#400F46",
-  },
-  {
-    id: "bebida-5",
-    nome: "Mate Leão Gelado",
-    descricao: "Mate Leão gelado natural. 300ml.",
-    preco: 5.9,
-    categoria: "bebidas",
-    imagem: "/images/donmix_logo.png",
-  },
-  // ── Combos ──
-  {
-    id: "combo-1",
-    nome: "Combo Casal",
-    descricao:
-      "2 X-Tudo Especial, 1 porção de batata frita grande, 2 refrigerantes e 1 sobremesa para dividir.",
-    preco: 79.9,
-    precoOriginal: 98.5,
-    categoria: "combos",
-    destaque: true,
-    imagem: "/images/donmix_logo.png",
-    tag: "Economia de R$18,60",
-    tagColor: "#C2D82A",
-  },
-  {
-    id: "combo-2",
-    nome: "Combo Kids",
-    descricao:
-      "Mini hambúrguer, batata frita pequena, suco natural e brinde surpresa.",
-    preco: 29.9,
-    categoria: "combos",
     lancamento: true,
     imagem: "/images/donmix_logo.png",
     tag: "Novo",
     tagColor: "#692D8F",
   },
   {
-    id: "combo-3",
-    nome: "Combo Executivo",
+    id: "doce-5",
+    nome: "Sobremesa Creme de Morango 400ml",
     descricao:
-      "1 lanche + 1 bebida + 1 sobremesa. Escolha entre as opções do cardápio.",
-    preco: 44.9,
-    precoOriginal: 52.0,
-    categoria: "combos",
+      "Leite integral, raspas de gelo, creme de leite, leite condensado e polpa de fruta. Acompanha calda saborizada industrializada. Copo com tampa reta.",
+    preco: 16.9,
+    categoria: "doces",
     imagem: "/images/donmix_logo.png",
-    tag: "Mais Pedido",
+  },
+  {
+    id: "doce-6",
+    nome: "Sobremesa Creme de Uva 400ml",
+    descricao:
+      "Leite integral, raspas de gelo, creme de leite, leite condensado e polpa de fruta. Acompanha calda saborizada industrializada. Copo com tampa reta.",
+    preco: 16.9,
+    categoria: "doces",
+    imagem: "/images/donmix_logo.png",
+  },
+  {
+    id: "doce-7",
+    nome: "Sobremesa Creme de Maracujá 400ml",
+    descricao:
+      "Leite integral, raspas de gelo, creme de leite, leite condensado e polpa de fruta. Acompanha calda saborizada industrializada. Copo com tampa reta.",
+    preco: 16.9,
+    categoria: "doces",
+    imagem: "/images/donmix_logo.png",
+  },
+  {
+    id: "doce-8",
+    nome: "Sobremesa Copo da Felicidade 400ml",
+    descricao:
+      "Creme de avelã, chantilly, creme de leite, leite em pó, chocolate branco e morango. Copo com tampa reta.",
+    preco: 21.9,
+    categoria: "doces",
+    destaque: true,
+    imagem: "/images/donmix_logo.png",
+    tag: "Especial",
     tagColor: "#C2D82A",
+  },
+  // ── Bebidas ──
+  {
+    id: "bebida-1",
+    nome: "Iogurte Natural com Mel 180ml",
+    descricao:
+      "Iogurte natural sem adição de conservantes com mel silvestre. Acompanha M&M's, mini cookies, Nutella, granola, cereais e amendoim granulado.",
+    preco: 12.9,
+    categoria: "bebidas",
+    imagem: "/images/iogurte-com-mel.png",
+    tag: "Natural",
+    tagColor: "#45AD56",
+  },
+  {
+    id: "bebida-2",
+    nome: "Café Expresso com Mel 180ml",
+    descricao:
+      "Café expresso solúvel adoçado com mel silvestre. Acompanha chantilly. Copo com tampa reta.",
+    preco: 9.9,
+    categoria: "bebidas",
+    imagem: "/images/cafe-expresso.png",
+    tag: "Quente",
+    tagColor: "#400F46",
+  },
+  {
+    id: "bebida-3",
+    nome: "Cappuccino Tradicional 350ml",
+    descricao: "Cappuccino com canela industrializado. Copo com tampa reta.",
+    preco: 12.9,
+    categoria: "bebidas",
+    imagem: "/images/cappuccino.png",
+  },
+  {
+    id: "bebida-4",
+    nome: "Chocolate Quente 350ml",
+    descricao:
+      "Bebida láctea com achocolatado industrializado. Copo com tampa reta com furo para canudo.",
+    preco: 13.9,
+    categoria: "bebidas",
+    imagem: "/images/chocolate-quente.png",
+  },
+  {
+    id: "bebida-5",
+    nome: "Refrigerante Lata 350ml",
+    descricao: "Bebida gaseificada. Sabores: Coca-Cola e Guaraná Antarctica.",
+    preco: 6.9,
+    categoria: "bebidas",
+    imagem: "/images/refri-lata.png",
+  },
+  {
+    id: "bebida-6",
+    nome: "Suco de Frutas Copo 300ml",
+    descricao:
+      "Suco industrializado saborizado. Sabores: laranja, tangerina, abacaxi, uva e pêssego. Copo com tampa reta.",
+    preco: 10.9,
+    categoria: "bebidas",
+    imagem: "/images/suco-fruta.png",
+    tag: "Natural",
+    tagColor: "#45AD56",
+  },
+  {
+    id: "bebida-7",
+    nome: "Água Mineral Gaseificada",
+    descricao:
+      "Água mineral gaseificada. Marcas: Água Mineral Mineiro e Água Mineral Lilia (ou Lia).",
+    preco: 5.9,
+    categoria: "bebidas",
+    imagem: "/images/agua-mineral.png",
   },
 ];
 
@@ -336,10 +294,16 @@ function MenuItemCard({ item }: { item: MenuItem }) {
           />
         </div>
 
-        {/* Emoji grande */}
-        <span className="relative z-10 text-6xl drop-shadow-lg select-none">
-          <Image src={item.imagem} alt={item.nome} width={96} height={96} />
-        </span>
+        {/* Imagem do produto */}
+        <div className="absolute inset-0 z-10 p-4">
+          <Image
+            src={item.imagem}
+            alt={item.nome}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-contain drop-shadow-lg"
+          />
+        </div>
 
         {/* Tags */}
         <div className="absolute left-3 top-3 z-20 flex flex-col gap-1.5">

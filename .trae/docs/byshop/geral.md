@@ -102,6 +102,9 @@
   - `OrderSchema` agora inclui `payment` (method + label) para exibir meio de pagamento na UI
   - `orders-store` bump `byshop:orders:v2` → `byshop:orders:v3` com limpeza destrutiva do v2
   - Checkout preenche `payment` (cartão mock com últimos 4 dígitos) ao criar pedido
+- 2026-10-14: Don Mix (cardápio) — imagem do card de produto
+  - `www/app/donmix/page.tsx` (`MenuItemCard`): a imagem do produto deixou de usar `width={96} height={96}` fixos dentro de um `<span>` (ficava pequena em relação ao card) e passou a preencher a área `h-44` do card com `next/image` `fill` + `object-contain` (`p-4`, `drop-shadow-lg`), escalando com a largura do card em todos os breakpoints.
+  - Adicionado `sizes` ao `<Image>` para otimização responsiva.
 
 ## Referências importantes
 - README do app importado (fonte de verdade do design system e convenções): [README.md](file:///c:/LOPES/www/byshop/www/README.md)
