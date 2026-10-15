@@ -60,7 +60,6 @@ interface Categoria {
 const CATEGORIAS: Categoria[] = [
   { id: "todos", nome: "Todos", icone: <Utensils className="size-4" /> },
   { id: "lanches", nome: "Lanches", icone: <ChefHat className="size-4" /> },
-  { id: "salgados", nome: "Salgados", icone: <Flame className="size-4" /> },
   { id: "doces", nome: "Doces", icone: <Sparkles className="size-4" /> },
   { id: "bebidas", nome: "Bebidas", icone: <Coffee className="size-4" /> },
   { id: "combos", nome: "Combos", icone: <Award className="size-4" /> },
@@ -583,7 +582,7 @@ function DonMixFooter() {
               Cardápio
             </h4>
             <ul className="space-y-2 text-sm text-purple-200">
-              {["Lanches", "Salgados", "Doces", "Bebidas", "Combos"].map(
+              {["Lanches", "Doces", "Bebidas", "Combos"].map(
                 (item) => (
                   <li key={item}>
                     <a href="#" className="transition-colors hover:text-white">
