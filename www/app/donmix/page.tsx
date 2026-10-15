@@ -77,7 +77,7 @@ const CARDAPIO: MenuItem[] = [
     categoria: "lanches",
     destaque: true,
     maisVendido: true,
-    imagem: "/images/hamburguer-prato.png",
+    imagem: "/images/x-burguer.png",
     tag: "Mais Vendido",
     tagColor: "#C2D82A",
   },
