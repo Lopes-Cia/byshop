@@ -124,7 +124,7 @@ const CARDAPIO: MenuItem[] = [
       "Base de sorvete sabor baunilha industrializado. Acompanha calda saborizada industrializada, cereja industrializada e amendoim granulado.",
     preco: 12.9,
     categoria: "doces",
-    imagem: "/images/donmix_logo.png",
+    imagem: "/images/sundae-baunilha.png",
     tag: "Sobremesa",
     tagColor: "#692D8F",
   },
@@ -135,7 +135,7 @@ const CARDAPIO: MenuItem[] = [
       "Base de sorvete sabor baunilha industrializado com base de sorvete de açaí natural da polpa. Acompanha calda saborizada industrializada, cereja industrializada e amendoim granulado.",
     preco: 14.9,
     categoria: "doces",
-    imagem: "/images/donmix_logo.png",
+    imagem: "/images/sundae-misto.png",
   },
   {
     id: "doce-4",
@@ -145,7 +145,7 @@ const CARDAPIO: MenuItem[] = [
     preco: 19.9,
     categoria: "doces",
     lancamento: true,
-    imagem: "/images/donmix_logo.png",
+    imagem: "/images/milkshake.png",
     tag: "Novo",
     tagColor: "#692D8F",
   },
@@ -184,7 +184,7 @@ const CARDAPIO: MenuItem[] = [
     preco: 21.9,
     categoria: "doces",
     destaque: true,
-    imagem: "/images/donmix_logo.png",
+    imagem: "/images/copo-da-felicidade.png",
     tag: "Especial",
     tagColor: "#C2D82A",
   },
@@ -582,15 +582,13 @@ function DonMixFooter() {
               Cardápio
             </h4>
             <ul className="space-y-2 text-sm text-purple-200">
-              {["Lanches", "Doces", "Bebidas", "Combos"].map(
-                (item) => (
-                  <li key={item}>
-                    <a href="#" className="transition-colors hover:text-white">
-                      {item}
-                    </a>
-                  </li>
-                ),
-              )}
+              {["Lanches", "Doces", "Bebidas", "Combos"].map((item) => (
+                <li key={item}>
+                  <a href="#" className="transition-colors hover:text-white">
+                    {item}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
