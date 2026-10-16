@@ -115,6 +115,25 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* ── Don Mix (delivery) — tokens próprios da marca ── */
+@theme inline {
+  --font-display: var(--font-bricolage, ui-sans-serif, system-ui, sans-serif);
+  --font-body: var(--font-jakarta, ui-sans-serif, system-ui, sans-serif);
+
+  --color-dm-ink: #2b0a31;
+  --color-dm-plum: #4a0e52;
+  --color-dm-plum-deep: #2b0733;
+  --color-dm-plum-soft: #6e2a82;
+  --color-dm-lime: #c2d82a;
+  --color-dm-lime-bright: #e3f25e;
+  --color-dm-cream: #faf6f1;
+  --color-dm-line: #ece3f0;
+  --color-dm-muted: #6f6577;
+  --color-dm-mango: #f5a524;
+  --color-dm-berry: #e5484d;
+  --color-dm-mint: #2fa36b;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -131,4 +150,41 @@
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* ── Don Mix — entrada orquestrada dos cards ── */
+@keyframes dm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dm-rise {
+  animation: dm-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-rise {
+    animation: none !important;
+  }
+}
+
+/* ── Don Mix — foco visível acessível ── */
+@utility dm-focus {
+  &:focus-visible {
+    outline: 2px solid #4a0e52;
+    outline-offset: 2px;
+  }
+}
+
+@utility dm-focus-lime {
+  &:focus-visible {
+    outline: 2px solid #c2d82a;
+    outline-offset: 2px;
+  }
 }

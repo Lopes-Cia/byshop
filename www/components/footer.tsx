@@ -50,7 +50,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-neutral-800 flex flex-col md:flex-row items-center justify-between gap-4">
           <Link href="/">
             <Image 
-              src="/images/logo.png" 
+              src="/images/logo.webp" 
               alt="byShop" 
               width={100} 
               height={28} 

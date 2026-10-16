@@ -64,7 +64,7 @@ export function Header({
         {/* Logo */}
         <Link href="/" className="flex-shrink-0">
           <Image 
-            src="/images/logo.png" 
+            src="/images/logo.webp" 
             alt="byShop" 
             width={120} 
             height={32} 

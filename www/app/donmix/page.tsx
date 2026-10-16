@@ -1,998 +1,726 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useMemo, useState } from "react"
+import Image from "next/image"
 import {
-  ShoppingCart,
+  ArrowRight,
+  BadgeCheck,
+  Bike,
   Clock,
+  Facebook,
+  Flame,
+  Instagram,
   MapPin,
   Phone,
-  Instagram,
-  Facebook,
-  ChevronRight,
   Search,
-  Sparkles,
-  ChefHat,
-  Flame,
-  Coffee,
-  Utensils,
-  Heart,
-  Plus,
-  Check,
-  Truck,
-  Award,
-  Menu,
-  X,
+  Send,
   ShoppingBag,
-} from "lucide-react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+  Soup,
+  Star,
+  Utensils,
+  Wallet,
+  X,
+} from "lucide-react"
+import { toast } from "sonner"
 
-/* ─── Tipos ─────────────────────────────────────────── */
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
-interface MenuItem {
-  id: string;
-  nome: string;
-  descricao: string;
-  preco: number;
-  precoOriginal?: number;
-  categoria: string;
-  destaque?: boolean;
-  maisVendido?: boolean;
-  lancamento?: boolean;
-  imagem: string;
-  tag?: string;
-  tagColor?: string;
-}
+import { CartSheet, type CartLine } from "./cart-sheet"
+import { MenuItemCard } from "./menu-item-card"
+import { CARDAPIO, CATEGORIAS, LOJA, formatBRL, type MenuItem } from "./menu-data"
 
-interface Categoria {
-  id: string;
-  nome: string;
-  icone: React.ReactNode;
-}
+const NAV = [
+  { href: "#cardapio", label: "Cardápio" },
+  { href: "#promo", label: "Promoções" },
+  { href: "#como-funciona", label: "Como funciona" },
+  { href: "#contato", label: "Contato" },
+]
 
-/* ─── Dados do Cardápio ────────────────────────────── */
-
-const CATEGORIAS: Categoria[] = [
-  { id: "todos", nome: "Todos", icone: <Utensils className="size-4" /> },
-  { id: "lanches", nome: "Lanches", icone: <ChefHat className="size-4" /> },
-  { id: "doces", nome: "Doces", icone: <Sparkles className="size-4" /> },
-  { id: "bebidas", nome: "Bebidas", icone: <Coffee className="size-4" /> },
-  { id: "combos", nome: "Combos", icone: <Award className="size-4" /> },
-];
-
-const CARDAPIO: MenuItem[] = [
-  // ── Lanches ──
+const PASSOS = [
   {
-    id: "lanche-1",
-    nome: "X-Burguer",
-    descricao:
-      "Pão brioche, hambúrguer de 90g, muçarela, alface, tomate, cebola e molho especial churrasco. Acompanha maionese, mostarda e ketchup.",
-    preco: 22.9,
-    categoria: "lanches",
-    destaque: true,
-    maisVendido: true,
-    imagem: "/images/x-burguer.png",
-    tag: "Mais Vendido",
-    tagColor: "#C2D82A",
+    icon: Utensils,
+    titulo: "Escolha no cardápio",
+    texto: "Navegue por lanches, sobremesas e bebidas e monte seu pedido.",
   },
   {
-    id: "lanche-2",
-    nome: "X-Burguer Duplo",
-    descricao:
-      "Pão brioche, 2 hambúrgueres de 90g, muçarela, alface, tomate, cebola e molho especial churrasco. Acompanha maionese, mostarda e ketchup.",
-    preco: 29.9,
-    categoria: "lanches",
-    destaque: true,
-    imagem: "/images/x-burguer-duplo.png",
-    tag: "Duplo",
-    tagColor: "#692D8F",
+    icon: Send,
+    titulo: "Envie pelo WhatsApp",
+    texto: "Seu pedido chega pronto para a gente — é só confirmar.",
   },
   {
-    id: "lanche-3",
-    nome: "Pão na Chapa",
-    descricao:
-      "1 fatia de pão sovado com manteiga de leite, levemente passado na chapa. Acompanha café expresso.",
-    preco: 8.9,
-    categoria: "lanches",
-    imagem: "/images/pao-na-chapa.png",
-    tag: "Clássico",
-    tagColor: "#400F46",
+    icon: Bike,
+    titulo: "Receba em casa",
+    texto: `Entrega em ${LOJA.tempoEntrega} ou retirada no balcão.`,
   },
-  // ── Doces (Sobremesas) ──
-  {
-    id: "doce-1",
-    nome: "Sobremesa Açaí (300ml, 400ml, 500ml)",
-    descricao:
-      "Base de sorvete de açaí natural da polpa. Acompanha banana, morango, leite em pó, M&M's, mini cookies, Nutella, granola, cereais e amendoim granulado.",
-    preco: 18.9,
-    categoria: "doces",
-    destaque: true,
-    maisVendido: true,
-    imagem: "/images/acai.png",
-    tag: "Mais Vendido",
-    tagColor: "#C2D82A",
-  },
-  {
-    id: "doce-2",
-    nome: "Sobremesa Sundae Baunilha (180ml, 400ml)",
-    descricao:
-      "Base de sorvete sabor baunilha industrializado. Acompanha calda saborizada industrializada, cereja industrializada e amendoim granulado.",
-    preco: 12.9,
-    categoria: "doces",
-    imagem: "/images/sundae-baunilha.png",
-    tag: "Sobremesa",
-    tagColor: "#692D8F",
-  },
-  {
-    id: "doce-3",
-    nome: "Sobremesa Sundae Misto (180ml, 400ml)",
-    descricao:
-      "Base de sorvete sabor baunilha industrializado com base de sorvete de açaí natural da polpa. Acompanha calda saborizada industrializada, cereja industrializada e amendoim granulado.",
-    preco: 14.9,
-    categoria: "doces",
-    imagem: "/images/sundae-misto.png",
-  },
-  {
-    id: "doce-4",
-    nome: "Sobremesa Milk-shake 500ml",
-    descricao:
-      "Leite integral e base de sorvete sabor baunilha industrializado. Acompanha leite em pó, M&M's, mini cookies, Nutella e cereais. Copo com tampa reta com furo para canudo.",
-    preco: 19.9,
-    categoria: "doces",
-    lancamento: true,
-    imagem: "/images/milkshake.png",
-    tag: "Novo",
-    tagColor: "#692D8F",
-  },
-  {
-    id: "doce-5",
-    nome: "Sobremesa Creme de Morango 400ml",
-    descricao:
-      "Leite integral, raspas de gelo, creme de leite, leite condensado e polpa de fruta. Acompanha calda saborizada industrializada. Copo com tampa reta.",
-    preco: 16.9,
-    categoria: "doces",
-    imagem: "/images/creme-morango.png",
-  },
-  {
-    id: "doce-6",
-    nome: "Sobremesa Creme de Uva 400ml",
-    descricao:
-      "Leite integral, raspas de gelo, creme de leite, leite condensado e polpa de fruta. Acompanha calda saborizada industrializada. Copo com tampa reta.",
-    preco: 16.9,
-    categoria: "doces",
-    imagem: "/images/creme-uva.png",
-  },
-  {
-    id: "doce-7",
-    nome: "Sobremesa Creme de Maracujá 400ml",
-    descricao:
-      "Leite integral, raspas de gelo, creme de leite, leite condensado e polpa de fruta. Acompanha calda saborizada industrializada. Copo com tampa reta.",
-    preco: 16.9,
-    categoria: "doces",
-    imagem: "/images/creme-maracuja.png",
-  },
-  {
-    id: "doce-8",
-    nome: "Sobremesa Copo da Felicidade 400ml",
-    descricao:
-      "Creme de avelã, chantilly, creme de leite, leite em pó, chocolate branco e morango. Copo com tampa reta.",
-    preco: 21.9,
-    categoria: "doces",
-    destaque: true,
-    imagem: "/images/copo-da-felicidade.png",
-    tag: "Especial",
-    tagColor: "#C2D82A",
-  },
-  // ── Bebidas ──
-  {
-    id: "bebida-1",
-    nome: "Iogurte Natural com Mel 180ml",
-    descricao:
-      "Iogurte natural sem adição de conservantes com mel silvestre. Acompanha M&M's, mini cookies, Nutella, granola, cereais e amendoim granulado.",
-    preco: 12.9,
-    categoria: "bebidas",
-    imagem: "/images/iogurte-com-mel.png",
-    tag: "Natural",
-    tagColor: "#45AD56",
-  },
-  {
-    id: "bebida-2",
-    nome: "Café Expresso com Mel 180ml",
-    descricao:
-      "Café expresso solúvel adoçado com mel silvestre. Acompanha chantilly. Copo com tampa reta.",
-    preco: 9.9,
-    categoria: "bebidas",
-    imagem: "/images/cafe-expresso.png",
-    tag: "Quente",
-    tagColor: "#400F46",
-  },
-  {
-    id: "bebida-3",
-    nome: "Cappuccino Tradicional 350ml",
-    descricao: "Cappuccino com canela industrializado. Copo com tampa reta.",
-    preco: 12.9,
-    categoria: "bebidas",
-    imagem: "/images/cappuccino.png",
-  },
-  {
-    id: "bebida-4",
-    nome: "Chocolate Quente 350ml",
-    descricao:
-      "Bebida láctea com achocolatado industrializado. Copo com tampa reta com furo para canudo.",
-    preco: 13.9,
-    categoria: "bebidas",
-    imagem: "/images/chocolate-quente.png",
-  },
-  {
-    id: "bebida-5",
-    nome: "Refrigerante Lata 350ml",
-    descricao: "Bebida gaseificada. Sabores: Coca-Cola e Guaraná Antarctica.",
-    preco: 6.9,
-    categoria: "bebidas",
-    imagem: "/images/refri-lata.png",
-  },
-  {
-    id: "bebida-6",
-    nome: "Suco de Frutas Copo 300ml",
-    descricao:
-      "Suco industrializado saborizado. Sabores: laranja, tangerina, abacaxi, uva e pêssego. Copo com tampa reta.",
-    preco: 10.9,
-    categoria: "bebidas",
-    imagem: "/images/suco-fruta.png",
-    tag: "Natural",
-    tagColor: "#45AD56",
-  },
-  {
-    id: "bebida-7",
-    nome: "Água Mineral Gaseificada",
-    descricao:
-      "Água mineral gaseificada. Marcas: Água Mineral Mineiro e Água Mineral Lilia (ou Lia).",
-    preco: 5.9,
-    categoria: "bebidas",
-    imagem: "/images/agua-mineral.png",
-  },
-];
-
-/* ─── Componente do Item do Cardápio ───────────────── */
-
-function MenuItemCard({ item }: { item: MenuItem }) {
-  const [adicionado, setAdicionado] = useState(false);
-
-  return (
-    <Card
-      className={cn(
-        "group border-0 overflow-hidden transition-all duration-300 hover:-translate-y-1",
-        item.destaque
-          ? "shadow-lg ring-2 ring-[#C2D82A]/30"
-          : "shadow-sm hover:shadow-md",
-      )}
-      style={{ backgroundColor: "#FEFEFE" }}
-    >
-      {/* Imagem / Placeholder */}
-      <div
-        className="relative flex h-44 items-center justify-center overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, #400F46 0%, #692D8F 50%, #400F46 100%)",
-        }}
-      >
-        {/* Padrão decorativo */}
-        <div className="absolute inset-0 opacity-10">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 25% 25%, #C2D82A 1px, transparent 1px)",
-              backgroundSize: "24px 24px",
-            }}
-          />
-        </div>
-
-        {/* Imagem do produto */}
-        <div className="absolute inset-0 z-10 p-4">
-          <Image
-            src={item.imagem}
-            alt={item.nome}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-contain drop-shadow-lg"
-          />
-        </div>
-
-        {/* Tags */}
-        <div className="absolute left-3 top-3 z-20 flex flex-col gap-1.5">
-          {item.maisVendido && (
-            <Badge
-              className="border-0 text-[10px] font-bold uppercase tracking-wider"
-              style={{
-                backgroundColor: "#C2D82A",
-                color: "#400F46",
-              }}
-            >
-              <Flame className="mr-0.5 size-3" />
-              Mais Vendido
-            </Badge>
-          )}
-          {item.lancamento && (
-            <Badge
-              className="border-0 text-[10px] font-bold uppercase tracking-wider"
-              style={{
-                backgroundColor: "#692D8F",
-                color: "#FEFEFE",
-              }}
-            >
-              <Sparkles className="mr-0.5 size-3" />
-              Lançamento
-            </Badge>
-          )}
-        </div>
-
-        {/* Preço original (desconto) */}
-        {item.precoOriginal && (
-          <div className="absolute right-3 top-3 z-20">
-            <Badge
-              className="border-0 text-[10px] font-bold"
-              style={{ backgroundColor: "#45AD56", color: "#FEFEFE" }}
-            >
-              {Math.round(
-                ((item.precoOriginal - item.preco) / item.precoOriginal) * 100,
-              )}
-              % OFF
-            </Badge>
-          </div>
-        )}
-
-        {/* Botão favoritar (hover) */}
-        <button
-          className="absolute right-3 bottom-3 z-20 flex size-8 items-center justify-center rounded-full opacity-0 transition-all duration-300 group-hover:opacity-100"
-          style={{ backgroundColor: "rgba(255,255,255,0.2)" }}
-          aria-label="Favoritar"
-        >
-          <Heart className="size-4 text-white" />
-        </button>
-      </div>
-
-      <CardContent className="space-y-2 px-4 pt-4 pb-0">
-        {/* Tag inline */}
-        {item.tag && (
-          <span
-            className="inline-block rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
-            style={{
-              backgroundColor: item.tagColor + "20",
-              color: item.tagColor,
-            }}
-          >
-            {item.tag}
-          </span>
-        )}
-
-        {/* Nome e descrição */}
-        <h3
-          className="text-base font-bold leading-tight"
-          style={{ color: "#400F46" }}
-        >
-          {item.nome}
-        </h3>
-        <p className="text-xs leading-relaxed text-gray-500 line-clamp-2">
-          {item.descricao}
-        </p>
-      </CardContent>
-
-      <CardFooter className="flex items-center justify-between px-4 pb-4 pt-3">
-        <div className="flex flex-col">
-          {item.precoOriginal && (
-            <span className="text-xs text-gray-400 line-through">
-              {new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              }).format(item.precoOriginal)}
-            </span>
-          )}
-          <span className="text-xl font-bold" style={{ color: "#400F46" }}>
-            {new Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(item.preco)}
-          </span>
-        </div>
-      </CardFooter>
-    </Card>
-  );
-}
-
-/* ─── Seção de Destaques ───────────────────────────── */
-
-function DestaquesSection({ itens }: { itens: MenuItem[] }) {
-  const destaques = itens.filter((i) => i.destaque);
-
-  return (
-    <section className="py-12">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold" style={{ color: "#400F46" }}>
-            🔥 Destaques do Cardápio
-          </h2>
-          <p className="mt-1 text-sm text-gray-500">
-            Os favoritos dos nossos clientes
-          </p>
-        </div>
-        <Button
-          variant="ghost"
-          className="hidden gap-1 text-sm font-medium sm:inline-flex"
-          style={{ color: "#692D8F" }}
-        >
-          Ver todos
-          <ChevronRight className="size-4" />
-        </Button>
-      </div>
-
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {destaques.map((item) => (
-          <MenuItemCard key={item.id} item={item} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* ─── Banner Promocional ───────────────────────────── */
-
-function PromoBanner() {
-  return (
-    <section
-      className="relative my-8 overflow-hidden rounded-2xl"
-      style={{
-        background:
-          "linear-gradient(135deg, #400F46 0%, #692D8F 50%, #400F46 100%)",
-      }}
-    >
-      {/* Padrão geométrico */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.08]">
-        <div
-          className="size-full"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 50% 50%, #FEFEFE 2px, transparent 2px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-      </div>
-
-      <div className="relative z-10 flex flex-col items-center gap-6 px-6 py-10 text-center md:flex-row md:justify-between md:text-left lg:px-12">
-        <div className="space-y-2">
-          <Badge
-            className="inline-flex border-0 text-xs font-bold uppercase tracking-wider"
-            style={{ backgroundColor: "#C2D82A", color: "#400F46" }}
-          >
-            <Sparkles className="mr-1 size-3" />
-            Oferta Imperdível
-          </Badge>
-          <h2 className="text-2xl font-bold text-white md:text-3xl">
-            Combo do Dia com <br className="sm:hidden" />
-            <span style={{ color: "#C2D82A" }}>10% OFF</span>
-          </h2>
-          <p className="max-w-md text-sm text-purple-200">
-            Peça o Combo Executivo e ganhe 10% de desconto + brinde especial.
-            Válido para pedidos feitos até as 18h.
-          </p>
-        </div>
-
-        <div className="flex shrink-0 flex-col items-center gap-2">
-          <span className="text-4xl">⏰</span>
-          <span
-            className="text-xs font-bold uppercase tracking-widest"
-            style={{ color: "#C2D82A" }}
-          >
-            Oferta por tempo limitado
-          </span>
-          <Button
-            className="h-11 gap-2 rounded-full border-0 px-8 text-sm font-bold uppercase tracking-wider"
-            style={{ backgroundColor: "#C2D82A", color: "#400F46" }}
-          >
-            <ShoppingCart className="size-4" />
-            Pedir Agora
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Banner de Informação (Horário/Local) ─────────── */
-
-function InfoBanner() {
-  return (
-    <section className="grid gap-4 py-8 sm:grid-cols-3">
-      {[
-        {
-          icone: <Clock className="size-6" />,
-          titulo: "Seg–Sáb 11h–23h",
-          subtitulo: "Dom 12h–22h",
-        },
-        {
-          icone: <MapPin className="size-6" />,
-          titulo: "Rua Augusta, 1500",
-          subtitulo: "Consolação, SP",
-        },
-        {
-          icone: <Phone className="size-6" />,
-          titulo: "(11) 99999-8888",
-          subtitulo: "WhatsApp",
-        },
-      ].map((info) => (
-        <div
-          key={info.titulo}
-          className="flex items-center gap-4 rounded-xl p-4 transition-colors"
-          style={{ backgroundColor: "#F9F0FA" }}
-        >
-          <div
-            className="flex size-12 shrink-0 items-center justify-center rounded-full"
-            style={{ backgroundColor: "#692D8F", color: "#FEFEFE" }}
-          >
-            {info.icone}
-          </div>
-          <div>
-            <p className="text-sm font-bold" style={{ color: "#400F46" }}>
-              {info.titulo}
-            </p>
-            <p className="text-xs text-gray-500">{info.subtitulo}</p>
-          </div>
-        </div>
-      ))}
-    </section>
-  );
-}
-
-/* ─── Footer ───────────────────────────────────────── */
-
-function DonMixFooter() {
-  return (
-    <footer className="mt-12" style={{ backgroundColor: "#400F46" }}>
-      <div className="mx-auto max-w-6xl px-4 py-10">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Marca */}
-          <div className="space-y-3">
-            <div className="flex flex-row items-center gap-4">
-              <h3 className="text-lg font-bold" style={{ color: "#C2D82A" }}>
-                Don Mix
-              </h3>
-              <Image
-                src="/images/donmix_logo.png"
-                alt="Don Mix"
-                width={48}
-                height={48}
-              />
-            </div>
-
-            <p className="text-sm leading-relaxed text-purple-200">
-              Sabor que conquista, qualidade que inspira.
-              <br />
-              Desde 2015 servindo o melhor da culinária brasileira.
-            </p>
-          </div>
-
-          {/* Navegação */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-white">
-              Cardápio
-            </h4>
-            <ul className="space-y-2 text-sm text-purple-200">
-              {["Lanches", "Doces", "Bebidas", "Combos"].map((item) => (
-                <li key={item}>
-                  <a href="#" className="transition-colors hover:text-white">
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Institucional */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-white">
-              Institucional
-            </h4>
-            <ul className="space-y-2 text-sm text-purple-200">
-              {[
-                "Sobre Nós",
-                "Trabalhe Conosco",
-                "Política de Privacidade",
-                "Termos de Uso",
-              ].map((item) => (
-                <li key={item}>
-                  <a href="#" className="transition-colors hover:text-white">
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Redes Sociais */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-white">
-              Redes Sociais
-            </h4>
-            <div className="flex gap-2">
-              {[
-                { icone: <Instagram className="size-5" />, nome: "Instagram" },
-                { icone: <Facebook className="size-5" />, nome: "Facebook" },
-                {
-                  icone: <ShoppingBag className="size-5" />,
-                  nome: "WhatsApp",
-                },
-              ].map(({ icone, nome }) => (
-                <a
-                  key={nome}
-                  href="#"
-                  className="flex size-10 items-center justify-center rounded-full transition-all hover:scale-110"
-                  style={{ backgroundColor: "#692D8F", color: "#FEFEFE" }}
-                  aria-label={nome}
-                >
-                  {icone}
-                </a>
-              ))}
-            </div>
-            <p className="text-xs text-purple-300">
-              Siga e fique por dentro das novidades!
-            </p>
-          </div>
-        </div>
-
-        <Separator className="my-8" style={{ backgroundColor: "#692D8F" }} />
-
-        <p className="text-center text-xs text-purple-300">
-          © {new Date().getFullYear()} Don Mix — Todos os direitos reservados. —
-          © Lopes & Cia
-        </p>
-      </div>
-    </footer>
-  );
-}
-
-/* ─── Página Principal ─────────────────────────────── */
+]
 
 export default function DonmixPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [categoriaAtiva, setCategoriaAtiva] = useState("todos");
-  const [menuAberto, setMenuAberto] = useState(false);
+  const [categoriaAtiva, setCategoriaAtiva] = useState<string>("todos")
+  const [searchTerm, setSearchTerm] = useState("")
+  const [lines, setLines] = useState<CartLine[]>([])
+  const [cartOpen, setCartOpen] = useState(false)
+  const [favoritos, setFavoritos] = useState<Set<string>>(new Set())
 
-  const itensFiltrados = CARDAPIO.filter((item) => {
-    const matchCategoria =
-      categoriaAtiva === "todos" || item.categoria === categoriaAtiva;
-    const matchSearch =
-      searchTerm === "" ||
-      item.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.descricao.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchCategoria && matchSearch;
-  });
+  const addItem = (item: MenuItem) => {
+    setLines((prev) => {
+      const existing = prev.find((line) => line.item.id === item.id)
+      if (existing) {
+        return prev.map((line) =>
+          line.item.id === item.id ? { ...line, qty: line.qty + 1 } : line,
+        )
+      }
+      return [...prev, { item, qty: 1 }]
+    })
+    toast.success(`${item.nome} no pedido`, { id: item.id })
+  }
+
+  const decItem = (item: MenuItem) => {
+    setLines((prev) =>
+      prev.flatMap((line) => {
+        if (line.item.id !== item.id) return [line]
+        return line.qty > 1 ? [{ ...line, qty: line.qty - 1 }] : []
+      }),
+    )
+  }
+
+  const toggleFavorito = (item: MenuItem) => {
+    setFavoritos((prev) => {
+      const next = new Set(prev)
+      if (next.has(item.id)) next.delete(item.id)
+      else next.add(item.id)
+      return next
+    })
+  }
+
+  const itensFiltrados = useMemo(() => {
+    const termo = searchTerm.trim().toLowerCase()
+    return CARDAPIO.filter((item) => {
+      const matchCategoria =
+        categoriaAtiva === "todos" || item.categoria === categoriaAtiva
+      const matchSearch =
+        termo === "" ||
+        item.nome.toLowerCase().includes(termo) ||
+        item.descricao.toLowerCase().includes(termo)
+      return matchCategoria && matchSearch
+    })
+  }, [categoriaAtiva, searchTerm])
+
+  const qtyPorItem = useMemo(() => {
+    const map = new Map<string, number>()
+    lines.forEach((line) => map.set(line.item.id, line.qty))
+    return map
+  }, [lines])
+
+  const totalItens = lines.reduce((sum, line) => sum + line.qty, 0)
+  const subtotal = lines.reduce((sum, line) => sum + line.item.preco * line.qty, 0)
+  const maisPedido = CARDAPIO.find((item) => item.maisVendido)
+
+  const irParaCardapio = (categoria?: string) => {
+    if (categoria) setCategoriaAtiva(categoria)
+    const reduzir = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+    document
+      .getElementById("cardapio")
+      ?.scrollIntoView({ behavior: reduzir ? "auto" : "smooth", block: "start" })
+  }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#FEFEFE" }}>
+    <div className={cn("min-h-screen", totalItens > 0 && "pb-24 md:pb-0")}>
       {/* ── Navbar ── */}
-      <header
-        className="sticky top-0 z-50 shadow-lg"
-        style={{ backgroundColor: "#400F46" }}
-      >
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-dm-plum-deep/95 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
+          <a href="#top" className="flex items-center gap-2.5">
             <Image
-              src="/images/donmix_logo.png"
+              src="/images/donmix_logo.webp"
               alt="Don Mix"
-              width={325}
-              height={325}
-              className="h-10 w-10"
+              width={44}
+              height={44}
+              className="size-11 rounded-full ring-2 ring-dm-lime/70"
             />
-            <div>
-              <h1
-                className="text-lg font-bold leading-tight tracking-tight"
-                style={{ color: "#C2D82A" }}
-              >
+            <span className="flex flex-col leading-none">
+              <span className="font-display text-lg font-extrabold tracking-tight text-white">
                 Don Mix
-              </h1>
-              <p className="text-[10px] font-medium uppercase tracking-widest text-purple-300">
-                Sabor & Qualidade
-              </p>
-            </div>
-          </div>
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-dm-lime">
+                {LOJA.slogan}
+              </span>
+            </span>
+          </a>
 
-          {/* Desktop nav */}
-          <nav className="hidden items-center gap-6 md:flex">
-            {CATEGORIAS.filter((c) => c.id !== "todos").map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setCategoriaAtiva(cat.id)}
-                className={cn(
-                  "flex items-center gap-1.5 text-sm font-medium transition-colors",
-                  categoriaAtiva === cat.id
-                    ? "text-white"
-                    : "text-purple-300 hover:text-white",
-                )}
+          <nav className="hidden items-center gap-1 lg:flex">
+            {NAV.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="rounded-full px-3 py-2 text-sm font-medium text-purple-100/80 transition-colors hover:bg-white/10 hover:text-white dm-focus-lime"
               >
-                {cat.icone}
-                {cat.nome}
-              </button>
+                {link.label}
+              </a>
             ))}
           </nav>
-        </div>
 
-        {/* Mobile menu */}
-        {menuAberto && (
-          <div
-            className="border-t md:hidden"
-            style={{ borderColor: "#692D8F", backgroundColor: "#400F46" }}
-          >
-            <div className="space-y-1 px-4 pb-4 pt-2">
-              {CATEGORIAS.filter((c) => c.id !== "todos").map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => {
-                    setCategoriaAtiva(cat.id);
-                    setMenuAberto(false);
-                  }}
-                  className={cn(
-                    "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                    categoriaAtiva === cat.id
-                      ? "text-white"
-                      : "text-purple-300 hover:bg-[#692D8F] hover:text-white",
-                  )}
-                  style={
-                    categoriaAtiva === cat.id
-                      ? { backgroundColor: "#692D8F" }
-                      : {}
-                  }
-                >
-                  {cat.icone}
-                  {cat.nome}
-                </button>
-              ))}
-            </div>
+          <div className="flex items-center gap-2">
+            <span className="hidden items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-purple-100 md:flex">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-dm-lime opacity-75 motion-reduce:animate-none" />
+                <span className="relative inline-flex size-2 rounded-full bg-dm-lime" />
+              </span>
+              Aberto agora
+            </span>
+            <button
+              type="button"
+              onClick={() => setCartOpen(true)}
+              aria-label={`Abrir pedido (${totalItens} ${totalItens === 1 ? "item" : "itens"})`}
+              className="inline-flex h-11 items-center gap-2 rounded-full bg-dm-lime pl-4 pr-3 text-sm font-bold text-dm-ink transition hover:bg-dm-lime-bright active:scale-95 dm-focus-lime"
+            >
+              <ShoppingBag className="size-5" />
+              <span className="hidden sm:inline">Pedido</span>
+              {totalItens > 0 && (
+                <span className="grid size-5 place-items-center rounded-full bg-dm-ink text-[11px] font-bold text-dm-lime tabular-nums">
+                  {totalItens}
+                </span>
+              )}
+            </button>
           </div>
-        )}
+        </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4">
+      <main id="top">
         {/* ── Hero ── */}
-        <section
-          className="relative -mx-4 mt-0 overflow-hidden px-4 py-12 sm:rounded-b-2xl sm:mx-0"
-          style={{
-            background:
-              "linear-gradient(160deg, #400F46 0%, #692D8F 60%, #400F46 100%)",
-          }}
-        >
-          {/* Padrão decorativo */}
-          <div className="pointer-events-none absolute inset-0 opacity-[0.06]">
-            <div
-              className="size-full"
-              style={{
-                backgroundImage:
-                  "radial-gradient(circle at 50% 50%, #C2D82A 2px, transparent 2px)",
-                backgroundSize: "40px 40px",
-              }}
-            />
-          </div>
+        <section className="relative overflow-hidden bg-dm-plum-deep">
+          <div className="pointer-events-none absolute -right-24 -top-24 size-[420px] rounded-full bg-dm-plum-soft/40 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-32 -left-24 size-[360px] rounded-full bg-dm-lime/10 blur-3xl" />
 
-          <div className="relative z-10 flex flex-col items-center gap-8 text-center lg:flex-row lg:text-left">
-            <div className="flex-1 space-y-4">
-              <Badge
-                className="inline-flex border-0 text-xs font-bold uppercase tracking-wider"
-                style={{ backgroundColor: "#C2D82A", color: "#400F46" }}
-              >
-                <Award className="mr-1 size-3" />
-                Novo Cardápio 2026
-              </Badge>
+          <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 lg:grid-cols-2 lg:py-20">
+            <div className="space-y-6 text-center lg:text-left">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold text-purple-100">
+                <Star className="size-3.5 fill-dm-lime text-dm-lime" />
+                {LOJA.avaliacao} de 5 · mais de 1.200 avaliações
+              </span>
 
-              <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
-                O sabor que <br />
-                <span style={{ color: "#C2D82A" }}>conquista</span>
-              </h2>
+              <h1 className="font-display text-4xl font-extrabold leading-[1.03] tracking-tight text-white sm:text-5xl lg:text-6xl">
+                Do nosso fogão direto para a sua casa.
+              </h1>
 
-              <p className="mx-auto max-w-md text-sm leading-relaxed text-purple-200 lg:mx-0">
-                Explore nosso cardápio repleto de delícias preparadas com
-                ingredientes selecionados e muito carinho. Do salgado ao doce,
-                temos o que você procura!
+              <p className="mx-auto max-w-md text-base leading-relaxed text-purple-200 lg:mx-0">
+                Lanches artesanais, sobremesas cremosas e bebidas geladas.
+                Escolha seus favoritos e receba quentinho em{" "}
+                <span className="whitespace-nowrap">{LOJA.tempoEntrega}</span>.
               </p>
 
-              <div className="flex flex-wrap items-center gap-3 pt-2">
+              <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
                 <Button
-                  className="h-11 gap-2 rounded-full border-0 px-6 text-sm font-bold uppercase tracking-wider shadow-lg"
-                  style={{ backgroundColor: "#C2D82A", color: "#400F46" }}
+                  onClick={() => irParaCardapio()}
+                  className="h-12 gap-2 rounded-full bg-dm-lime px-6 text-base font-bold text-dm-ink hover:bg-dm-lime-bright"
                 >
-                  <ShoppingCart className="size-4" />
-                  Fazer Pedido
+                  Ver cardápio
+                  <ArrowRight className="size-5" />
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-11 gap-2 rounded-full border-2 px-6 text-sm font-bold uppercase tracking-wider shadow-lg"
-                  style={{
-                    borderColor: "#FEFEFE",
-                    color: "#400F46",
-                  }}
+                  asChild
+                  className="h-12 gap-2 rounded-full border-white/30 bg-white/5 px-6 text-base font-bold text-white hover:bg-white/15 hover:text-white"
                 >
-                  <MapPin className="size-4" />
-                  Onde Estamos
+                  <a href="#como-funciona">Como funciona</a>
                 </Button>
               </div>
+
+              <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2 pt-1 text-sm text-purple-200 lg:justify-start">
+                <li className="inline-flex items-center gap-2">
+                  <Bike className="size-4 text-dm-lime" />
+                  Entrega em <span className="whitespace-nowrap">{LOJA.tempoEntrega}</span>
+                </li>
+                <li className="inline-flex items-center gap-2">
+                  <BadgeCheck className="size-4 text-dm-lime" />
+                  Grátis acima de {formatBRL(LOJA.entregaGratisAcima)}
+                </li>
+                <li className="inline-flex items-center gap-2">
+                  <Clock className="size-4 text-dm-lime" />
+                  Seg–Sáb 11h–23h
+                </li>
+              </ul>
             </div>
 
-            {/* Indicadores visuais */}
-            <div className="flex shrink-0 gap-4 lg:flex-col">
-              {[
-                { valor: "12+", label: "Anos de Tradição" },
-                { valor: "80+", label: "Itens no Cardápio" },
-                { valor: "4.9", label: "Avaliação ⭐" },
-              ].map((stat) => (
-                <div
-                  key={stat.label}
-                  className="flex flex-col items-center rounded-xl px-5 py-3"
-                  style={{
-                    backgroundColor: "rgba(255,255,255,0.1)",
-                    backdropFilter: "blur(4px)",
-                  }}
-                >
-                  <span
-                    className="text-xl font-bold"
-                    style={{ color: "#C2D82A" }}
-                  >
-                    {stat.valor}
-                  </span>
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-purple-200">
-                    {stat.label}
-                  </span>
+            <div className="relative mx-auto w-full max-w-[520px]">
+              <div
+                aria-hidden
+                className="absolute -bottom-6 -right-6 size-44 rounded-full bg-dm-plum-soft/40 blur-3xl"
+              />
+
+              <div className="relative pt-[29%]">
+                {/* Card de trás — aparece só na metade de cima */}
+                <div className="absolute left-1/2 top-0 z-0 aspect-[4/5] w-[46%] -translate-x-1/2 overflow-hidden rounded-[2rem] shadow-lg ring-1 ring-white/15">
+                  <Image
+                    src="/images/homem-tomando-sorvete.webp"
+                    alt="Cliente do Don Mix com um milk-shake"
+                    fill
+                    sizes="(max-width: 1024px) 45vw, 240px"
+                    className="object-cover object-[50%_0%]"
+                  />
                 </div>
+
+                <div className="relative z-10 flex items-end justify-center">
+                  {/* Frente — lanche */}
+                  <div className="relative z-30 w-[52%]">
+                    <div
+                      aria-hidden
+                      className="absolute -left-3 -top-3 size-16 rounded-[1.5rem] bg-dm-lime sm:size-20"
+                    />
+                    <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] shadow-2xl ring-1 ring-white/15">
+                      <Image
+                        src="/images/comendo-hamburguer.webp"
+                        alt="Cliente do Don Mix comendo um hambúrguer"
+                        fill
+                        priority
+                        sizes="(max-width: 1024px) 50vw, 300px"
+                        className="object-cover object-[50%_35%]"
+                      />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-dm-plum-deep/75 to-transparent" />
+                      <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5 rounded-full bg-dm-plum-deep/85 px-3 py-1.5 text-xs font-bold text-white shadow-lg backdrop-blur">
+                        <Star className="size-3.5 fill-dm-lime text-dm-lime" />
+                        {LOJA.avaliacao}
+                      </div>
+                    </div>
+
+                    {maisPedido && (
+                      <div className="absolute -bottom-4 -left-2 z-40 flex items-center gap-3 rounded-2xl bg-white/95 p-3 pr-4 shadow-xl ring-1 ring-black/5 backdrop-blur sm:-left-4">
+                        <span className="grid size-10 place-items-center rounded-xl bg-dm-lime text-dm-ink">
+                          <Flame className="size-5" />
+                        </span>
+                        <div>
+                          <p className="text-[11px] font-semibold uppercase tracking-wide text-dm-muted">
+                            Mais pedido
+                          </p>
+                          <p className="font-display text-sm font-bold text-dm-ink">
+                            {maisPedido.nome} · {formatBRL(maisPedido.preco)}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Atrás do lanche — sorvete deslocado para a esquerda */}
+                  <div className="relative z-20 -ml-[12%] aspect-[4/5] w-[40%] overflow-hidden rounded-[2rem] shadow-xl ring-1 ring-white/15">
+                    <Image
+                      src="/images/comendo-sorvete.webp"
+                      alt="Cliente do Don Mix tomando sorvete"
+                      fill
+                      sizes="(max-width: 1024px) 35vw, 200px"
+                      className="origin-[50%_29%] scale-[1.7] object-cover sm:scale-[1.9]"
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-dm-plum-deep/70 to-transparent" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Cardápio ── */}
+        <section id="cardapio" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-14">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-dm-ink sm:text-4xl">
+                Cardápio
+              </h2>
+              <p className="mt-1 text-sm text-dm-muted">
+                {itensFiltrados.length}{" "}
+                {itensFiltrados.length === 1 ? "item" : "itens"} para escolher
+              </p>
+            </div>
+
+            <div className="relative w-full sm:w-72">
+              <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-dm-plum" />
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Buscar no cardápio"
+                aria-label="Buscar no cardápio"
+                className="h-12 w-full rounded-full border border-dm-line bg-white pl-11 pr-10 text-sm text-dm-ink outline-none transition placeholder:text-dm-muted focus:border-dm-plum focus:ring-2 focus:ring-dm-plum/20"
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm("")}
+                  aria-label="Limpar busca"
+                  className="absolute right-3 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-full text-dm-muted transition hover:bg-dm-cream hover:text-dm-ink dm-focus"
+                >
+                  <X className="size-4" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="relative mt-6">
+            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-hide">
+              {CATEGORIAS.map((cat) => {
+                const Icon = cat.icon
+                const active = categoriaAtiva === cat.id
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setCategoriaAtiva(cat.id)}
+                    aria-pressed={active}
+                    className={cn(
+                      "inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-semibold transition dm-focus",
+                      active
+                        ? "border-dm-plum bg-dm-plum text-white shadow-md"
+                        : "border-dm-line bg-white text-dm-ink hover:border-dm-plum/40 hover:text-dm-plum",
+                    )}
+                  >
+                    <Icon className="size-4" />
+                    {cat.nome}
+                  </button>
+                )
+              })}
+            </div>
+            <div className="pointer-events-none absolute inset-y-0 -right-4 w-12 bg-linear-to-l from-dm-cream to-transparent sm:hidden" />
+          </div>
+
+          {itensFiltrados.length > 0 ? (
+            <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {itensFiltrados.map((item, index) => (
+                <MenuItemCard
+                  key={item.id}
+                  item={item}
+                  index={index}
+                  qty={qtyPorItem.get(item.id) ?? 0}
+                  favorito={favoritos.has(item.id)}
+                  onAdd={addItem}
+                  onDec={decItem}
+                  onToggleFavorito={toggleFavorito}
+                />
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* ── Bem-vindo + Busca ── */}
-        <section className="flex flex-col gap-4 pt-10 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-2xl font-bold" style={{ color: "#400F46" }}>
-              Nosso Cardápio
-            </h2>
-            <p className="mt-1 text-sm text-gray-500">
-              Escolha entre deliciosas opções preparadas na hora
-            </p>
-          </div>
-
-          {/* Busca */}
-          <div className="relative w-full sm:w-72">
-            <Search
-              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2"
-              style={{ color: "#692D8F" }}
-            />
-            <input
-              type="text"
-              placeholder="Buscar no cardápio…"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-xl border-2 py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
-              style={{
-                borderColor: "#E5D0E8",
-                color: "#400F46",
-              }}
-              onFocus={(e) => (e.target.style.borderColor = "#692D8F")}
-              onBlur={(e) => (e.target.style.borderColor = "#E5D0E8")}
-            />
-          </div>
-        </section>
-
-        {/* ── Abas de Categoria ── */}
-        <Tabs
-          defaultValue="todos"
-          value={categoriaAtiva}
-          onValueChange={setCategoriaAtiva}
-          className="mt-6"
-        >
-          <TabsList
-            className="h-auto flex-wrap gap-1.5 rounded-2xl border-0 p-2"
-            style={{ backgroundColor: "#F9F0FA" }}
-          >
-            {CATEGORIAS.map((cat) => (
-              <TabsTrigger
-                key={cat.id}
-                value={cat.id}
-                className="gap-1.5 rounded-xl border-0 px-4 py-2 text-xs font-bold uppercase tracking-wider data-[state=active]:shadow-md"
-                style={{
-                  color: "#400F46",
-                }}
-              >
-                {cat.icone}
-                {cat.nome}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          {CATEGORIAS.map((cat) => (
-            <TabsContent key={cat.id} value={cat.id} className="mt-6">
-              {itensFiltrados.length > 0 ? (
-                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {itensFiltrados.map((item) => (
-                    <MenuItemCard key={item.id} item={item} />
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center py-16 text-center">
-                  <span className="text-5xl">😕</span>
-                  <h3
-                    className="mt-4 text-lg font-bold"
-                    style={{ color: "#400F46" }}
-                  >
-                    Nenhum item encontrado
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-500">
-                    Tente buscar por outro termo ou categoria.
-                  </p>
-                  <Button
-                    variant="outline"
-                    className="mt-4"
-                    onClick={() => {
-                      setSearchTerm("");
-                      setCategoriaAtiva("todos");
-                    }}
-                  >
-                    Limpar filtros
-                  </Button>
-                </div>
-              )}
-            </TabsContent>
-          ))}
-        </Tabs>
-
-        {/* ── Banner Promocional ── */}
-        <PromoBanner />
-
-        {/* ── Destaques ── */}
-        <DestaquesSection itens={CARDAPIO} />
-
-        {/* ── Info Banner ── */}
-        <InfoBanner />
-
-        {/* ── CTA Final ── */}
-        <section
-          className="my-8 overflow-hidden rounded-2xl text-center"
-          style={{
-            background: "linear-gradient(135deg, #C2D82A 0%, #45AD56 100%)",
-          }}
-        >
-          <div className="px-6 py-10">
-            <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Faça seu pedido agora!
-            </h2>
-            <p className="mx-auto mt-2 max-w-lg text-sm font-bold text-white/90">
-              Peça pelo WhatsApp ou pelo nosso delivery e receba em casa com
-              todo conforto e segurança.
-            </p>
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Button
-                className="h-11 gap-2 rounded-full border-0 px-8 text-sm font-bold uppercase tracking-wider shadow-lg"
-                style={{ backgroundColor: "#400F46", color: "#FEFEFE" }}
-              >
-                <ShoppingBag className="size-4" />
-                Pedir pelo WhatsApp
-              </Button>
+          ) : (
+            <div className="mt-6 flex flex-col items-center gap-4 rounded-[28px] bg-white py-16 text-center ring-1 ring-dm-line">
+              <span className="grid size-16 place-items-center rounded-full bg-dm-cream text-dm-plum">
+                <Soup className="size-7" />
+              </span>
+              <div className="space-y-1">
+                <h3 className="font-display text-lg font-bold text-dm-ink">
+                  Nada encontrado por aqui
+                </h3>
+                <p className="text-sm text-dm-muted">
+                  Tente outra busca ou explore outra categoria.
+                </p>
+              </div>
               <Button
                 variant="outline"
-                className="h-11 gap-2 rounded-full border-2 px-8 text-sm font-bold uppercase tracking-wider shadow-lg"
-                style={{ borderColor: "#FEFEFE", color: "#400F46" }}
+                className="rounded-full border-dm-line"
+                onClick={() => {
+                  setSearchTerm("")
+                  setCategoriaAtiva("todos")
+                }}
               >
-                <Truck className="size-4" />
-                Delivery
+                Limpar filtros
               </Button>
+            </div>
+          )}
+        </section>
+
+        {/* ── Promo ── */}
+        <section id="promo" className="mx-auto max-w-6xl scroll-mt-20 px-4">
+          <div className="relative overflow-hidden rounded-[32px] bg-dm-plum">
+            <div className="pointer-events-none absolute -right-16 -top-16 size-72 rounded-full bg-dm-lime/15 blur-3xl" />
+            <div className="pointer-events-none absolute inset-0 opacity-[0.06]">
+              <div
+                className="size-full"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle at 50% 50%, #FEFEFE 2px, transparent 2px)",
+                  backgroundSize: "28px 28px",
+                }}
+              />
+            </div>
+
+            <div className="relative grid items-center gap-6 p-8 sm:p-10 lg:grid-cols-[1.15fr_1fr] lg:p-12">
+              <div className="space-y-4 text-center lg:text-left">
+                <span className="inline-flex items-center gap-2 rounded-full bg-dm-lime px-3 py-1 text-xs font-bold uppercase tracking-wide text-dm-ink">
+                  <Flame className="size-3.5" />
+                  Combos & sobremesas
+                </span>
+                <h2 className="font-display text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl">
+                  Monte o combo perfeito para o seu momento.
+                </h2>
+                <p className="mx-auto max-w-md text-sm leading-relaxed text-purple-200 lg:mx-0">
+                  De um lanche rápido com café a uma sobremesa que abraça.
+                  Combine o que quiser e a entrega sai de graça acima de{" "}
+                  {formatBRL(LOJA.entregaGratisAcima)}.
+                </p>
+                <div className="flex flex-wrap justify-center gap-3 pt-1 lg:justify-start">
+                  <Button
+                    onClick={() => irParaCardapio("doces")}
+                    className="h-11 gap-2 rounded-full bg-dm-lime px-6 text-sm font-bold text-dm-ink hover:bg-dm-lime-bright"
+                  >
+                    Ver sobremesas
+                    <ArrowRight className="size-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="h-11 rounded-full border-white/30 bg-white/5 px-6 text-sm font-bold text-white hover:bg-white/15 hover:text-white"
+                  >
+                    <a href="#cardapio">Ver tudo</a>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="relative mx-auto aspect-square w-full max-w-xs">
+                <div className="absolute inset-0 rounded-full bg-dm-lime/15" />
+                <div className="absolute inset-0">
+                  <Image
+                    src="/images/acai.webp"
+                    alt="Sobremesa de açaí do Don Mix"
+                    fill
+                    sizes="(max-width: 1024px) 60vw, 320px"
+                    className="object-contain drop-shadow-[0_24px_30px_rgba(0,0,0,0.35)]"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Como funciona ── */}
+        <section id="como-funciona" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-14">
+          <div className="max-w-xl">
+            <h2 className="font-display text-3xl font-extrabold tracking-tight text-dm-ink sm:text-4xl">
+              Como funciona
+            </h2>
+            <p className="mt-1 text-sm text-dm-muted">
+              Três passos entre você e o seu pedido.
+            </p>
+          </div>
+
+          <ol className="mt-8 grid gap-5 md:grid-cols-3">
+            {PASSOS.map((passo, index) => {
+              const Icon = passo.icon
+              return (
+                <li
+                  key={passo.titulo}
+                  className="relative rounded-[28px] bg-white p-6 ring-1 ring-dm-line"
+                >
+                  <span
+                    aria-hidden
+                    className="font-display text-4xl font-extrabold leading-none text-dm-plum"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="mt-3 grid size-11 place-items-center rounded-2xl bg-dm-lime text-dm-ink">
+                    <Icon className="size-5" />
+                  </span>
+                  <h3 className="mt-4 font-display text-lg font-bold text-dm-ink">
+                    {passo.titulo}
+                  </h3>
+                  <p className="mt-1 text-sm leading-relaxed text-dm-muted">
+                    {passo.texto}
+                  </p>
+                </li>
+              )
+            })}
+          </ol>
+        </section>
+
+        {/* ── Contato ── */}
+        <section id="contato" className="mx-auto max-w-6xl scroll-mt-20 px-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icon: MapPin, titulo: "Endereço", texto: LOJA.endereco },
+              { icon: Clock, titulo: "Horário", texto: LOJA.horario },
+              { icon: Phone, titulo: "Telefone", texto: LOJA.telefone },
+              {
+                icon: Wallet,
+                titulo: "Pagamento",
+                texto: "Pix, cartão e dinheiro na entrega",
+              },
+            ].map((info) => {
+              const Icon = info.icon
+              return (
+                <div
+                  key={info.titulo}
+                  className="flex items-start gap-3 rounded-3xl bg-white p-5 ring-1 ring-dm-line"
+                >
+                  <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-dm-cream text-dm-plum">
+                    <Icon className="size-5" />
+                  </span>
+                  <div>
+                    <h3 className="font-display text-sm font-bold text-dm-ink">
+                      {info.titulo}
+                    </h3>
+                    <p className="mt-0.5 text-sm leading-relaxed text-dm-muted">
+                      {info.texto}
+                    </p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* ── CTA final ── */}
+        <section className="mx-auto max-w-6xl px-4 py-14">
+          <div className="relative overflow-hidden rounded-[32px] bg-dm-lime px-6 py-12 text-center sm:px-12">
+            <div className="pointer-events-none absolute -bottom-16 -right-10 size-56 rounded-full bg-dm-ink/5" />
+            <div className="relative mx-auto max-w-xl space-y-5">
+              <h2 className="font-display text-3xl font-extrabold leading-tight tracking-tight text-dm-ink sm:text-4xl">
+                Bateu a fome? A gente resolve.
+              </h2>
+              <p className="text-sm font-medium text-dm-ink/80">
+                Peça pelo WhatsApp e acompanhe a entrega até a sua porta.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Button
+                  onClick={() => setCartOpen(true)}
+                  className="h-12 gap-2 rounded-full bg-dm-ink px-6 text-base font-bold text-white hover:bg-dm-plum"
+                >
+                  <ShoppingBag className="size-5" />
+                  Ver meu pedido
+                </Button>
+                <Button
+                  variant="outline"
+                  asChild
+                  className="h-12 gap-2 rounded-full border-dm-ink/25 bg-transparent px-6 text-base font-bold text-dm-ink hover:bg-dm-ink/10 hover:text-dm-ink"
+                >
+                  <a href={`tel:${LOJA.telefone}`}>
+                    <Phone className="size-5" />
+                    Ligar para a loja
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </section>
       </main>
 
       {/* ── Footer ── */}
-      <DonMixFooter />
+      <footer className="bg-dm-plum-deep text-purple-200">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2.5">
+              <Image
+                src="/images/donmix_logo.webp"
+                alt="Don Mix"
+                width={44}
+                height={44}
+                className="size-11 rounded-full ring-2 ring-dm-lime/60"
+              />
+              <span className="font-display text-lg font-extrabold text-white">
+                Don Mix
+              </span>
+            </div>
+            <p className="text-sm leading-relaxed">
+              Sabor que conquista, qualidade que inspira. Desde 2015 servindo o
+              melhor da culinária brasileira.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="font-display text-sm font-bold uppercase tracking-wide text-white">
+              Cardápio
+            </h2>
+            <ul className="space-y-2 text-sm">
+              {CATEGORIAS.filter((cat) => cat.id !== "todos").map((cat) => (
+                <li key={cat.id}>
+                  <button
+                    type="button"
+                    onClick={() => irParaCardapio(cat.id)}
+                    className="transition-colors hover:text-white dm-focus-lime"
+                  >
+                    {cat.nome}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="font-display text-sm font-bold uppercase tracking-wide text-white">
+              Institucional
+            </h2>
+            <ul className="space-y-2 text-sm">
+              {["Sobre nós", "Trabalhe conosco", "Política de privacidade", "Termos de uso"].map(
+                (item) => (
+                  <li key={item}>
+                    <a href="#" className="transition-colors hover:text-white dm-focus-lime">
+                      {item}
+                    </a>
+                  </li>
+                ),
+              )}
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="font-display text-sm font-bold uppercase tracking-wide text-white">
+              Fale com a gente
+            </h2>
+            <ul className="space-y-2 text-sm">
+              <li className="flex items-center gap-2">
+                <Phone className="size-4 text-dm-lime" />
+                {LOJA.telefone}
+              </li>
+              <li className="flex items-center gap-2">
+                <MapPin className="size-4 text-dm-lime" />
+                {LOJA.endereco}
+              </li>
+            </ul>
+            <div className="flex gap-2 pt-1">
+              {[
+                { icon: Instagram, nome: "Instagram" },
+                { icon: Facebook, nome: "Facebook" },
+                { icon: Phone, nome: "WhatsApp" },
+              ].map(({ icon: Icon, nome }) => (
+                <a
+                  key={nome}
+                  href="#"
+                  aria-label={nome}
+                  className="grid size-10 place-items-center rounded-full bg-white/10 text-white transition hover:bg-dm-lime hover:text-dm-ink dm-focus-lime"
+                >
+                  <Icon className="size-5" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-white/10">
+          <p className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-purple-300">
+            © {new Date().getFullYear()} Don Mix — Todos os direitos reservados ·
+            © Lopes &amp; Cia
+          </p>
+        </div>
+      </footer>
+
+      {/* ── Barra fixa do pedido (mobile) ── */}
+      {totalItens > 0 && !cartOpen && (
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-dm-line bg-white/95 p-3 backdrop-blur md:hidden">
+          <button
+            type="button"
+            onClick={() => setCartOpen(true)}
+            className="flex h-12 w-full items-center justify-between rounded-full bg-dm-plum pl-5 pr-4 text-white active:scale-[0.99] dm-focus"
+          >
+            <span className="flex items-center gap-2 text-sm font-bold">
+              <ShoppingBag className="size-5" />
+              Ver pedido ({totalItens})
+            </span>
+            <span className="font-display text-base font-bold">
+              {formatBRL(subtotal)}
+            </span>
+          </button>
+        </div>
+      )}
+
+      <CartSheet
+        open={cartOpen}
+        onOpenChange={setCartOpen}
+        lines={lines}
+        onInc={addItem}
+        onDec={decItem}
+        onClear={() => setLines([])}
+      />
     </div>
-  );
+  )
 }
