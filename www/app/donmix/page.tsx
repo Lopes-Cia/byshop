@@ -113,7 +113,7 @@ const CARDAPIO: MenuItem[] = [
     categoria: "doces",
     destaque: true,
     maisVendido: true,
-    imagem: "/images/donmix_logo.png",
+    imagem: "/images/acai.png",
     tag: "Mais Vendido",
     tagColor: "#C2D82A",
   },
@@ -156,7 +156,7 @@ const CARDAPIO: MenuItem[] = [
       "Leite integral, raspas de gelo, creme de leite, leite condensado e polpa de fruta. Acompanha calda saborizada industrializada. Copo com tampa reta.",
     preco: 16.9,
     categoria: "doces",
-    imagem: "/images/donmix_logo.png",
+    imagem: "/images/creme-morango.png",
   },
   {
     id: "doce-6",
@@ -165,7 +165,7 @@ const CARDAPIO: MenuItem[] = [
       "Leite integral, raspas de gelo, creme de leite, leite condensado e polpa de fruta. Acompanha calda saborizada industrializada. Copo com tampa reta.",
     preco: 16.9,
     categoria: "doces",
-    imagem: "/images/donmix_logo.png",
+    imagem: "/images/creme-uva.png",
   },
   {
     id: "doce-7",
@@ -174,7 +174,7 @@ const CARDAPIO: MenuItem[] = [
       "Leite integral, raspas de gelo, creme de leite, leite condensado e polpa de fruta. Acompanha calda saborizada industrializada. Copo com tampa reta.",
     preco: 16.9,
     categoria: "doces",
-    imagem: "/images/donmix_logo.png",
+    imagem: "/images/creme-maracuja.png",
   },
   {
     id: "doce-8",
