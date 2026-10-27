@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ),
   title: "Don Mix — Delivery de lanches, sobremesas e bebidas",
   description:
-    "Cardápio do Don Mix: lanches artesanais, sobremesas cremosas e bebidas geladas com entrega rápida em Consolação, SP.",
+    "Cardápio do Don Mix: lanches artesanais, sobremesas cremosas e bebidas geladas com entrega rápida em Aparecida de Goiânia, GO.",
   // Ícones/favicon do Don Mix — aplicados somente às rotas deste segmento,
   // sobrepondo os ícones globais definidos em app/layout.tsx.
   icons: {

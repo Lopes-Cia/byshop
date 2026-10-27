@@ -40,7 +40,8 @@ export const LOJA = {
   telefone: "(62) 98595-0004",
   telefoneLink: "+5562985950004",
   whatsapp: "5562985950004",
-  endereco: "Rua Augusta, 1500 — Consolação, SP",
+  endereco:
+    "R C 25, SN — Quadra 58, Lote 02, Casa 02, Sala 02 — Jardim Boa Esperança, Aparecida de Goiânia - GO · CEP 74.960-160",
   horario: "Seg–Sáb 11h–23h · Dom 12h–22h",
   tempoEntrega: "30–45 min",
   avaliacao: "4,9",

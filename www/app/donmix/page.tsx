@@ -575,9 +575,9 @@ export default function DonmixPage() {
                 <Phone className="size-4 text-dm-lime" />
                 {LOJA.telefone}
               </li>
-              <li className="flex items-center gap-2">
-                <MapPin className="size-4 text-dm-lime" />
-                {LOJA.endereco}
+              <li className="flex items-start gap-2">
+                <MapPin className="mt-0.5 size-4 shrink-0 text-dm-lime" />
+                <span>{LOJA.endereco}</span>
               </li>
             </ul>
             <div className="flex gap-2 pt-1">
