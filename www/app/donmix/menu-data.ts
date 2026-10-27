@@ -37,8 +37,9 @@ export interface Categoria {
 export const LOJA = {
   nome: "Don Mix",
   slogan: "Sabor & Qualidade",
-  telefone: "(11) 99999-8888",
-  whatsapp: "5511999998888",
+  telefone: "(62) 98595-0004",
+  telefoneLink: "+5562985950004",
+  whatsapp: "5562985950004",
   endereco: "Rua Augusta, 1500 — Consolação, SP",
   horario: "Seg–Sáb 11h–23h · Dom 12h–22h",
   tempoEntrega: "30–45 min",
@@ -118,7 +119,7 @@ export const CARDAPIO: MenuItem[] = [
     id: "doce-2",
     nome: "Sundae Baunilha",
     descricao:
-      "Base de sorvete sabor baunilha industrializado. Acompanha calda saborizada industrializada, cereja industrializada e amendoim granulado. 180ml ou 400ml.",
+      "Base de sorvete sabor baunilha industrializado. Acompanha calda saborizada industrializada, cereja industrializada e amendoim granulado. 170ml ou 400ml.",
     preco: 12.9,
     categoria: "doces",
     imagem: "/images/sundae-baunilha.webp",
@@ -129,7 +130,7 @@ export const CARDAPIO: MenuItem[] = [
     id: "doce-3",
     nome: "Sundae Misto",
     descricao:
-      "Base de sorvete sabor baunilha industrializado com base de sorvete de açaí natural da polpa. Acompanha calda, cereja e amendoim granulado. 180ml ou 400ml.",
+      "Base de sorvete sabor baunilha industrializado com base de sorvete de açaí natural da polpa. Acompanha calda, cereja e amendoim granulado. 170ml ou 400ml.",
     preco: 14.9,
     categoria: "doces",
     imagem: "/images/sundae-misto.webp",
@@ -188,7 +189,7 @@ export const CARDAPIO: MenuItem[] = [
   // ── Bebidas ──
   {
     id: "bebida-1",
-    nome: "Iogurte Natural com Mel 180ml",
+    nome: "Iogurte Natural com Mel 170ml",
     descricao:
       "Iogurte natural sem adição de conservantes com mel silvestre. Acompanha M&M's, mini cookies, Nutella, granola, cereais e amendoim granulado.",
     preco: 12.9,
@@ -199,7 +200,7 @@ export const CARDAPIO: MenuItem[] = [
   },
   {
     id: "bebida-2",
-    nome: "Café Expresso com Mel 180ml",
+    nome: "Café Expresso com Mel 170ml",
     descricao:
       "Café expresso solúvel adoçado com mel silvestre. Acompanha chantilly. Copo com tampa reta.",
     preco: 9.9,

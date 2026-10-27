@@ -584,7 +584,7 @@ export default function DonmixPage() {
                   asChild
                   className="h-12 gap-2 rounded-full border-dm-ink/25 bg-transparent px-6 text-base font-bold text-dm-ink hover:bg-dm-ink/10 hover:text-dm-ink"
                 >
-                  <a href={`tel:${LOJA.telefone}`}>
+                  <a href={`tel:${LOJA.telefoneLink}`}>
                     <Phone className="size-5" />
                     Ligar para a loja
                   </a>
