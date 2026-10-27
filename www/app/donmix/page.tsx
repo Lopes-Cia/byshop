@@ -21,21 +21,13 @@ import {
   Wallet,
   X,
 } from "lucide-react"
-import { toast } from "sonner"
-
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-import { CartSheet, type CartLine } from "./cart-sheet"
+import { useDonMixCart } from "./cart-store"
+import { DonMixHeader } from "./donmix-header"
 import { MenuItemCard } from "./menu-item-card"
 import { CARDAPIO, CATEGORIAS, LOJA, formatBRL, type MenuItem } from "./menu-data"
-
-const NAV = [
-  { href: "#cardapio", label: "Cardápio" },
-  { href: "#promo", label: "Promoções" },
-  { href: "#como-funciona", label: "Como funciona" },
-  { href: "#contato", label: "Contato" },
-]
 
 const PASSOS = [
   {
@@ -58,31 +50,9 @@ const PASSOS = [
 export default function DonmixPage() {
   const [categoriaAtiva, setCategoriaAtiva] = useState<string>("todos")
   const [searchTerm, setSearchTerm] = useState("")
-  const [lines, setLines] = useState<CartLine[]>([])
-  const [cartOpen, setCartOpen] = useState(false)
   const [favoritos, setFavoritos] = useState<Set<string>>(new Set())
-
-  const addItem = (item: MenuItem) => {
-    setLines((prev) => {
-      const existing = prev.find((line) => line.item.id === item.id)
-      if (existing) {
-        return prev.map((line) =>
-          line.item.id === item.id ? { ...line, qty: line.qty + 1 } : line,
-        )
-      }
-      return [...prev, { item, qty: 1 }]
-    })
-    toast.success(`${item.nome} no pedido`, { id: item.id })
-  }
-
-  const decItem = (item: MenuItem) => {
-    setLines((prev) =>
-      prev.flatMap((line) => {
-        if (line.item.id !== item.id) return [line]
-        return line.qty > 1 ? [{ ...line, qty: line.qty - 1 }] : []
-      }),
-    )
-  }
+  const { lines, count: totalItens, subtotal, open: cartOpen, openCart } =
+    useDonMixCart()
 
   const toggleFavorito = (item: MenuItem) => {
     setFavoritos((prev) => {
@@ -108,12 +78,12 @@ export default function DonmixPage() {
 
   const qtyPorItem = useMemo(() => {
     const map = new Map<string, number>()
-    lines.forEach((line) => map.set(line.item.id, line.qty))
+    lines.forEach((line) =>
+      map.set(line.productId, (map.get(line.productId) ?? 0) + line.qty),
+    )
     return map
   }, [lines])
 
-  const totalItens = lines.reduce((sum, line) => sum + line.qty, 0)
-  const subtotal = lines.reduce((sum, line) => sum + line.item.preco * line.qty, 0)
   const maisPedido = CARDAPIO.find((item) => item.maisVendido)
 
   const irParaCardapio = (categoria?: string) => {
@@ -127,63 +97,7 @@ export default function DonmixPage() {
   return (
     <div className={cn("min-h-screen", totalItens > 0 && "pb-24 md:pb-0")}>
       {/* ── Navbar ── */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-dm-plum-deep/95 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
-          <a href="#top" className="flex items-center gap-2.5">
-            <Image
-              src="/images/donmix_logo.webp"
-              alt="Don Mix"
-              width={44}
-              height={44}
-              className="size-11 rounded-full ring-2 ring-dm-lime/70"
-            />
-            <span className="flex flex-col leading-none">
-              <span className="font-display text-lg font-extrabold tracking-tight text-white">
-                Don Mix
-              </span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-dm-lime">
-                {LOJA.slogan}
-              </span>
-            </span>
-          </a>
-
-          <nav className="hidden items-center gap-1 lg:flex">
-            {NAV.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="rounded-full px-3 py-2 text-sm font-medium text-purple-100/80 transition-colors hover:bg-white/10 hover:text-white dm-focus-lime"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <span className="hidden items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-purple-100 md:flex">
-              <span className="relative flex size-2">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-dm-lime opacity-75 motion-reduce:animate-none" />
-                <span className="relative inline-flex size-2 rounded-full bg-dm-lime" />
-              </span>
-              Aberto agora
-            </span>
-            <button
-              type="button"
-              onClick={() => setCartOpen(true)}
-              aria-label={`Abrir pedido (${totalItens} ${totalItens === 1 ? "item" : "itens"})`}
-              className="inline-flex h-11 items-center gap-2 rounded-full bg-dm-lime pl-4 pr-3 text-sm font-bold text-dm-ink transition hover:bg-dm-lime-bright active:scale-95 dm-focus-lime"
-            >
-              <ShoppingBag className="size-5" />
-              <span className="hidden sm:inline">Pedido</span>
-              {totalItens > 0 && (
-                <span className="grid size-5 place-items-center rounded-full bg-dm-ink text-[11px] font-bold text-dm-lime tabular-nums">
-                  {totalItens}
-                </span>
-              )}
-            </button>
-          </div>
-        </div>
-      </header>
+      <DonMixHeader />
 
       <main id="top">
         {/* ── Hero ── */}
@@ -385,11 +299,10 @@ export default function DonmixPage() {
                 <MenuItemCard
                   key={item.id}
                   item={item}
+                  href={`/donmix/produto/${item.id}`}
                   index={index}
                   qty={qtyPorItem.get(item.id) ?? 0}
                   favorito={favoritos.has(item.id)}
-                  onAdd={addItem}
-                  onDec={decItem}
                   onToggleFavorito={toggleFavorito}
                 />
               ))}
@@ -573,7 +486,7 @@ export default function DonmixPage() {
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 <Button
-                  onClick={() => setCartOpen(true)}
+                  onClick={openCart}
                   className="h-12 gap-2 rounded-full bg-dm-ink px-6 text-base font-bold text-white hover:bg-dm-plum"
                 >
                   <ShoppingBag className="size-5" />
@@ -699,7 +612,7 @@ export default function DonmixPage() {
         <div className="fixed inset-x-0 bottom-0 z-30 border-t border-dm-line bg-white/95 p-3 backdrop-blur md:hidden">
           <button
             type="button"
-            onClick={() => setCartOpen(true)}
+            onClick={openCart}
             className="flex h-12 w-full items-center justify-between rounded-full bg-dm-plum pl-5 pr-4 text-white active:scale-[0.99] dm-focus"
           >
             <span className="flex items-center gap-2 text-sm font-bold">
@@ -712,15 +625,6 @@ export default function DonmixPage() {
           </button>
         </div>
       )}
-
-      <CartSheet
-        open={cartOpen}
-        onOpenChange={setCartOpen}
-        lines={lines}
-        onInc={addItem}
-        onDec={decItem}
-        onClear={() => setLines([])}
-      />
     </div>
   )
 }

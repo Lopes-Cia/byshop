@@ -229,7 +229,8 @@ export const CARDAPIO: MenuItem[] = [
   {
     id: "bebida-5",
     nome: "Refrigerante Lata 350ml",
-    descricao: "Bebida gaseificada. Sabores: Coca-Cola e Guaraná Antarctica.",
+    descricao:
+      "Bebida gaseificada. Escolha o sabor: Coca-Cola, Coca-Cola Zero, Fanta Laranja ou Guaraná Antarctica.",
     preco: 6.9,
     categoria: "bebidas",
     imagem: "/images/refri-lata.webp",
