@@ -256,7 +256,7 @@ interface ProductDetailProps {
 }
 
 export function ProductDetail({ produto, relacionados }: ProductDetailProps) {
-  const { addLine, openCart, subtotal } = useDonMixCart()
+  const { addLine, openCart } = useDonMixCart()
 
   const variacaoInicial =
     produto.variacoes.find((variacao) => variacao.estoque > 0) ??
@@ -304,11 +304,6 @@ export function ProductDetail({ produto, relacionados }: ProductDetailProps) {
       .filter((adicional) => adicional.gratis)
       .reduce((soma, adicional) => soma + adicional.total, 0),
   )
-  const faltamParaFrete = Math.max(
-    0,
-    roundMoney(LOJA.entregaGratisAcima - (subtotal + totalItem)),
-  )
-
   const categoria = categoriaPorId(produto.categoria)
   const IconeCategoria = categoria.icon
   const rotulo = rotuloVariacoes(produto.variacoes)
@@ -560,8 +555,8 @@ export function ProductDetail({ produto, relacionados }: ProductDetailProps) {
 
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium text-dm-muted">
                 <span className="inline-flex items-center gap-1.5">
-                  <Gift className="size-3.5 text-dm-plum" />
-                  Frete grátis acima de {formatBRL(LOJA.entregaGratisAcima)}
+                  <ShoppingBag className="size-3.5 text-dm-plum" />
+                  Retirada no balcão disponível
                 </span>
               </div>
             </header>
@@ -886,9 +881,8 @@ export function ProductDetail({ produto, relacionados }: ProductDetailProps) {
 
               <p className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-purple-200">
                 <Bike className="size-3.5 text-dm-lime" />
-                {faltamParaFrete > 0
-                  ? `Faltam ${formatBRL(faltamParaFrete)} para entrega grátis`
-                  : "Entrega grátis liberada"}
+                Entrega em {LOJA.tempoEntrega} · taxa de{" "}
+                {formatBRL(LOJA.taxaEntrega)}
               </p>
             </div>
           </div>

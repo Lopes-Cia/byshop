@@ -57,7 +57,7 @@ export function montarMensagemPedido({
     blocos.join("\n\n"),
     "",
     `Subtotal: ${formatBRL(subtotal)}`,
-    `Entrega: ${entrega === 0 ? "Grátis" : formatBRL(entrega)}`,
+    `Entrega: ${formatBRL(entrega)}`,
     ...(economia > 0
       ? [`Adicionais grátis: ${formatBRL(economia)} de economia`]
       : []),

@@ -35,10 +35,8 @@ export function CartSheet() {
     clear,
   } = useDonMixCart()
 
-  const entrega =
-    subtotal === 0 || subtotal >= LOJA.entregaGratisAcima ? 0 : LOJA.taxaEntrega
+  const entrega = LOJA.taxaEntrega
   const total = roundMoney(subtotal + entrega)
-  const faltamParaFreteGratis = Math.max(LOJA.entregaGratisAcima - subtotal, 0)
 
   const finalizar = () => {
     const mensagem = montarMensagemPedido({ lines, subtotal, entrega, total })
@@ -238,13 +236,6 @@ export function CartSheet() {
             </div>
 
             <SheetFooter className="gap-3 border-t border-dm-line bg-white px-5 py-5">
-              {faltamParaFreteGratis > 0 && (
-                <p className="rounded-xl bg-dm-lime/25 px-3 py-2 text-center text-xs font-medium text-dm-ink">
-                  Faltam {formatBRL(faltamParaFreteGratis)} para a entrega sair
-                  de graça.
-                </p>
-              )}
-
               <dl className="space-y-1.5 text-sm">
                 <div className="flex justify-between text-dm-muted">
                   <dt>Subtotal</dt>
@@ -252,13 +243,7 @@ export function CartSheet() {
                 </div>
                 <div className="flex justify-between text-dm-muted">
                   <dt>Entrega</dt>
-                  <dd>
-                    {entrega === 0 ? (
-                      <span className="font-semibold text-dm-plum">Grátis</span>
-                    ) : (
-                      formatBRL(entrega)
-                    )}
-                  </dd>
+                  <dd>{formatBRL(entrega)}</dd>
                 </div>
                 <div className="flex justify-between border-t border-dm-line pt-2 font-display text-lg font-bold text-dm-ink">
                   <dt>Total</dt>

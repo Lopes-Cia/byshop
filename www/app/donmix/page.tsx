@@ -4,7 +4,6 @@ import { useMemo, useState } from "react"
 import Image from "next/image"
 import {
   ArrowRight,
-  BadgeCheck,
   Bike,
   Clock,
   Facebook,
@@ -28,6 +27,7 @@ import { useDonMixCart } from "./cart-store"
 import { DonMixHeader } from "./donmix-header"
 import { MenuItemCard } from "./menu-item-card"
 import { CARDAPIO, CATEGORIAS, LOJA, formatBRL, type MenuItem } from "./menu-data"
+import { WhatsAppIcon } from "./whatsapp-icon"
 
 const PASSOS = [
   {
@@ -145,12 +145,12 @@ export default function DonmixPage() {
                   Entrega em <span className="whitespace-nowrap">{LOJA.tempoEntrega}</span>
                 </li>
                 <li className="inline-flex items-center gap-2">
-                  <BadgeCheck className="size-4 text-dm-lime" />
-                  Grátis acima de {formatBRL(LOJA.entregaGratisAcima)}
+                  <ShoppingBag className="size-4 text-dm-lime" />
+                  Retirada no balcão
                 </li>
                 <li className="inline-flex items-center gap-2">
                   <Clock className="size-4 text-dm-lime" />
-                  Seg–Sáb 11h–23h
+                  Horário varia por dia
                 </li>
               </ul>
             </div>
@@ -360,8 +360,7 @@ export default function DonmixPage() {
                 </h2>
                 <p className="mx-auto max-w-md text-sm leading-relaxed text-purple-200 lg:mx-0">
                   De um lanche rápido com café a uma sobremesa que abraça.
-                  Combine o que quiser e a entrega sai de graça acima de{" "}
-                  {formatBRL(LOJA.entregaGratisAcima)}.
+                  Combine o que quiser e monte o seu momento do seu jeito.
                 </p>
                 <div className="flex flex-wrap justify-center gap-3 pt-1 lg:justify-start">
                   <Button
@@ -443,7 +442,7 @@ export default function DonmixPage() {
             {[
               { icon: MapPin, titulo: "Endereço", texto: LOJA.endereco },
               { icon: Clock, titulo: "Horário", texto: LOJA.horario },
-              { icon: Phone, titulo: "Telefone", texto: LOJA.telefone },
+              { icon: WhatsAppIcon, titulo: "Telefone", texto: LOJA.telefone },
               {
                 icon: Wallet,
                 titulo: "Pagamento",

@@ -42,11 +42,11 @@ export const LOJA = {
   whatsapp: "5562985950004",
   endereco:
     "R C 25, SN — Quadra 58, Lote 02, Casa 02, Sala 02 — Jardim Boa Esperança, Aparecida de Goiânia - GO · CEP 74.960-160",
-  horario: "Seg–Sáb 11h–23h · Dom 12h–22h",
+  horario:
+    "Seg, Ter, Qui e Sáb 9h–21h · Qua e Sex 9h–18h · Dom fechado",
   tempoEntrega: "30–45 min",
   avaliacao: "4,9",
   taxaEntrega: 6.9,
-  entregaGratisAcima: 60,
 } as const
 
 /* ─── Categorias ────────────────────────────────────── */
